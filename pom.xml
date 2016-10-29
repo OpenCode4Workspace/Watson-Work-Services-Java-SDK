@@ -13,6 +13,8 @@
 	<artifactId>wws.parent</artifactId>
 	<properties>
 		<compiler>1.6</compiler>
+		<it.userName>${itUserName}</it.userName>
+		<it.password>${itPassword}</it.password>
 	</properties>
 	<build>
 		<plugins>

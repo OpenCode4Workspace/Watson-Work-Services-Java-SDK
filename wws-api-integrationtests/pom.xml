@@ -14,26 +14,34 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<skip>true</skip>
+					<excludes>
+						<exclude>**/it/*.java</exclude>
+					</excludes>
 					<systemProperties>
 						<property>
-							<name>user</name>
-							<value>tobrien</value>
+							<name>userName</name>
+							<value>${it.userName}</value>
 						</property>
 						<property>
-							<name>name</name>
-							<value>Tim O'Brien</value>
+							<name>userPassword</name>
+							<value>${it.password}</value>
 						</property>
 					</systemProperties>
 				</configuration>
 				<executions>
 					<execution>
+						<id>integration-test</id>
 						<phase>integration-test</phase>
 						<goals>
 							<goal>test</goal>
 						</goals>
 						<configuration>
-							<skip>false</skip>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/it/*.java</include>
+							</includes>
 						</configuration>
 					</execution>
 				</executions>
@@ -52,7 +60,7 @@
 				org.opencode4workspace.watson-work-services
 			</groupId>
 			<artifactId>wws-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

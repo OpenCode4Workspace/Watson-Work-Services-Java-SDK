@@ -48,7 +48,7 @@ public class AuthenticationTests {
 		WWClient client = WWClient.buildClientUserAccess("Max Muster", "mypassword", authenticationEndpoint);
 		
 		assertNotNull(client);
-		assertFalse(client.isAuthentitacted());
+		assertFalse(client.isAuthenticated());
 		client.authenticate();
 
 		assertEquals(JWT_TOKEN, client.getJWTToken());
@@ -67,7 +67,7 @@ public class AuthenticationTests {
 		WWClient client = WWClient.buildClientUserAccess("Max Muster", "mypassword", authenticationEndpoint);
 		
 		assertNotNull(client);
-		assertFalse(client.isAuthentitacted());
+		assertFalse(client.isAuthenticated());
 		try {
 			client.authenticate();
 		} catch(WWException ex) {

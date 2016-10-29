@@ -14,7 +14,8 @@ public class ITAuthentification {
 	@Parameters({ "userName", "userPassword" })
 	public void testLoginAsUser(String userName, String userPassword) throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientUserAccess(userName, userPassword, new WWAuthenticationEndpoint());
-		assert client.isAuthentitacted();
+		assert !client.isAuthenticated();
 		client.authenticate();
+		assert client.isAuthenticated();
 	}
 }

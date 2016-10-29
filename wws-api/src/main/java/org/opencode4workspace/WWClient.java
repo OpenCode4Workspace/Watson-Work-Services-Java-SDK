@@ -44,7 +44,7 @@ public class WWClient {
 		return "Basic " + base64;
 	}
 
-	public boolean isAuthentitacted() {
+	public boolean isAuthenticated() {
 		return false;
 	}
 

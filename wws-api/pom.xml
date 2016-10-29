@@ -10,7 +10,6 @@
 	<artifactId>wws-api</artifactId>
 	<name>Java SDK API Client</name>
 	<description>Java client for Watson Web Services REST and GraphQL APIs</description>
-	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -18,7 +17,11 @@
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
