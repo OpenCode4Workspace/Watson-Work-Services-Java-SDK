@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>wws-api</module>
+		<module>wws-api-integrationtests</module>
 	</modules>
 	<artifactId>wws.parent</artifactId>
 	<properties>

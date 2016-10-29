@@ -2,3 +2,4 @@
 .project
 wws-api/.classpath
 .settings/
+wws-api-integrationtests/.classpath
