@@ -13,8 +13,9 @@
 	<artifactId>wws.parent</artifactId>
 	<properties>
 		<compiler>1.6</compiler>
-		<it.userName>${itUserName}</it.userName>
-		<it.password>${itPassword}</it.password>
+		<it.appId>${appId}</it.appId>
+		<it.appSecret>${appSecret}</it.appSecret>
+		<it.userToken>${userToken}</it.userToken>
 	</properties>
 	<build>
 		<plugins>

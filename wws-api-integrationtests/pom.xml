@@ -19,12 +19,16 @@
 					</excludes>
 					<systemProperties>
 						<property>
-							<name>userName</name>
-							<value>${it.userName}</value>
+							<name>appId</name>
+							<value>${it.appId}</value>
 						</property>
 						<property>
-							<name>userPassword</name>
-							<value>${it.password}</value>
+							<name>appSecret</name>
+							<value>${it.appSecret}</value>
+						</property>
+						<property>
+							<name>userToken</name>
+							<value>${it.userToken}</value>
 						</property>
 					</systemProperties>
 				</configuration>

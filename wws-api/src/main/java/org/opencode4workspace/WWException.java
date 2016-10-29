@@ -11,4 +11,8 @@ public class WWException extends Exception {
 		super(message);
 	}
 
+	public WWException(Exception e) {
+		super(e);
+	}
+
 }

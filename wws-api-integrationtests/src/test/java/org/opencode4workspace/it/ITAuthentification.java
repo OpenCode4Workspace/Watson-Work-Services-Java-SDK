@@ -8,14 +8,27 @@ import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+
 public class ITAuthentification {
 
 	@Test
-	@Parameters({ "userName", "userPassword" })
-	public void testLoginAsUser(String userName, String userPassword) throws UnsupportedEncodingException, WWException {
-		WWClient client = WWClient.buildClientUserAccess(userName, userPassword, new WWAuthenticationEndpoint());
+	@Parameters({ "appId", "appSecret" })
+	public void testLoginAsUser(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicaitonAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
 	}
+
+	
+	@Test(enabled=false)
+	@Parameters({ "appId", "appSecret", "userToken" })
+	public void testLoginAsUser(String appId, String appSecret, String userToken) throws UnsupportedEncodingException, WWException {
+		System.out.println("UserToken: "+ userToken);
+		WWClient client = WWClient.buildClientUserAccess(userToken,appId, appSecret, new WWAuthenticationEndpoint(), "https://webgate.biz");
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+	}
+
 }

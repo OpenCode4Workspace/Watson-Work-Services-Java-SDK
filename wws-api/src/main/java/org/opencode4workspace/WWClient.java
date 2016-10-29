@@ -13,25 +13,30 @@ public class WWClient {
 	}
 
 	private ClientType clientType;
-	private String userName;
-	private String password;
+	private String appId;
+	private String appSecret;
+	private String userToken;
 	private AuthenticatenEndpoint endpoint;
 	private AuthenticationResult authenticationResult;
+	private String redirectTo;
 
-	public static WWClient buildClientUserAccess(String userName, String password, AuthenticatenEndpoint authenticationEndpoint) {
+	public static WWClient buildClientUserAccess(String userToken, String appId, String appSecret, AuthenticatenEndpoint authenticationEndpoint, String redirectTo) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.USER;
-		client.userName = userName;
-		client.password = password;
+		client.userToken = userToken;
+		client.appId = appId;
+		client.appSecret = appSecret;
 		client.endpoint = authenticationEndpoint;
+		client.redirectTo = redirectTo;
 		return client;
 	}
 
-	public static WWClient buildClientApplicaitonAccess(String appId, String appSecret, AuthenticatenEndpoint authencticationEndpoint) {
+	public static WWClient buildClientApplicaitonAccess(String appId, String appSecret, AuthenticatenEndpoint authenticationEndpoint) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.APPLICATON;
-		client.userName = appId;
-		client.password = appSecret;
+		client.appId = appId;
+		client.appSecret = appSecret;
+		client.endpoint = authenticationEndpoint;
 		return client;
 	}
 
@@ -39,17 +44,21 @@ public class WWClient {
 		return clientType;
 	}
 
-	public String getBasicCredentials() throws UnsupportedEncodingException {
-		String base64 = Base64.encodeBase64String((userName + ":" + password).getBytes("UTF-8"));
+	public String getAppCredentials() throws UnsupportedEncodingException {
+		String base64 = Base64.encodeBase64String((appId + ":" + appSecret).getBytes("UTF-8"));
 		return "Basic " + base64;
 	}
 
 	public boolean isAuthenticated() {
-		return false;
+		return authenticationResult != null;
 	}
 
 	public void authenticate() throws UnsupportedEncodingException, WWException {
-		authenticationResult = endpoint.authenticate(getBasicCredentials());
+		if (clientType == ClientType.APPLICATON) {
+		authenticationResult = endpoint.authenticateApplication(getAppCredentials());
+		} else {
+			authenticationResult = endpoint.authorizeUser(getAppCredentials(), userToken, redirectTo);			
+		}
 	}
 
 	public String getJWTToken() {
