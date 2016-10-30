@@ -12,10 +12,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.authentication.AppToken;
 import org.opencode4workspace.authentication.AuthenticatenEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
+import org.opencode4workspace.json.ResultParser;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
@@ -34,7 +35,8 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 			response = client.execute(post);
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
-				System.out.println(content);
+				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
+				return AuthenticationResult.buildFromToken(appToken);
 			} else {
 				throw new WWException("Failuer during login" + response.getStatusLine().getReasonPhrase());
 			}
@@ -49,7 +51,6 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 				}
 			}
 		}
-		return null;
 	}
 
 	private HttpPost preparePost(String basicAuth) {

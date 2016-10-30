@@ -59,4 +59,8 @@ public class AuthenticationResult {
 		return expireDate.after(new Date());
 	}
 
+	public static AuthenticationResult buildFromToken(AppToken appToken) {
+		return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), "", appToken.getId(), appToken.getJti());
+	}
+
 }
