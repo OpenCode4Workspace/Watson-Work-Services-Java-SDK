@@ -8,10 +8,14 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>wws-api</module>
+		<module>wws-api-integrationtests</module>
 	</modules>
 	<artifactId>wws.parent</artifactId>
 	<properties>
 		<compiler>1.6</compiler>
+		<it.appId>${appId}</it.appId>
+		<it.appSecret>${appSecret}</it.appSecret>
+		<it.userToken>${userToken}</it.userToken>
 	</properties>
 	<build>
 		<plugins>
