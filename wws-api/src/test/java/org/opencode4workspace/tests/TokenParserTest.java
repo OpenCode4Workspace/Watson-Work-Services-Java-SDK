@@ -3,6 +3,7 @@ package org.opencode4workspace.tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.opencode4workspace.authentication.AppToken;
+import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.json.ResultParser;
 
 public class TokenParserTest {
@@ -19,5 +20,20 @@ public class TokenParserTest {
 		assertEquals("read write", appToken.getScope());
 		assertEquals("appID", appToken.getId());
 		assertEquals("jwtTokenID", appToken.getJti());
+	}
+	
+	@Test
+	public void testPeopleAppToken() {
+		PeopleToken peopleToken =  new ResultParser<PeopleToken>(PeopleToken.class).parse(PEOPLE_TOKEN_RESULT);
+		assertNotNull(peopleToken);
+		assertEquals("personJWTToken", peopleToken.getAccess_Token());
+		assertEquals("bearer", peopleToken.getToken_Type());
+		assertEquals(43199, peopleToken.getExpires_In());
+		assertEquals("read write", peopleToken.getScope());
+		assertEquals("userID", peopleToken.getId());
+		assertEquals("personJWTTokenID", peopleToken.getJti());
+		assertEquals("personRefreshToken", peopleToken.getRefresh_Token());
+		assertEquals("Max Muster", peopleToken.getDisplayName());
+		assertEquals("BLUE_ID_AUTH_PROVIDER", peopleToken.getProviderId());
 	}
 }
