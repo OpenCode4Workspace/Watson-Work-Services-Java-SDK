@@ -16,7 +16,7 @@ public class ITgraphQL {
 	@Test(enabled=false)
 	@Parameters({ "appId", "appSecret" })
 	public void testgetSpacesAsApp(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
-		WWClient client = WWClient.buildClientApplicaitonAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
