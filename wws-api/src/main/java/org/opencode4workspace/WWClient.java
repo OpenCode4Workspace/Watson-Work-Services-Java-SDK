@@ -31,7 +31,7 @@ public class WWClient {
 		return client;
 	}
 
-	public static WWClient buildClientApplicaitonAccess(String appId, String appSecret, AuthenticatenEndpoint authenticationEndpoint) {
+	public static WWClient buildClientApplicationAccess(String appId, String appSecret, AuthenticatenEndpoint authenticationEndpoint) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.APPLICATON;
 		client.appId = appId;

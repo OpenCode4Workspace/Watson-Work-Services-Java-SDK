@@ -30,7 +30,7 @@ public class AuthenticationTests {
 	@Test
 	public void testBuildAuthenticationClient4Application() {
 		AuthenticatenEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticatenEndpoint.class);
-		WWClient client = WWClient.buildClientApplicaitonAccess("201830181", "appsecretekey", authenticationEndpoint);
+		WWClient client = WWClient.buildClientApplicationAccess("201830181", "appsecretekey", authenticationEndpoint);
 		assertNotNull(client);
 		assertEquals(WWClient.ClientType.APPLICATON, client.getClientType());
 	}
@@ -48,7 +48,7 @@ public class AuthenticationTests {
 		AuthenticatenEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticatenEndpoint.class);
 		EasyMock.expect(authenticationEndpoint.authenticateApplication(BASIC_MM_CRED)).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", ""));
 		EasyMock.replay(authenticationEndpoint);
-		WWClient client = WWClient.buildClientApplicaitonAccess(MY_APP_ID, MY_APP_SECRET, authenticationEndpoint);
+		WWClient client = WWClient.buildClientApplicationAccess(MY_APP_ID, MY_APP_SECRET, authenticationEndpoint);
 
 		assertNotNull(client);
 		assertFalse(client.isAuthenticated());
