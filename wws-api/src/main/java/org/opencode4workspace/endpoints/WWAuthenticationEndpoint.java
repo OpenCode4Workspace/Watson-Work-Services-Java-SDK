@@ -19,9 +19,6 @@ import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.json.ResultParser;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -34,8 +31,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint#
-	 * authenticateApplication(java.lang.String)
+	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint# authenticateApplication(java.lang.String)
 	 */
 	@Override
 	public AuthenticationResult authenticateApplication(String basicAuth) throws WWException {
@@ -72,10 +68,8 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 * Creates a Post request and adds required header details
 	 * 
 	 * @param basicAuth
-	 *            String, Authorization header constructed from
-	 *            {@linkplain WWClient#getAppCredentials()}
-	 * @return HttpPost containing endpoint for authentication and required
-	 *         headers
+	 *            String, Authorization header constructed from {@linkplain WWClient#getAppCredentials()}
+	 * @return HttpPost containing endpoint for authentication and required headers
 	 * 
 	 * @since 0.5.0
 	 */
@@ -89,9 +83,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.opencode4workspace.authentication.AuthenticatenEndpoint#authorizeUser
-	 * (java.lang.String, java.lang.String, java.lang.String)
+	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint#authorizeUser (java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public AuthenticationResult authorizeUser(String basicAuthApp, String userToken, String url) throws WWException {

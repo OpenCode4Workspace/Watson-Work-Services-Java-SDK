@@ -23,11 +23,16 @@ public class AuthenticationResult {
 	/**
 	 * Constructs AuthenticationResult from parameters. Typically called from {@linkplain #buildFromToken(AppToken)}
 	 * 
-	 * @param jwtToken String JWT token for future requests
-	 * @param expires int, length of time until expiry
-	 * @param displayName String, display name for user or blank for applications
-	 * @param userId String, user id
-	 * @param jtiId String, JTI id
+	 * @param jwtToken
+	 *            String JWT token for future requests
+	 * @param expires
+	 *            int, length of time until expiry
+	 * @param displayName
+	 *            String, display name for user or blank for applications
+	 * @param userId
+	 *            String, user id
+	 * @param jtiId
+	 *            String, JTI id
 	 * 
 	 * @since 0.5.0
 	 */
@@ -92,8 +97,7 @@ public class AuthenticationResult {
 	}
 
 	/**
-	 * Gets the display name for the user, not currently in authentication
-	 * result for applications
+	 * Gets the display name for the user, not currently in authentication result for applications
 	 * 
 	 * @return String user's display name
 	 * 
@@ -126,8 +130,7 @@ public class AuthenticationResult {
 	}
 
 	/**
-	 * Test JDT token expiry time against current time and return whether or not
-	 * it's still valid. If not, we need to authenticate again
+	 * Test JDT token expiry time against current time and return whether or not it's still valid. If not, we need to authenticate again
 	 * 
 	 * @return boolean, whether or not valid
 	 * 
@@ -138,20 +141,16 @@ public class AuthenticationResult {
 	}
 
 	/**
-	 * Builds an AuthenticationResult object from the AppToken object
-	 * constructed from JSON returned by the authentication process
+	 * Builds an AuthenticationResult object from the AppToken object constructed from JSON returned by the authentication process
 	 * 
 	 * @param appToken
-	 *            {@linkplain AppToken} object constructed from JSON returned by
-	 *            authentication process
-	 * @return new AuthenticationResult object with contents extracted from
-	 *         AppToken
+	 *            {@linkplain AppToken} object constructed from JSON returned by authentication process
+	 * @return new AuthenticationResult object with contents extracted from AppToken
 	 * 
 	 * @since 0.5.0
 	 */
 	public static AuthenticationResult buildFromToken(AppToken appToken) {
-		return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), "", appToken.getId(),
-				appToken.getJti());
+		return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), "", appToken.getId(), appToken.getJti());
 	}
 
 }

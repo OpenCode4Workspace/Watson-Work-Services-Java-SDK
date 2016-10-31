@@ -2,8 +2,6 @@ package org.opencode4workspace;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.print.attribute.standard.Sides;
-
 import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
@@ -13,8 +11,7 @@ import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Watson Work Services Apache HTTP Client class Manages setting up an
- *        HTTP Client for both users and applications
+ *        Watson Workspace Apache HTTP Client class Manages setting up an HTTP Client for both users and applications
  */
 public class WWClient {
 
@@ -22,10 +19,8 @@ public class WWClient {
 	 * @author Christian Guedemann
 	 * @since 0.5.0
 	 * 
-	 *        Two types of authentication are supported - user-level and
-	 *        application-level User is for actions on behalf of a specific user
-	 *        Application is for actions taken on behalf of the application,
-	 *        without being associated with a user
+	 *        Two types of authentication are supported - user-level and application-level User is for actions on behalf of a specific user Application is for actions taken on behalf of the
+	 *        application, without being associated with a user
 	 */
 	public enum ClientType {
 		USER, APPLICATON;
@@ -43,25 +38,20 @@ public class WWClient {
 	 * Creates and returns a WWClient for a specific user
 	 * 
 	 * @param userToken
-	 *            String, the JWT user token to be passed, used to authenticate
-	 *            as the specific user
+	 *            String, the JWT user token to be passed, used to authenticate as the specific user
 	 * @param appId
 	 *            String, the ID for the application the code is being run from
 	 * @param appSecret
-	 *            String, the secret for the application the code is being run
-	 *            from
+	 *            String, the secret for the application the code is being run from
 	 * @param authenticationEndpoint
-	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof.
-	 *            Typically {@linkplain WWAuthenticationEndpoint}
+	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof. Typically {@linkplain WWAuthenticationEndpoint}
 	 * @param redirectTo
 	 *            String, URL to redirect to after authentication
-	 * @return WWClient, a Watson Work Services Client contructed with the
-	 *         passed params
+	 * @return WWClient, a Watson Workspace Client contructed with the passed params
 	 * 
 	 * @since 0.5.0
 	 */
-	public static WWClient buildClientUserAccess(String userToken, String appId, String appSecret,
-			AuthenticationEndpoint authenticationEndpoint, String redirectTo) {
+	public static WWClient buildClientUserAccess(String userToken, String appId, String appSecret, AuthenticationEndpoint authenticationEndpoint, String redirectTo) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.USER;
 		client.userToken = userToken;
@@ -73,24 +63,19 @@ public class WWClient {
 	}
 
 	/**
-	 * Creates an application-level WWClient, not associated with a specific
-	 * user
+	 * Creates an application-level WWClient, not associated with a specific user
 	 * 
 	 * @param appId
 	 *            String, the ID for the application the code is being run from
 	 * @param appSecret
-	 *            String, the secret for the application the code is being run
-	 *            from
+	 *            String, the secret for the application the code is being run from
 	 * @param authenticationEndpoint
-	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof.
-	 *            Typically {@linkplain WWAuthenticationEndpoint}
-	 * @return WWClient, a Watson Work Services Client contructed with the
-	 *         passed params
+	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof. Typically {@linkplain WWAuthenticationEndpoint}
+	 * @return WWClient, a Watson Workspace Client contructed with the passed params
 	 * 
 	 * @since 0.5.0
 	 */
-	public static WWClient buildClientApplicationAccess(String appId, String appSecret,
-			AuthenticationEndpoint authenticationEndpoint) {
+	public static WWClient buildClientApplicationAccess(String appId, String appSecret, AuthenticationEndpoint authenticationEndpoint) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.APPLICATON;
 		client.appId = appId;
@@ -102,8 +87,7 @@ public class WWClient {
 	/**
 	 * Getter for ClientType, dependent upon the initialiser user
 	 * 
-	 * @return {@linkplain ClientType#USER} or
-	 *         {@linkplain ClientType#APPLICATON}
+	 * @return {@linkplain ClientType#USER} or {@linkplain ClientType#APPLICATON}
 	 * 
 	 * @since 0.5.0
 	 */
@@ -112,8 +96,7 @@ public class WWClient {
 	}
 
 	/**
-	 * Converts appId and appSecret into required content for Authorization
-	 * header
+	 * Converts appId and appSecret into required content for Authorization header
 	 * 
 	 * @return String, content for Authorization header
 	 * @throws UnsupportedEncodingException
@@ -125,8 +108,7 @@ public class WWClient {
 	}
 
 	/**
-	 * Whether or not authentication has successfully occurred. Call
-	 * {@linkplain #authenticate()} first
+	 * Whether or not authentication has successfully occurred. Call {@linkplain #authenticate()} first
 	 * 
 	 * @return boolean, whether or not already authenticated
 	 * 
@@ -153,11 +135,8 @@ public class WWClient {
 	}
 
 	/**
-	 * Gets JWT token for the user / application from the
-	 * {@linkplain AuthenticationResult}. The JWT token is an expiring token
-	 * associated with the appId and appSecret. From the documentation: "This
-	 * JWT token is what you have to use in your App to pass to Watson Work
-	 * Services on API calls so that you can use its services securely"
+	 * Gets JWT token for the user / application from the {@linkplain AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This
+	 * JWT token is what you have to use in your App to pass to Watson Work Services on API calls so that you can use its services securely"
 	 * 
 	 * @return String, JWT token
 	 */
@@ -166,8 +145,7 @@ public class WWClient {
 	}
 
 	/**
-	 * Gets the length of time until the token expires from the
-	 * {@linkplain AuthenticationResult}
+	 * Gets the length of time until the token expires from the {@linkplain AuthenticationResult}
 	 * 
 	 * @return Object, a long that determines the time until expiry
 	 */
