@@ -17,8 +17,8 @@ public class Space implements Serializable {
 	private Person createdBy;
 	private Date updated;
 	private Person updatedBy;
-	private List<Person> members;
-	private Conversation conversation;
+	private List<Person> memberList;
+	private Conversation conversationContent;
 
 	public String getId() {
 		return id;
@@ -77,19 +77,19 @@ public class Space implements Serializable {
 	}
 
 	public List<Person> getMembers() {
-		return members;
+		return memberList;
 	}
 
 	public void setMembers(List<Person> members) {
-		this.members = members;
+		this.memberList = members;
 	}
 
 	public Conversation getConversation() {
-		return conversation;
+		return conversationContent;
 	}
 
 	public void setConversation(Conversation conversation) {
-		this.conversation = conversation;
+		this.conversationContent = conversation;
 	}
 
 }

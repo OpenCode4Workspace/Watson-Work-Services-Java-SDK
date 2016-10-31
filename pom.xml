@@ -16,6 +16,7 @@
 		<it.appId>${appId}</it.appId>
 		<it.appSecret>${appSecret}</it.appSecret>
 		<it.userToken>${userToken}</it.userToken>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
 		<plugins>

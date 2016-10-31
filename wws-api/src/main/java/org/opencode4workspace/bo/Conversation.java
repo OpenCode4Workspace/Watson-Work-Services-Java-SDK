@@ -14,7 +14,7 @@ public class Conversation implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
-	private List<Message> messages;
+	private List<Message> messageList;
 
 	public String getId() {
 		return id;
@@ -57,11 +57,11 @@ public class Conversation implements Serializable {
 	}
 
 	public List<Message> getMessages() {
-		return messages;
+		return messageList;
 	}
 
 	public void setMessages(List<Message> messages) {
-		this.messages = messages;
+		this.messageList = messages;
 	}
 
 }

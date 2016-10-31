@@ -1,0 +1,119 @@
+{
+  "data": {
+    "spaces": {
+      "pageInfo": {
+        "startCursor": "TGlzdDow",
+        "endCursor": "TGlzdDow",
+        "hasNextPage": true,
+        "hasPreviousPage": false
+      },
+      "items": [
+        {
+          "id": "007",
+          "title": "James Bond Exchange",
+          "description": null,
+          "updated": "2016-10-31T00:49:59.113+0000",
+          "updatedBy": {
+            "id": "007-M1",
+            "displayName": "Mister M",
+            "photoUrl": null,
+            "email": "m@mi6.gov.uk"
+          },
+          "created": "2016-10-22T20:04:47.554+0000",
+          "createdBy": {
+            "id": "007-MM",
+            "displayName": "Miss Moneypenny",
+            "photoUrl": null,
+            "email": "mp@mi6.gov.uk"
+          },
+          "membersUpdated": "2016-10-28T16:12:05.234+0000",
+          "members": {
+            "items": [
+              {
+                "id": "int-007-00",
+                "photoUrl": null,
+                "email": "007@mi6.gov.uk",
+                "displayName": "James Bond"
+              },
+              {
+                "id": "007-MM",
+                "photoUrl": null,
+                "email": "mp@mi6.gov.uk",
+                "displayName": "Miss Moneypenny"
+              }
+            ]
+          },
+          "conversation": {
+            "id": "998877665544332211",
+            "created": "2016-10-22T20:04:47.554+0000",
+            "createdBy": {
+              "id": "007-01",
+              "displayName": "Jambes Bond",
+              "photoUrl": null,
+              "email": "007@mi6.gov.uk"
+            },
+            "updated": "2016-10-31T00:49:59.113+0000",
+            "updatedBy": {
+              "id": "007-00",
+              "displayName": "James Boud",
+              "photoUrl": null,
+              "email": "007@mi6.gov.uk"
+            },
+            "messages": {
+              "pageInfo": {
+                "startCursor": "TGlzdDow",
+                "endCursor": "TGlzdDoy",
+                "hasPreviousPage": false,
+                "hasNextPage": true
+              },
+              "items": [
+                {
+                  "contentType": "text/html",
+                  "content": "Thanks for the holiday gift",
+                  "id": "0003",
+                  "created": "2016-10-31T00:49:59.111+0000",
+                  "updated": "2016-10-31T00:49:59.261+0000",
+                  "createdBy": {
+                    "id": "007-MM",
+                    "displayName": "Miss Moneypenny",
+                    "photoUrl": null,
+                    "email": "mp@mi6.uk.gov"
+                  },
+                  "updatedBy": null
+                },
+                {
+                  "contentType": "text/html",
+                  "content": "You get the post card?",
+                  "id": "0002",
+                  "created": "2016-10-30T23:56:33.260+0000",
+                  "updated": "2016-10-31T01:52:50.844+0000",
+                  "createdBy": {
+                    "id": "007-00",
+                    "displayName": "James Bound",
+                    "photoUrl": null,
+                    "email": "007@mi6.gov.uk"
+                  },
+                  "updatedBy": null
+                },
+                {
+                  "contentType": "text/html",
+                  "content": "Bond where are you. We need you here.",
+                  "id": "0001",
+                  "created": "2016-10-30T21:30:11.769+0000",
+                  "updated": "2016-10-30T22:32:48.609+0000",
+                  "createdBy": {
+                    "id": "007-M",
+                    "displayName": "Mister M.",
+                    "photoUrl": null,
+                    "email": "m@mi6.gov.uk"
+                  },
+                  "updatedBy": null
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

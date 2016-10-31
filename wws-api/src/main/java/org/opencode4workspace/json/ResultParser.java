@@ -1,8 +1,7 @@
 package org.opencode4workspace.json;
 
-import org.opencode4workspace.authentication.AppToken;
-
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ResultParser<T> {
 
@@ -11,11 +10,11 @@ public class ResultParser<T> {
 
 	public ResultParser(Class<T> clazz) {
 		this.clazz = clazz;
-		this.gson = new Gson();
+		this.gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSZ").create();
 	}
 
-	public T parse(String appTokenResult) {
-		return gson.fromJson(appTokenResult, clazz);
+	public T parse(String jsonString) {
+		return gson.fromJson(jsonString, clazz);
 	}
 
 }
