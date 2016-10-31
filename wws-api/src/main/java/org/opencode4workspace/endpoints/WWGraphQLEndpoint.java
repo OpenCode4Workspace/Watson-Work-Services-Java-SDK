@@ -10,8 +10,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.graphql.GraphResultContainer;
-import org.opencode4workspace.graphql.SpaceWrapper;
 import org.opencode4workspace.json.GraphQLRequest;
 import org.opencode4workspace.json.RequestBuilder;
 import org.opencode4workspace.json.ResultParser;
@@ -25,7 +25,7 @@ public class WWGraphQLEndpoint {
 		this.client = client;
 	}
 
-	public List<SpaceWrapper> getSpaces() throws WWException {
+	public List<? extends Space> getSpaces() throws WWException {
 		GraphQLRequest request = new GraphQLRequest(GET_SPACES_QUERY, null, "getSpaces");
 		HttpPost post = preparePost(client.getJWTToken());
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -36,7 +36,6 @@ public class WWGraphQLEndpoint {
 			response = client.execute(post);
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
-				System.out.println(content);
 				GraphResultContainer resultContainer = new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content);
 				return resultContainer.getData().getSpaces().getItems();
 			} else {
@@ -60,7 +59,7 @@ public class WWGraphQLEndpoint {
 	
 	private HttpPost preparePost(String jwtToken) {
 		HttpPost post = new HttpPost("https://api.watsonwork.ibm.com/graphql");
-		post.addHeader("Authorization", jwtToken);
+		post.addHeader("jwt", jwtToken);
 		post.addHeader("content-type", "application/json");
 		return post;
 	}
