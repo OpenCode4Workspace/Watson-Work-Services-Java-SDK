@@ -14,7 +14,7 @@ public class ITAuthentification {
 	@Test
 	@Parameters({ "appId", "appSecret" })
 	public void testLoginAsApplication(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
-		WWClient client = WWClient.buildClientApplicaitonAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();

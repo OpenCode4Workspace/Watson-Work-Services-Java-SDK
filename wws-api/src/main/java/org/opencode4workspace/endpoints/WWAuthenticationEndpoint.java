@@ -11,9 +11,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.authentication.AppToken;
-import org.opencode4workspace.authentication.AuthenticatenEndpoint;
+import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.json.ResultParser;
@@ -21,8 +22,21 @@ import org.opencode4workspace.json.ResultParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
+/**
+ * @author Christian Guedemann
+ * @since 0.5.0
+ * 
+ *        Authentication endpoint, generated POST requests for authentication
+ *
+ */
+public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint#
+	 * authenticateApplication(java.lang.String)
+	 */
 	@Override
 	public AuthenticationResult authenticateApplication(String basicAuth) throws WWException {
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -39,7 +53,7 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
 				return AuthenticationResult.buildFromToken(appToken);
 			} else {
-				throw new WWException("Failuer during login" + response.getStatusLine().getReasonPhrase());
+				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
 			}
 		} catch (Exception e) {
 			throw new WWException(e);
@@ -54,6 +68,17 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 		}
 	}
 
+	/**
+	 * Creates a Post request and adds required header details
+	 * 
+	 * @param basicAuth
+	 *            String, Authorization header constructed from
+	 *            {@linkplain WWClient#getAppCredentials()}
+	 * @return HttpPost containing endpoint for authentication and required
+	 *         headers
+	 * 
+	 * @since 0.5.0
+	 */
 	private HttpPost preparePost(String basicAuth) {
 		HttpPost post = new HttpPost("https://api.watsonwork.ibm.com/oauth/token");
 		post.addHeader("Authorization", basicAuth);
@@ -61,6 +86,13 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 		return post;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.opencode4workspace.authentication.AuthenticatenEndpoint#authorizeUser
+	 * (java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public AuthenticationResult authorizeUser(String basicAuthApp, String userToken, String url) throws WWException {
 		CloseableHttpClient client = HttpClients.createDefault();
