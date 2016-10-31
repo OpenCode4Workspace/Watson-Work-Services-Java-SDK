@@ -15,6 +15,7 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.authentication.AppToken;
 import org.opencode4workspace.authentication.AuthenticatenEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
+import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.json.ResultParser;
 
 import com.google.gson.JsonElement;
@@ -55,7 +56,6 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 
 	private HttpPost preparePost(String basicAuth) {
 		HttpPost post = new HttpPost("https://api.watsonwork.ibm.com/oauth/token");
-		System.out.println(basicAuth);
 		post.addHeader("Authorization", basicAuth);
 		post.addHeader("content-type", "application/x-www-form-urlencoded");
 		return post;
@@ -76,8 +76,8 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 			response = client.execute(post);
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
-				JsonParser jp = new JsonParser();
-				JsonElement je = jp.parse(content);
+				PeopleToken peopleToken = new ResultParser<PeopleToken>(PeopleToken.class).parse(content);
+				return AuthenticationResult.buildFromToken(peopleToken);
 			} else {
 				throw new WWException("Failuer during login" + response.getStatusLine().getStatusCode());
 			}
@@ -97,7 +97,6 @@ public class WWAuthenticationEndpoint implements AuthenticatenEndpoint {
 				e.printStackTrace();
 			}
 		}
-		return null;
 	}
 
 }
