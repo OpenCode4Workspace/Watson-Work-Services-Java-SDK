@@ -8,7 +8,7 @@ public class AppMessage extends Message {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String type = "AppMessage";
+	private String type = "appMessage";
 	private int version;
 
 	public String getType() {

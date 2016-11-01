@@ -1,5 +1,8 @@
 package org.opencode4workspace.builders;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.opencode4workspace.bo.Actor;
 import org.opencode4workspace.bo.Annotation;
 import org.opencode4workspace.endpoints.AppMessage;
@@ -63,6 +66,7 @@ public class AppMessageBuilder {
 			actor.setUrl(actorUrl);
 			annotation.setActor(actor);
 		}
+		message.setAnnotations(new ArrayList<Annotation>(Arrays.asList(annotation)));
 		return message;
 	}
 }
