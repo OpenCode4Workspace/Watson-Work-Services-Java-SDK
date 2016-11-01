@@ -10,6 +10,7 @@ import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  * 
  *        Watson Workspace Apache HTTP Client class Manages setting up an HTTP Client for both users and applications

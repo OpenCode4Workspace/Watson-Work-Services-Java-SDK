@@ -2,6 +2,7 @@ package org.opencode4workspace.endpoints;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -13,12 +14,24 @@ import org.opencode4workspace.json.GraphQLRequest;
 import org.opencode4workspace.json.RequestBuilder;
 import org.opencode4workspace.json.ResultParser;
 
+/**
+ * @author Paul Withers
+ * @since 0.5.0
+ * 
+ *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@linkplain #parseResultContainer()}
+ *        method needs to be overloaded.
+ *
+ */
 public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 
 	private final WWClient client;
 	private GraphQLRequest request;
 	private GraphResultContainer resultContainer;
 
+	/**
+	 * @param client
+	 *            WWClient containing authentication details and token
+	 */
 	public AbstractWWGraphQLEndpoint(WWClient client) {
 		this.client = client;
 	}
@@ -33,6 +46,11 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		return client;
 	}
 
+	/**
+	 * Tests the token against its expireDate.
+	 * 
+	 * @return boolean, whether or not the token should be valid
+	 */
 	private boolean isShouldBeValid() {
 		if (getClient().isValid()) {
 			return true;
@@ -91,7 +109,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		if (null == getRequest()) {
 			throw new WWException("A GraphQLRequest object must be loaded before calling the 'execute' method");
 		}
-		HttpPost post = preparePost(getClient().getJWTToken());
+		HttpPost post = preparePost();
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
@@ -132,10 +150,15 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		}
 	}
 
-	private HttpPost preparePost(String jwtToken) {
+	/**
+	 * Prepares the HttpPost with relevant headers - JWT Token and Content-Type
+	 * 
+	 * @return HttpPost containing the relevant headers
+	 */
+	private HttpPost preparePost() {
 		HttpPost post = new HttpPost(WWDefinedEndpoints.GRAPHQL);
-		post.addHeader("jwt", jwtToken);
-		post.addHeader("content-type", "application/json");
+		post.addHeader("jwt", getClient().getJWTToken());
+		post.addHeader("content-type", ContentType.APPLICATION_JSON.toString());
 		return post;
 	}
 
