@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -74,9 +75,9 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 * @since 0.5.0
 	 */
 	private HttpPost preparePost(String basicAuth) {
-		HttpPost post = new HttpPost("https://api.watsonwork.ibm.com/oauth/token");
+		HttpPost post = new HttpPost(WWDefinedEndpoints.AUTHENTICATION);
 		post.addHeader("Authorization", basicAuth);
-		post.addHeader("content-type", "application/x-www-form-urlencoded");
+		post.addHeader("content-type", ContentType.APPLICATION_FORM_URLENCODED.toString());
 		return post;
 	}
 
@@ -103,7 +104,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 				PeopleToken peopleToken = new ResultParser<PeopleToken>(PeopleToken.class).parse(content);
 				return AuthenticationResult.buildFromToken(peopleToken);
 			} else {
-				throw new WWException("Failuer during login" + response.getStatusLine().getStatusCode());
+				throw new WWException("Failure during login" + response.getStatusLine().getStatusCode());
 			}
 		} catch (Exception e) {
 			throw new WWException(e);

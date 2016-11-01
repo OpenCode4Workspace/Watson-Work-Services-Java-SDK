@@ -1,5 +1,6 @@
 package org.opencode4workspace;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.codec.binary.Base64;
@@ -13,7 +14,7 @@ import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
  * 
  *        Watson Workspace Apache HTTP Client class Manages setting up an HTTP Client for both users and applications
  */
-public class WWClient {
+public class WWClient implements Serializable {
 
 	/**
 	 * @author Christian Guedemann
@@ -26,6 +27,7 @@ public class WWClient {
 		USER, APPLICATON;
 	}
 
+	private static final long serialVersionUID = 1L;
 	private ClientType clientType;
 	private String appId;
 	private String appSecret;
