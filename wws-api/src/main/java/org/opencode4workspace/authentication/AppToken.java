@@ -2,18 +2,45 @@ package org.opencode4workspace.authentication;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  * 
  *        Application Token Class, specific for application connections to Watson Workspace. Extended by {@linkplain PeopleToken}
  */
 public class AppToken {
 
-	// TODO: Make this an enum
+	public enum TokenType {
+		BEARER("bearer");
+
+		private String value_;
+
+		private TokenType(String type) {
+			value_ = type;
+		}
+
+		public String getValue() {
+			return value_;
+		}
+	}
+
+	public enum TokenScope {
+		READ_WRITE("read write");
+
+		private String value_;
+
+		private TokenScope(String scope) {
+			value_ = scope;
+		}
+
+		public String getValue() {
+			return value_;
+		}
+	}
+
 	private String access_token;
-	private String token_type;
+	private TokenType token_type;
 	private int expires_in;
-	// TODO: Make this an enum
-	private String scope;
+	private TokenScope scope;
 	private String id;
 	private String jti;
 
@@ -25,10 +52,14 @@ public class AppToken {
 	}
 
 	/**
-	 * @return String, get token type for the authenticated application / user. Currently the value is "bearer"
+	 * @return TokenType, get token type for the authenticated application / user. Currently the value is "bearer"
 	 */
-	public String getToken_Type() {
+	public TokenType getToken_Type() {
 		return token_type;
+	}
+
+	public String getToken_TypeAsString() {
+		return token_type.getValue();
 	}
 
 	/**
@@ -39,10 +70,17 @@ public class AppToken {
 	}
 
 	/**
-	 * @return String, the scope of the token, e.g. READ WRITE
+	 * @return AccessScope, the scope of the token, e.g. READ_WRITE
 	 */
-	public String getScope() {
+	public TokenScope getScope() {
 		return scope;
+	}
+
+	/**
+	 * @return String, the scope of the token as string, e.g. "read write"
+	 */
+	public String getScopeAsString() {
+		return scope.getValue();
 	}
 
 	/**
