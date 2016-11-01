@@ -2,6 +2,7 @@ package org.opencode4workspace.bo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Christian Guedemann
@@ -21,6 +22,7 @@ public class Message implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
+	private List<? extends Annotation> annotations;
 
 	/**
 	 * @return String, id of the Message
@@ -125,6 +127,14 @@ public class Message implements Serializable {
 	 */
 	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public List<? extends Annotation> getAnnotations() {
+		return annotations;
+	}
+
+	public void setAnnotations(List<? extends Annotation> annotations) {
+		this.annotations = annotations;
 	}
 
 }
