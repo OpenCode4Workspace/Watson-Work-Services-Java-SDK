@@ -1,5 +1,7 @@
 package org.opencode4workspace.json;
 
+import java.util.HashMap;
+
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -10,7 +12,7 @@ package org.opencode4workspace.json;
 public class GraphQLRequest {
 
 	private String query;
-	private String variables;
+	private HashMap<String, String> variables;
 	private String operationName;
 
 	/**
@@ -19,11 +21,11 @@ public class GraphQLRequest {
 	 * @param query
 	 *            String, query passed
 	 * @param variables
-	 *            String, any dynamic variables passed
+	 *            HashMap, dynamic variables passed with key as variable name, value as variable value
 	 * @param operationName
 	 *            String, operation name for the query
 	 */
-	public GraphQLRequest(String query, String variables, String operationName) {
+	public GraphQLRequest(String query, HashMap<String, String> variables, String operationName) {
 		super();
 		this.query = query;
 		this.variables = variables;
@@ -46,17 +48,17 @@ public class GraphQLRequest {
 	}
 
 	/**
-	 * @return String, dynamic variables passed
+	 * @return HashMap, dynamic variables passed with key as variable name, value as variable value
 	 */
-	public String getVariables() {
+	public HashMap<String, String> getVariables() {
 		return variables;
 	}
 
 	/**
 	 * @param variables
-	 *            String, dynamic variables passed
+	 *            HashMap, dynamic variables passed with key as variable name, value as variable value
 	 */
-	public void setVariables(String variables) {
+	public void setVariables(HashMap<String, String> variables) {
 		this.variables = variables;
 	}
 
