@@ -13,6 +13,43 @@ import java.util.List;
  */
 public class Space implements Serializable {
 
+	public enum SpaceFields implements WWFieldsAttributesInterface {
+		ID("id"), DESCRIPTION("description"), TITLE("title"), CREATED("created"), UPDATED("updated"), MEMBERS_UPDATED("membersUpdated");
+
+		private String label;
+
+		private SpaceFields(String label) {
+			this.label = label;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	public enum SpaceChildren implements WWChildInterface {
+		MEMBERS_LIST("membersList", Object.class), CONVERSATION_CONTENT("conversationContent", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+
+		private String label;
+		private Class<?> childClass;
+
+		private SpaceChildren(String label, Class<?> childClass) {
+			this.label = label;
+			this.childClass = childClass;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public Class<?> getChildClass() {
+			return childClass;
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -25,6 +62,7 @@ public class Space implements Serializable {
 	private Date updated;
 	private Person updatedBy;
 	private List<Person> memberList;
+	private String membersUpdated;
 	private Conversation conversationContent;
 
 	/**
@@ -145,6 +183,21 @@ public class Space implements Serializable {
 	 */
 	public void setMembers(List<Person> members) {
 		this.memberList = members;
+	}
+
+	/**
+	 * @return String JSON date of when members were last updated
+	 */
+	public String getMembersUpdated() {
+		return membersUpdated;
+	}
+
+	/**
+	 * @param membersUpdated
+	 *            String JSON date of when members were last updated
+	 */
+	public void setMembersUpdated(String membersUpdated) {
+		this.membersUpdated = membersUpdated;
 	}
 
 	/**
