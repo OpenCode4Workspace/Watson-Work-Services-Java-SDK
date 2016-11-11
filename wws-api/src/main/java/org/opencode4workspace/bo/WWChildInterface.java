@@ -4,6 +4,6 @@ public interface WWChildInterface {
 
 	public String getLabel();
 
-	public Class<?> getChildClass();
+	public Class<?> getEnumClass();
 
 }

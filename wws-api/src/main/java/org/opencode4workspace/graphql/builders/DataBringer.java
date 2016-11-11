@@ -4,6 +4,8 @@ public interface DataBringer {
 
 	public String buildQuery();
 
+	public String buildQuery(boolean pretty);
+
 	public Object getDataQuery();
 
 }

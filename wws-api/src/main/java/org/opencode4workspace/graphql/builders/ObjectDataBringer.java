@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
 public class ObjectDataBringer implements DataBringer {
@@ -15,8 +16,9 @@ public class ObjectDataBringer implements DataBringer {
 	private boolean hasItems;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
 	private List<String> fieldsList = new ArrayList<String>();
-	private List<ObjectDataBringer> children = new ArrayList<ObjectDataBringer>();
+	private List<DataBringer> children = new ArrayList<DataBringer>();
 	private String dataQuery;
+	private ObjectDataBringer pageInfo;
 
 	public ObjectDataBringer() {
 
@@ -64,6 +66,12 @@ public class ObjectDataBringer implements DataBringer {
 		return buildQuery(false);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
+	 */
+	@Override
 	public String buildQuery(boolean pretty) {
 		boolean isFirst = true;
 		StringBuilder s = new StringBuilder();
@@ -91,14 +99,14 @@ public class ObjectDataBringer implements DataBringer {
 			s.append("\n\r");
 		}
 
-		// Add children, if exist
-		for (ObjectDataBringer child : getChildren()) {
-			s.append(child.buildQuery(pretty));
+		// Add pageInfo, if required
+		if (null != pageInfo) {
+			s.append(pageInfo.buildQuery(pretty));
 		}
 
 		// Open "items" container, if required
 		if (isHasItems()) {
-			s.append("items {");
+			s.append(" items {");
 			if (pretty) {
 				s.append("\n\r");
 			}
@@ -117,6 +125,11 @@ public class ObjectDataBringer implements DataBringer {
 				isFirst = false;
 			}
 			s.append(field);
+		}
+
+		// Add children, if exist
+		for (DataBringer child : getChildren()) {
+			s.append(child.buildQuery(pretty));
 		}
 
 		// Close "items" container, if required
@@ -196,22 +209,35 @@ public class ObjectDataBringer implements DataBringer {
 		return attributesList;
 	}
 
-	public List<ObjectDataBringer> getChildren() {
+	public List<DataBringer> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<ObjectDataBringer> children) {
+	public void setChildren(List<DataBringer> children) {
 		this.children = children;
 	}
 
-	public List<ObjectDataBringer> addChild(ObjectDataBringer child) {
+	public List<DataBringer> addChild(DataBringer child) {
 		children.add(child);
 		return children;
 	}
 
-	public List<ObjectDataBringer> removeChild(ObjectDataBringer child) {
+	public List<DataBringer> removeChild(DataBringer child) {
 		children.remove(child);
 		return children;
+	}
+
+	public void addPageInfo() {
+		pageInfo = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, true);
+		;
+	}
+
+	public void addPageInfo(ObjectDataBringer pageInfoCustom) {
+		pageInfo = pageInfoCustom;
+	}
+
+	public void removePageInfo() {
+		pageInfo = null;
 	}
 
 }
