@@ -31,14 +31,12 @@ public class ObjectDataBringer implements DataBringer {
 		this.hasItems = hasItems;
 	}
 
-	// TODO: If we can't find a smarter way to build an enum for use with addField(), remove this
-	public ObjectDataBringer(Class<?> clazz, Boolean addAllFields) {
-		this(clazz, addAllFields, false);
+	public ObjectDataBringer(String objectName, Class<?> clazz, Boolean addAllFields) {
+		this(objectName, clazz, false, addAllFields);
 	}
 
-	// TODO: If we can't find a smarter way to build an enum for use with addField(), remove this
-	public ObjectDataBringer(Class<?> clazz, Boolean addAllFields, boolean hasItems) {
-		objectName = clazz.getSimpleName();
+	public ObjectDataBringer(String objectName, Class<?> clazz, boolean hasItems, Boolean addAllFields) {
+		this.objectName = objectName;
 		this.hasItems = hasItems;
 		if (addAllFields) {
 			for (Field f : clazz.getDeclaredFields()) {
@@ -49,12 +47,12 @@ public class ObjectDataBringer implements DataBringer {
 		}
 	}
 
-	public ObjectDataBringer(Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
-		this(clazz, fieldsEnum, false);
+	public ObjectDataBringer(String objectName, Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
+		this(objectName, clazz, false, fieldsEnum);
 	}
 
-	public ObjectDataBringer(Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum, boolean hasItems) {
-		objectName = clazz.getSimpleName();
+	public ObjectDataBringer(String objectName, Class<?> clazz, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
+		this.objectName = objectName;
 		this.hasItems = hasItems;
 		for (WWFieldsAttributesInterface f : fieldsEnum) {
 			fieldsList.add(f.getLabel());
@@ -70,10 +68,11 @@ public class ObjectDataBringer implements DataBringer {
 		boolean isFirst = true;
 		StringBuilder s = new StringBuilder();
 		// Add object name
-		s.append(objectName);
+		s.append(objectName + " ");
 
 		// Add attributes, if exist
 		if (!attributesList.isEmpty()) {
+			s.append("(");
 			for (String key : attributesList.keySet()) {
 				if (!isFirst) {
 					s.append(" ");
@@ -83,6 +82,7 @@ public class ObjectDataBringer implements DataBringer {
 				s.append(key + ": ");
 				s.append(attributesList.get(key));
 			}
+			s.append(") ");
 		}
 
 		// Open object

@@ -24,7 +24,7 @@ public class PageInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String LABEL = "pageInfo";
 	private String startCursor;
-	private String lastCursor;
+	private String endCursor;
 	private boolean hasNextPage;
 	private boolean hasPreviousPage;
 
@@ -40,12 +40,12 @@ public class PageInfo implements Serializable {
 		this.startCursor = startCursor;
 	}
 
-	public String getLastCursor() {
-		return lastCursor;
+	public String getEndCursor() {
+		return endCursor;
 	}
 
-	public void setLastCursor(String lastCursor) {
-		this.lastCursor = lastCursor;
+	public void setEndCursor(String lastCursor) {
+		this.endCursor = lastCursor;
 	}
 
 	public boolean isHasNextPage() {
