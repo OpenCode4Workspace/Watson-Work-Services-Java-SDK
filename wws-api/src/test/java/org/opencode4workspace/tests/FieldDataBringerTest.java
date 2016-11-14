@@ -30,7 +30,7 @@ public class FieldDataBringerTest {
 	public void testGetPageInfoFields() {
 		ObjectDataBringer fb = new ObjectDataBringer(PageInfo.LABEL, false);
 		assertEquals(0, fb.getFieldsList().size());
-		fb = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, true);
+		fb = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, false, true);
 		assertEquals(4, fb.getFieldsList().size());
 		fb = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, PageInfo.PageInfoFields.values());
 		assertEquals(4, fb.getFieldsList().size());
@@ -70,13 +70,13 @@ public class FieldDataBringerTest {
 		spaces.addField(SpaceFields.CREATED.getLabel());
 		spaces.addField(SpaceFields.UPDATED.getLabel());
 		spaces.addField(SpaceFields.MEMBERS_UPDATED.getLabel());
-		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel(), SpaceChildren.UPDATED_BY.getEnumClass(), false);
+		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonInfoFields.ID.getLabel());
 		updatedBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonInfoFields.PHOTO_URL.getLabel());
 		updatedBy.addField(PersonInfoFields.EMAIL.getLabel());
 		spaces.addChild(updatedBy);
-		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel(), SpaceChildren.CREATED_BY.getEnumClass(), false);
+		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonInfoFields.ID.getLabel());
 		createdBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonInfoFields.PHOTO_URL.getLabel());
@@ -105,13 +105,13 @@ public class FieldDataBringerTest {
 		spaces.addField(SpaceFields.CREATED.getLabel());
 		spaces.addField(SpaceFields.UPDATED.getLabel());
 		spaces.addField(SpaceFields.MEMBERS_UPDATED.getLabel());
-		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel(), SpaceChildren.UPDATED_BY.getEnumClass(), false);
+		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonInfoFields.ID.getLabel());
 		updatedBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonInfoFields.PHOTO_URL.getLabel());
 		updatedBy.addField(PersonInfoFields.EMAIL.getLabel());
 		spaces.addChild(updatedBy);
-		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel(), SpaceChildren.CREATED_BY.getEnumClass(), false);
+		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonInfoFields.ID.getLabel());
 		createdBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonInfoFields.PHOTO_URL.getLabel());
@@ -128,13 +128,13 @@ public class FieldDataBringerTest {
 		conversation.addField(ConversationFields.ID.getLabel());
 		conversation.addField(ConversationFields.CREATED.getLabel());
 		conversation.addField(ConversationFields.UPDATED.getLabel());
-		createdBy = new ObjectDataBringer(ConversationChildren.CREATED_BY.getLabel(), ConversationChildren.CREATED_BY.getEnumClass(), false);
+		createdBy = new ObjectDataBringer(ConversationChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonInfoFields.ID.getLabel());
 		createdBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonInfoFields.PHOTO_URL.getLabel());
 		createdBy.addField(PersonInfoFields.EMAIL.getLabel());
 		conversation.addChild(createdBy);
-		updatedBy = new ObjectDataBringer(ConversationChildren.UPDATED_BY.getLabel(), ConversationChildren.UPDATED_BY.getEnumClass(), false);
+		updatedBy = new ObjectDataBringer(ConversationChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonInfoFields.ID.getLabel());
 		updatedBy.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonInfoFields.PHOTO_URL.getLabel());

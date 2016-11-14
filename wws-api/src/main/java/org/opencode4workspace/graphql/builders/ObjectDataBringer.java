@@ -33,11 +33,7 @@ public class ObjectDataBringer implements DataBringer {
 		this.hasItems = hasItems;
 	}
 
-	public ObjectDataBringer(String objectName, Class<?> clazz, Boolean addAllFields) {
-		this(objectName, clazz, false, addAllFields);
-	}
-
-	public ObjectDataBringer(String objectName, Class<?> clazz, boolean hasItems, Boolean addAllFields) {
+	public ObjectDataBringer(String objectName, Class<?> clazz, Boolean hasItems, Boolean addAllFields) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 		if (addAllFields) {
@@ -237,8 +233,7 @@ public class ObjectDataBringer implements DataBringer {
 	}
 
 	public void addPageInfo() {
-		pageInfo = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, true);
-		;
+		pageInfo = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, false, true);
 	}
 
 	public void addPageInfo(ObjectDataBringer pageInfoCustom) {
