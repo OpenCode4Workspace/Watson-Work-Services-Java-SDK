@@ -1,5 +1,6 @@
 package org.opencode4workspace.graphql.builders;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -10,8 +11,9 @@ import java.util.Map;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
-public class ObjectDataSender implements DataSender {
+public class ObjectDataSender implements DataSender, Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String objectName;
 	private boolean hasItems;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
