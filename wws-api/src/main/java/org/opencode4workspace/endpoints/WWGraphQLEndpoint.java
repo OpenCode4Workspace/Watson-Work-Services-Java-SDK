@@ -2,66 +2,99 @@ package org.opencode4workspace.endpoints;
 
 import java.util.List;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Conversation.ConversationChildren;
+import org.opencode4workspace.bo.Conversation.ConversationFields;
+import org.opencode4workspace.bo.Message.MessageFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
-import org.opencode4workspace.graphql.GraphResultContainer;
+import org.opencode4workspace.bo.Space.SpaceChildren;
+import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.graphql.builders.BasicPaginationEnum;
+import org.opencode4workspace.graphql.builders.ObjectDataSender;
 import org.opencode4workspace.json.GraphQLRequest;
-import org.opencode4workspace.json.RequestBuilder;
-import org.opencode4workspace.json.ResultParser;
 
-public class WWGraphQLEndpoint {
+public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 
-	private static final String GET_SPACES_QUERY = "query getSpaces {spaces(first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage}items {id title description updated updatedBy {id displayName photoUrl email} created createdBy {id displayName photoUrl email} members(first: 100) {items {id photoUrl email displayName} } conversation {id created createdBy {id displayName photoUrl email} updated updatedBy {id displayName photoUrl email} messages(first: 20) { pageInfo {startCursor  endCursor hasPreviousPage hasNextPage} items {contentType content id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}}}}}";
-	private final WWClient client;
-
+	/**
+	 * @param client
+	 *            WWClient containing authentication details and token
+	 */
 	public WWGraphQLEndpoint(WWClient client) {
-		this.client = client;
+		super(client);
 	}
 
+	/**
+	 * Simplified access method, to load GraphQL query for getting spaces, execute the request, and parse the results
+	 * 
+	 * @return List<? extending Space> of Space details
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
+	@SuppressWarnings("unchecked")
 	public List<? extends Space> getSpaces() throws WWException {
-		GraphQLRequest request = new GraphQLRequest(GET_SPACES_QUERY, null, "getSpaces");
-		HttpPost post = preparePost(client.getJWTToken());
-		CloseableHttpClient client = HttpClients.createDefault();
-		CloseableHttpResponse response = null;
-		try {
-			StringEntity postPayload = new StringEntity(new RequestBuilder<GraphQLRequest>(GraphQLRequest.class).buildJson(request), "UTF-8");
-			post.setEntity(postPayload);
-			response = client.execute(post);
-			if (response.getStatusLine().getStatusCode() == 200) {
-				String content = EntityUtils.toString(response.getEntity());
-				GraphResultContainer resultContainer = new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content);
-				return resultContainer.getData().getSpaces().getItems();
-			} else {
-				throw new WWException("Failuer during login" + response.getStatusLine().getReasonPhrase());
-			}
-		} catch (Exception e) {
-			throw new WWException(e);
-		} finally {
-			if (response != null) {
-				try {
-					response.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		// Basic createdBy ObjectDataBringer - same label for all
+		ObjectDataSender createdBy = new ObjectDataSender(SpaceChildren.UPDATED_BY.getLabel());
+		createdBy.addField(PersonFields.ID.getLabel());
+		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
+		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
+		createdBy.addField(PersonFields.EMAIL.getLabel());
 
+		// Basic updatedBy ObjectDataBringer - same label for all
+		ObjectDataSender updatedBy = new ObjectDataSender(SpaceChildren.UPDATED_BY.getLabel());
+		updatedBy.addField(PersonFields.ID.getLabel());
+		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
+		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
+		updatedBy.addField(PersonFields.EMAIL.getLabel());
 
-		
+		ObjectDataSender spaces = new ObjectDataSender("spaces", true);
+		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addPageInfo();
+		spaces.addField(SpaceFields.ID.getLabel());
+		spaces.addField(SpaceFields.TITLE.getLabel());
+		spaces.addField(SpaceFields.DESCRIPTION.getLabel());
+		spaces.addField(SpaceFields.UPDATED.getLabel());
+		spaces.addChild(updatedBy);
+		spaces.addField(SpaceFields.CREATED.getLabel());
+		spaces.addChild(createdBy);
+		ObjectDataSender members = new ObjectDataSender(SpaceChildren.MEMBERS.getLabel(), SpaceChildren.MEMBERS.getEnumClass(), true, false);
+		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		members.addField(PersonFields.ID.getLabel());
+		members.addField(PersonFields.PHOTO_URL.getLabel());
+		members.addField(PersonFields.EMAIL.getLabel());
+		members.addField(PersonFields.DISPLAY_NAME.getLabel());
+		spaces.addChild(members);
+		ObjectDataSender conversation = new ObjectDataSender(SpaceChildren.CONVERSATION.getLabel());
+		conversation.addField(ConversationFields.ID.getLabel());
+		conversation.addField(ConversationFields.CREATED.getLabel());
+		conversation.addChild(createdBy);
+		conversation.addField(ConversationFields.UPDATED.getLabel());
+		conversation.addChild(updatedBy);
+		ObjectDataSender messages = new ObjectDataSender(ConversationChildren.MESSAGES.getLabel(), true);
+		messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 200);
+		messages.addPageInfo();
+		messages.addField(MessageFields.CONTENT_TYPE.getLabel());
+		messages.addField(MessageFields.CONTENT.getLabel());
+		messages.addField(MessageFields.CREATED.getLabel());
+		messages.addField(MessageFields.UPDATED.getLabel());
+		messages.addChild(createdBy);
+		messages.addChild(updatedBy);
+		conversation.addChild(messages);
+		spaces.addChild(conversation);
+
+		setRequest(new GraphQLRequest(spaces, "getSpaces"));
+		executeRequest();
+		return (List<? extends Space>) parseResultContainer();
 	}
-	
-	private HttpPost preparePost(String jwtToken) {
-		HttpPost post = new HttpPost("https://api.watsonwork.ibm.com/graphql");
-		post.addHeader("jwt", jwtToken);
-		post.addHeader("content-type", "application/json");
-		return post;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.AbstractWWGraphQLEndpoint#parseResultContainer()
+	 */
+	public Object parseResultContainer() {
+		return getResultContainer().getData().getSpaces().getItems();
 	}
 
 }

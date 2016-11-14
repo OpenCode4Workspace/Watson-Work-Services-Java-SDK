@@ -13,6 +13,43 @@ import java.util.List;
  */
 public class Message implements Serializable {
 
+	public enum MessageFields implements WWFieldsAttributesInterface {
+		ID("id"), CONTENT("content"), CONTENT_TYPE("contentType"), ANNOTATIONS("annotations"), CREATED("created"), UPDATED("updated");
+
+		private String label;
+
+		private MessageFields(String label) {
+			this.label = label;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	public enum MessageChildren implements WWChildInterface {
+		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+
+		private String label;
+		private Class<?> childEnumClass;
+
+		private MessageChildren(String label, Class<?> childEnumClass) {
+			this.label = label;
+			this.childEnumClass = childEnumClass;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public Class<?> getEnumClass() {
+			return childEnumClass;
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	private String id;
 	// TODO: Make this an enum
