@@ -28,7 +28,7 @@ public class Person implements Serializable {
 	}
 
 	public enum PersonInfoChildren implements WWChildInterface {
-		CREATED_BY("createdBy", PersonInfoFields.class), UPDATED_BY("updatedBy", PersonInfoFields.class);
+		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;

@@ -101,12 +101,12 @@ public class ObjectDataBringer implements DataBringer {
 
 		// Add pageInfo, if required
 		if (null != pageInfo) {
-			s.append(pageInfo.buildQuery(pretty));
+			s.append(pageInfo.buildQuery(pretty) + " ");
 		}
 
 		// Open "items" container, if required
 		if (isHasItems()) {
-			s.append(" items {");
+			s.append("items {");
 			if (pretty) {
 				s.append("\n\r");
 			}
@@ -129,6 +129,15 @@ public class ObjectDataBringer implements DataBringer {
 
 		// Add children, if exist
 		for (DataBringer child : getChildren()) {
+			if (!isFirst) {
+				if (pretty) {
+					s.append("\n\r");
+				} else {
+					s.append(" ");
+				}
+			} else {
+				isFirst = false;
+			}
 			s.append(child.buildQuery(pretty));
 		}
 

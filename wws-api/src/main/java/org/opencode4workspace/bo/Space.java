@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.opencode4workspace.bo.Person.PersonInfoFields;
-
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -31,8 +29,7 @@ public class Space implements Serializable {
 	}
 
 	public enum SpaceChildren implements WWChildInterface {
-		MEMBERS("members", Object.class), CONVERSATION_CONTENT("conversationContent", Conversation.class), CREATED_BY("createdBy", PersonInfoFields.class), UPDATED_BY("updatedBy",
-				PersonInfoFields.class);
+		MEMBERS("members", Person.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -66,7 +63,7 @@ public class Space implements Serializable {
 	private Person updatedBy;
 	private List<Person> memberList;
 	private String membersUpdated;
-	private Conversation conversationContent;
+	private Conversation conversation;
 
 	/**
 	 * @return String, id of the space
@@ -207,7 +204,7 @@ public class Space implements Serializable {
 	 * @return Conversation, corresponding to all messages in the space
 	 */
 	public Conversation getConversation() {
-		return conversationContent;
+		return conversation;
 	}
 
 	/**
@@ -215,7 +212,7 @@ public class Space implements Serializable {
 	 *            Conversation, corresponding to all messages in the space
 	 */
 	public void setConversation(Conversation conversation) {
-		this.conversationContent = conversation;
+		this.conversation = conversation;
 	}
 
 }

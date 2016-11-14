@@ -46,8 +46,6 @@ public class QueryBuilder implements Serializable {
 	public static QueryBuilder buildFromGraphQLQuery(String name, AbstractGraphQLQuery query) throws WWException {
 		if (null == query) {
 			throw new WWException("This method does not accept an empty GraphQLQuery object");
-		} else if (query.isEmpty()) {
-			throw new WWException("This method does not accept an empty GraphQLQuery object");
 		} else {
 			return new QueryBuilder(name, query);
 		}
