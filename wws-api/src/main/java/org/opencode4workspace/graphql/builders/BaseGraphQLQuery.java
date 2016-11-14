@@ -13,7 +13,7 @@ public class BaseGraphQLQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String operationName;
-	private ObjectDataBringer queryObject;
+	private ObjectDataSender queryObject;
 
 	public BaseGraphQLQuery() {
 
@@ -23,7 +23,7 @@ public class BaseGraphQLQuery implements Serializable {
 		this.operationName = operationName;
 	}
 
-	public BaseGraphQLQuery(String operationName, ObjectDataBringer queryObject) {
+	public BaseGraphQLQuery(String operationName, ObjectDataSender queryObject) {
 		this.operationName = operationName;
 		this.queryObject = queryObject;
 	}
@@ -36,11 +36,11 @@ public class BaseGraphQLQuery implements Serializable {
 		this.operationName = operationName;
 	}
 
-	public ObjectDataBringer getQueryObject() {
+	public ObjectDataSender getQueryObject() {
 		return queryObject;
 	}
 
-	public void setQueryObject(ObjectDataBringer queryObject) {
+	public void setQueryObject(ObjectDataSender queryObject) {
 		this.queryObject = queryObject;
 	}
 

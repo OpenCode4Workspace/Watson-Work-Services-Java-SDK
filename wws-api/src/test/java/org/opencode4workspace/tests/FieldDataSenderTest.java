@@ -15,11 +15,11 @@ import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.graphql.builders.BaseGraphQLQuery;
 import org.opencode4workspace.graphql.builders.BasicPaginationEnum;
-import org.opencode4workspace.graphql.builders.ObjectDataBringer;
+import org.opencode4workspace.graphql.builders.ObjectDataSender;
 import org.opencode4workspace.graphql.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.json.GraphQLRequest;
 
-public class FieldDataBringerTest {
+public class FieldDataSenderTest {
 
 	private static final String EXPECTED_PAGE_QUERY = "pageInfo {startCursor endCursor}";
 	private static final String GET_SPACES_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
@@ -28,13 +28,13 @@ public class FieldDataBringerTest {
 
 	@Test
 	public void testGetPageInfoFields() {
-		ObjectDataBringer fb = new ObjectDataBringer(PageInfo.LABEL, false);
+		ObjectDataSender fb = new ObjectDataSender(PageInfo.LABEL, false);
 		assertEquals(0, fb.getFieldsList().size());
-		fb = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, false, true);
+		fb = new ObjectDataSender(PageInfo.LABEL, PageInfo.class, false, true);
 		assertEquals(4, fb.getFieldsList().size());
-		fb = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, PageInfo.PageInfoFields.values());
+		fb = new ObjectDataSender(PageInfo.LABEL, PageInfo.class, PageInfo.PageInfoFields.values());
 		assertEquals(4, fb.getFieldsList().size());
-		fb = new ObjectDataBringer(PageInfo.LABEL);
+		fb = new ObjectDataSender(PageInfo.LABEL);
 		fb.addField(PageInfoFields.START_CURSOR.getLabel());
 		fb.addField(PageInfoFields.END_CURSOR.getLabel());
 		assertEquals(EXPECTED_PAGE_QUERY, fb.buildQuery());
@@ -43,7 +43,7 @@ public class FieldDataBringerTest {
 	@Test
 	public void testSpacesObjectQuery() throws WWException {
 		BaseGraphQLQuery query = new BaseGraphQLQuery("getSpaces");
-		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
+		ObjectDataSender spaces = new ObjectDataSender("spaces", true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
@@ -61,7 +61,7 @@ public class FieldDataBringerTest {
 	public void testSpacesBiggerObjectQuery() {
 		BaseGraphQLQuery query = new BaseGraphQLQuery();
 		query.setOperationName("getSpaces");
-		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
+		ObjectDataSender spaces = new ObjectDataSender("spaces", true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
@@ -70,19 +70,19 @@ public class FieldDataBringerTest {
 		spaces.addField(SpaceFields.CREATED.getLabel());
 		spaces.addField(SpaceFields.UPDATED.getLabel());
 		spaces.addField(SpaceFields.MEMBERS_UPDATED.getLabel());
-		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
+		ObjectDataSender updatedBy = new ObjectDataSender(SpaceChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonFields.ID.getLabel());
 		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
 		updatedBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(updatedBy);
-		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel());
+		ObjectDataSender createdBy = new ObjectDataSender(SpaceChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonFields.ID.getLabel());
 		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
 		createdBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(createdBy);
-		ObjectDataBringer members = new ObjectDataBringer((SpaceChildren.MEMBERS.getLabel()), true);
+		ObjectDataSender members = new ObjectDataSender((SpaceChildren.MEMBERS.getLabel()), true);
 		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		members.addField(PersonFields.ID.getLabel());
 		members.addField(PersonFields.PHOTO_URL.getLabel());
@@ -96,7 +96,7 @@ public class FieldDataBringerTest {
 	@Test
 	public void testSpacesFullObjectQuery() {
 		SpacesGraphQLQuery graphQuery = new SpacesGraphQLQuery();
-		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
+		ObjectDataSender spaces = new ObjectDataSender("spaces", true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
@@ -105,42 +105,42 @@ public class FieldDataBringerTest {
 		spaces.addField(SpaceFields.CREATED.getLabel());
 		spaces.addField(SpaceFields.UPDATED.getLabel());
 		spaces.addField(SpaceFields.MEMBERS_UPDATED.getLabel());
-		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
+		ObjectDataSender updatedBy = new ObjectDataSender(SpaceChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonFields.ID.getLabel());
 		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
 		updatedBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(updatedBy);
-		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.CREATED_BY.getLabel());
+		ObjectDataSender createdBy = new ObjectDataSender(SpaceChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonFields.ID.getLabel());
 		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
 		createdBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(createdBy);
-		ObjectDataBringer members = new ObjectDataBringer(SpaceChildren.MEMBERS.getLabel(), true);
+		ObjectDataSender members = new ObjectDataSender(SpaceChildren.MEMBERS.getLabel(), true);
 		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		members.addField(PersonFields.ID.getLabel());
 		members.addField(PersonFields.PHOTO_URL.getLabel());
 		members.addField(PersonFields.EMAIL.getLabel());
 		members.addField(PersonFields.DISPLAY_NAME.getLabel());
 		spaces.addChild(members);
-		ObjectDataBringer conversation = new ObjectDataBringer(SpaceChildren.CONVERSATION.getLabel(), false);
+		ObjectDataSender conversation = new ObjectDataSender(SpaceChildren.CONVERSATION.getLabel(), false);
 		conversation.addField(ConversationFields.ID.getLabel());
 		conversation.addField(ConversationFields.CREATED.getLabel());
 		conversation.addField(ConversationFields.UPDATED.getLabel());
-		createdBy = new ObjectDataBringer(ConversationChildren.CREATED_BY.getLabel());
+		createdBy = new ObjectDataSender(ConversationChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonFields.ID.getLabel());
 		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
 		createdBy.addField(PersonFields.EMAIL.getLabel());
 		conversation.addChild(createdBy);
-		updatedBy = new ObjectDataBringer(ConversationChildren.UPDATED_BY.getLabel());
+		updatedBy = new ObjectDataSender(ConversationChildren.UPDATED_BY.getLabel());
 		updatedBy.addField(PersonFields.ID.getLabel());
 		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
 		updatedBy.addField(PersonFields.EMAIL.getLabel());
 		conversation.addChild(updatedBy);
-		ObjectDataBringer messages = new ObjectDataBringer(ConversationChildren.MESSAGES.getLabel(), true);
+		ObjectDataSender messages = new ObjectDataSender(ConversationChildren.MESSAGES.getLabel(), true);
 		messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 20);
 		messages.addPageInfo();
 		messages.addField(MessageFields.CONTENT_TYPE.getLabel());

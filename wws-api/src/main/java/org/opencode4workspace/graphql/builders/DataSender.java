@@ -1,6 +1,6 @@
 package org.opencode4workspace.graphql.builders;
 
-public interface DataBringer {
+public interface DataSender {
 
 	public String buildQuery();
 

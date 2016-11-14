@@ -10,30 +10,30 @@ import java.util.Map;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
-public class ObjectDataBringer implements DataBringer {
+public class ObjectDataSender implements DataSender {
 
 	private String objectName;
 	private boolean hasItems;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
 	private List<String> fieldsList = new ArrayList<String>();
-	private List<DataBringer> children = new ArrayList<DataBringer>();
+	private List<DataSender> children = new ArrayList<DataSender>();
 	private String dataQuery;
-	private ObjectDataBringer pageInfo;
+	private ObjectDataSender pageInfo;
 
-	public ObjectDataBringer() {
+	public ObjectDataSender() {
 
 	}
 
-	public ObjectDataBringer(String objectName) {
+	public ObjectDataSender(String objectName) {
 		this(objectName, false);
 	}
 
-	public ObjectDataBringer(String objectName, boolean hasItems) {
+	public ObjectDataSender(String objectName, boolean hasItems) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 	}
 
-	public ObjectDataBringer(String objectName, Class<?> clazz, Boolean hasItems, Boolean addAllFields) {
+	public ObjectDataSender(String objectName, Class<?> clazz, Boolean hasItems, Boolean addAllFields) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 		if (addAllFields) {
@@ -45,11 +45,11 @@ public class ObjectDataBringer implements DataBringer {
 		}
 	}
 
-	public ObjectDataBringer(String objectName, Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
+	public ObjectDataSender(String objectName, Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
 		this(objectName, clazz, false, fieldsEnum);
 	}
 
-	public ObjectDataBringer(String objectName, Class<?> clazz, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
+	public ObjectDataSender(String objectName, Class<?> clazz, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 		for (WWFieldsAttributesInterface f : fieldsEnum) {
@@ -124,7 +124,7 @@ public class ObjectDataBringer implements DataBringer {
 		}
 
 		// Add children, if exist
-		for (DataBringer child : getChildren()) {
+		for (DataSender child : getChildren()) {
 			if (!isFirst) {
 				if (pretty) {
 					s.append("\n\r");
@@ -214,29 +214,29 @@ public class ObjectDataBringer implements DataBringer {
 		return attributesList;
 	}
 
-	public List<DataBringer> getChildren() {
+	public List<DataSender> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<DataBringer> children) {
+	public void setChildren(List<DataSender> children) {
 		this.children = children;
 	}
 
-	public List<DataBringer> addChild(DataBringer child) {
+	public List<DataSender> addChild(DataSender child) {
 		children.add(child);
 		return children;
 	}
 
-	public List<DataBringer> removeChild(DataBringer child) {
+	public List<DataSender> removeChild(DataSender child) {
 		children.remove(child);
 		return children;
 	}
 
 	public void addPageInfo() {
-		pageInfo = new ObjectDataBringer(PageInfo.LABEL, PageInfo.class, false, true);
+		pageInfo = new ObjectDataSender(PageInfo.LABEL, PageInfo.class, false, true);
 	}
 
-	public void addPageInfo(ObjectDataBringer pageInfoCustom) {
+	public void addPageInfo(ObjectDataSender pageInfoCustom) {
 		pageInfo = pageInfoCustom;
 	}
 
