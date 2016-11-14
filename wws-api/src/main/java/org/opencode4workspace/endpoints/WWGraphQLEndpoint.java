@@ -4,13 +4,18 @@ import java.util.List;
 
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Conversation.ConversationChildren;
+import org.opencode4workspace.bo.Conversation.ConversationFields;
+import org.opencode4workspace.bo.Message.MessageFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
+import org.opencode4workspace.bo.Space.SpaceChildren;
+import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.graphql.builders.BasicPaginationEnum;
+import org.opencode4workspace.graphql.builders.ObjectDataBringer;
 import org.opencode4workspace.json.GraphQLRequest;
 
 public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
-
-	// TODO: Convert to RequestBuilder
-	private static final String GET_SPACES_QUERY = "query getSpaces {spaces(first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage}items {id title description updated updatedBy {id displayName photoUrl email} created createdBy {id displayName photoUrl email} members(first: 100) {items {id photoUrl email displayName} } conversation {id created createdBy {id displayName photoUrl email} updated updatedBy {id displayName photoUrl email} messages(first: 20) { pageInfo {startCursor  endCursor hasPreviousPage hasNextPage} items {contentType content id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}}}}}";
 
 	/**
 	 * @param client
@@ -29,7 +34,56 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<? extends Space> getSpaces() throws WWException {
-		setRequest(new GraphQLRequest(GET_SPACES_QUERY, null, "getSpaces"));
+		// Basic createdBy ObjectDataBringer - same label for all
+		ObjectDataBringer createdBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
+		createdBy.addField(PersonFields.ID.getLabel());
+		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
+		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
+		createdBy.addField(PersonFields.EMAIL.getLabel());
+
+		// Basic updatedBy ObjectDataBringer - same label for all
+		ObjectDataBringer updatedBy = new ObjectDataBringer(SpaceChildren.UPDATED_BY.getLabel());
+		updatedBy.addField(PersonFields.ID.getLabel());
+		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
+		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
+		updatedBy.addField(PersonFields.EMAIL.getLabel());
+
+		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
+		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addPageInfo();
+		spaces.addField(SpaceFields.ID.getLabel());
+		spaces.addField(SpaceFields.TITLE.getLabel());
+		spaces.addField(SpaceFields.DESCRIPTION.getLabel());
+		spaces.addField(SpaceFields.UPDATED.getLabel());
+		spaces.addChild(updatedBy);
+		spaces.addField(SpaceFields.CREATED.getLabel());
+		spaces.addChild(createdBy);
+		ObjectDataBringer members = new ObjectDataBringer(SpaceChildren.MEMBERS.getLabel(), SpaceChildren.MEMBERS.getEnumClass(), true, false);
+		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		members.addField(PersonFields.ID.getLabel());
+		members.addField(PersonFields.PHOTO_URL.getLabel());
+		members.addField(PersonFields.EMAIL.getLabel());
+		members.addField(PersonFields.DISPLAY_NAME.getLabel());
+		spaces.addChild(members);
+		ObjectDataBringer conversation = new ObjectDataBringer(SpaceChildren.CONVERSATION.getLabel());
+		conversation.addField(ConversationFields.ID.getLabel());
+		conversation.addField(ConversationFields.CREATED.getLabel());
+		conversation.addChild(createdBy);
+		conversation.addField(ConversationFields.UPDATED.getLabel());
+		conversation.addChild(updatedBy);
+		ObjectDataBringer messages = new ObjectDataBringer(ConversationChildren.MESSAGES.getLabel(), true);
+		messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 200);
+		messages.addPageInfo();
+		messages.addField(MessageFields.CONTENT_TYPE.getLabel());
+		messages.addField(MessageFields.CONTENT.getLabel());
+		messages.addField(MessageFields.CREATED.getLabel());
+		messages.addField(MessageFields.UPDATED.getLabel());
+		messages.addChild(createdBy);
+		messages.addChild(updatedBy);
+		conversation.addChild(messages);
+		spaces.addChild(conversation);
+
+		setRequest(new GraphQLRequest(spaces, "getSpaces"));
 		executeRequest();
 		return (List<? extends Space>) parseResultContainer();
 	}
