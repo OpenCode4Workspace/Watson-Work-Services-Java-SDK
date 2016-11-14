@@ -4,9 +4,11 @@ import java.util.HashMap;
 
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.graphql.builders.BaseGraphQLQuery;
+import org.opencode4workspace.graphql.builders.ObjectDataBringer;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  *
  *        A class for handling GraphQL requests
@@ -35,14 +37,68 @@ public class GraphQLRequest {
 		this.operationName = operationName;
 	}
 
+	/**
+	 * Initialises the GraphQLRequest object from a BaseGraphQLQuery object. This will have the operation name and will not pass any variables to Watson Work Services
+	 * 
+	 * @param queryObject
+	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataBringer} which will be parsed to return the full query
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 */
 	public GraphQLRequest(BaseGraphQLQuery queryObject) throws WWException {
 		this(queryObject, new HashMap<String, String>());
 	}
 
+	/**
+	 * Initialises the GraphQLRequest object from a BaseGraphQLQuery object. This will have the operation name.
+	 * 
+	 * @param queryObject
+	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataBringer} which will be parsed to return the full query
+	 * @param variables
+	 *            HashMap<String, String> of variables to pass with the query
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 */
 	public GraphQLRequest(BaseGraphQLQuery queryObject, HashMap<String, String> variables) throws WWException {
 		try {
-			operationName = queryObject.getOperationName();
+			this.operationName = queryObject.getOperationName();
 			this.query = queryObject.returnQuery();
+			this.variables = variables;
+		} catch (Exception e) {
+			throw new WWException("Error creating request from query - " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Initialises the GraphQLRequest from an ObjectDataBringer and operation name. Those will be combined to build the String query. This will not pass any variables to Watson Work Services.
+	 * 
+	 * @param queryObject
+	 *            ObjectDataBringer containing the query settings
+	 * @param operationName
+	 *            String operationName to use
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 */
+	public GraphQLRequest(ObjectDataBringer queryObject, String operationName) throws WWException {
+		this(queryObject, new HashMap<String, String>(), operationName);
+	}
+
+	/**
+	 * Initialises the GraphQLRequest from an ObjectDataBringer, operation name and variables. Those will be combined to build the String query.
+	 * 
+	 * @param queryObject
+	 *            ObjectDataBringer containing the query settings
+	 * @param variables
+	 *            HashMap<String, String> of variables to pass with the query
+	 * @param operationName
+	 *            String operationName to use
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 */
+	public GraphQLRequest(ObjectDataBringer queryObject, HashMap<String, String> variables, String operationName) throws WWException {
+		try {
+			this.operationName = operationName;
+			this.query = "query " + operationName + " {" + queryObject.buildQuery() + "}";
 			this.variables = variables;
 		} catch (Exception e) {
 			throw new WWException("Error creating request from query - " + e.getMessage());
