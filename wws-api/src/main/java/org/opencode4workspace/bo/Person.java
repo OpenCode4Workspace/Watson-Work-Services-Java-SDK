@@ -12,12 +12,12 @@ import java.util.Date;
  */
 public class Person implements Serializable {
 
-	public enum PersonInfoFields implements WWFieldsAttributesInterface {
+	public enum PersonFields implements WWFieldsAttributesInterface {
 		ID("id"), PHOTO_URL("photoUrl"), EMAIL("email"), DISPLAY_NAME("displayName"), EXT_ID("extId"), EMAIL_ADDRESSES("emailAddresses"), CUSTOMER_ID("customerId"), CREATED("created");
 
 		private String label;
 
-		private PersonInfoFields(String label) {
+		private PersonFields(String label) {
 			this.label = label;
 		}
 
@@ -27,13 +27,13 @@ public class Person implements Serializable {
 		}
 	}
 
-	public enum PersonInfoChildren implements WWChildInterface {
+	public enum PersonChildren implements WWChildInterface {
 		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
 
-		private PersonInfoChildren(String label, Class<?> childEnumClass) {
+		private PersonChildren(String label, Class<?> childEnumClass) {
 			this.label = label;
 			this.childEnumClass = childEnumClass;
 		}
