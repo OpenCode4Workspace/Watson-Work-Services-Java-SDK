@@ -3,6 +3,7 @@ package org.opencode4workspace.tests;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
@@ -12,9 +13,11 @@ import org.opencode4workspace.bo.Person.PersonInfoFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.graphql.builders.BaseGraphQLQuery;
 import org.opencode4workspace.graphql.builders.BasicPaginationEnum;
 import org.opencode4workspace.graphql.builders.ObjectDataBringer;
 import org.opencode4workspace.graphql.builders.SpacesGraphQLQuery;
+import org.opencode4workspace.json.GraphQLRequest;
 
 public class FieldDataBringerTest {
 
@@ -38,8 +41,8 @@ public class FieldDataBringerTest {
 	}
 
 	@Test
-	public void testSpacesObjectQuery() {
-		SpacesGraphQLQuery graphQuery = new SpacesGraphQLQuery();
+	public void testSpacesObjectQuery() throws WWException {
+		BaseGraphQLQuery query = new BaseGraphQLQuery("getSpaces");
 		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
@@ -49,13 +52,15 @@ public class FieldDataBringerTest {
 		spaces.addField(SpaceFields.CREATED.getLabel());
 		spaces.addField(SpaceFields.UPDATED.getLabel());
 		spaces.addField(SpaceFields.MEMBERS_UPDATED.getLabel());
-		graphQuery.setQueryObject(spaces);
-		assertEquals(GET_SPACES_QUERY, graphQuery.returnQuery());
+		query.setQueryObject(spaces);
+		GraphQLRequest request = new GraphQLRequest(query);
+		assertEquals(GET_SPACES_QUERY, request.getQuery());
 	}
 
 	@Test
 	public void testSpacesBiggerObjectQuery() {
-		SpacesGraphQLQuery graphQuery = new SpacesGraphQLQuery();
+		BaseGraphQLQuery query = new BaseGraphQLQuery();
+		query.setOperationName("getSpaces");
 		ObjectDataBringer spaces = new ObjectDataBringer("spaces", true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
@@ -84,8 +89,8 @@ public class FieldDataBringerTest {
 		members.addField(PersonInfoFields.EMAIL.getLabel());
 		members.addField(PersonInfoFields.DISPLAY_NAME.getLabel());
 		spaces.addChild(members);
-		graphQuery.setQueryObject(spaces);
-		assertEquals(GET_SPACES_BIGGER_QUERY, graphQuery.returnQuery());
+		query.setQueryObject(spaces);
+		assertEquals(GET_SPACES_BIGGER_QUERY, query.returnQuery());
 	}
 
 	@Test

@@ -2,6 +2,9 @@ package org.opencode4workspace.json;
 
 import java.util.HashMap;
 
+import org.opencode4workspace.WWException;
+import org.opencode4workspace.graphql.builders.BaseGraphQLQuery;
+
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -30,6 +33,20 @@ public class GraphQLRequest {
 		this.query = query;
 		this.variables = variables;
 		this.operationName = operationName;
+	}
+
+	public GraphQLRequest(BaseGraphQLQuery queryObject) throws WWException {
+		this(queryObject, new HashMap<String, String>());
+	}
+
+	public GraphQLRequest(BaseGraphQLQuery queryObject, HashMap<String, String> variables) throws WWException {
+		try {
+			operationName = queryObject.getOperationName();
+			this.query = queryObject.returnQuery();
+			this.variables = variables;
+		} catch (Exception e) {
+			throw new WWException("Error creating request from query - " + e.getMessage());
+		}
 	}
 
 	/**

@@ -9,23 +9,23 @@ import java.io.Serializable;
  *        Abstract object for creating GraphQL Query. Use one of the in-built options
  *
  */
-public class AbstractGraphQLQuery implements Serializable {
+public class BaseGraphQLQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String introduction;
 	private String operationName;
 	private ObjectDataBringer queryObject;
 
-	public AbstractGraphQLQuery() {
+	public BaseGraphQLQuery() {
 
 	}
 
-	public String getIntroduction() {
-		return introduction;
+	public BaseGraphQLQuery(String operationName) {
+		this.operationName = operationName;
 	}
 
-	public void setIntroduction(String introduction) {
-		this.introduction = introduction;
+	public BaseGraphQLQuery(String operationName, ObjectDataBringer queryObject) {
+		this.operationName = operationName;
+		this.queryObject = queryObject;
 	}
 
 	public String getOperationName() {
