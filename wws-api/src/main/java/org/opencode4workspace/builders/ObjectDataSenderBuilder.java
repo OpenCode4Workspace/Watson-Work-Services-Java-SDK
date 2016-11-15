@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
+import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable {
 
@@ -40,7 +41,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		if (addAllFields) {
 			for (Field f : clazz.getDeclaredFields()) {
 				if (!Modifier.isStatic(f.getModifiers())) {
-					fieldsList.add(f.getName());
+					String fieldName = extractFieldName(f);
+					fieldsList.add(fieldName);
 				}
 			}
 		}
@@ -58,6 +60,14 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		}
 	}
 
+	private String extractFieldName(Field f) {
+		String fieldName = f.getName();
+		if (f.isAnnotationPresent(GraphQLJsonPropertyHelper.class)) {
+			return f.getAnnotation(GraphQLJsonPropertyHelper.class).jsonProperty();
+		}
+		return fieldName;
+	}
+
 	@Override
 	public String build() {
 		return build(false);
@@ -66,7 +76,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
+	 * @see
+	 * org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
 	 */
 	@Override
 	public String build(boolean pretty) {

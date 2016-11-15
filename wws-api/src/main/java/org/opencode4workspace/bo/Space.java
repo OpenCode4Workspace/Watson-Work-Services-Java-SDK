@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
+
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -63,7 +65,8 @@ public class Space implements Serializable {
 	private Person updatedBy;
 	private List<Person> memberList;
 	private String membersUpdated;
-	private Conversation conversation;
+	@GraphQLJsonPropertyHelper(jsonProperty="conversation")
+	private Conversation conversationContent;
 
 	/**
 	 * @return String, id of the space
@@ -204,7 +207,7 @@ public class Space implements Serializable {
 	 * @return Conversation, corresponding to all messages in the space
 	 */
 	public Conversation getConversation() {
-		return conversation;
+		return conversationContent;
 	}
 
 	/**
@@ -212,7 +215,7 @@ public class Space implements Serializable {
 	 *            Conversation, corresponding to all messages in the space
 	 */
 	public void setConversation(Conversation conversation) {
-		this.conversation = conversation;
+		this.conversationContent = conversation;
 	}
 
 }

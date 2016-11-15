@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
+
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -57,6 +59,7 @@ public class Conversation implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
+	@GraphQLJsonPropertyHelper(jsonProperty="message")
 	private List<Message> messageList;
 
 	/**

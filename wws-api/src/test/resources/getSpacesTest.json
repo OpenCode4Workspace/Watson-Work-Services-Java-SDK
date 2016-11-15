@@ -107,7 +107,14 @@
                     "photoUrl": null,
                     "email": "m@mi6.gov.uk"
                   },
-                  "updatedBy": null
+                  "updatedBy": null,
+                  "annotations": [
+                    "{\"version\":1.0,\"text\":\"Ready to Code?\",\"actor\":{\"name\":\"SYS Alert\",\"avatar\":\"https://avatar\",\"url\":\"https://sysalert.webgate.biz\"},\"type\":\"generic\",\"color\":\"#FF0000\",\"title\":\"Direct from the Round Table\",\"annotationId\":\"582af525e4b01f7f73f8f3c0\",\"created\":1479210277362,\"createdBy\":\"e9c66bc5-0d1f-41e3-8f63-9db840376d00\"}",
+                    "{\"language\":\"english\",\"text\":\"Ready to Code?\",\"docSentiment\":{\"type\":\"neutral\"},\"annotationId\":\"582af526e4b01f7f73f8f3c2\",\"created\":1479210278397,\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"type\":\"message-nlp-docSentiment\"}",
+                    "{\"language\":\"english\",\"text\":\"Ready to Code?\",\"taxonomy\":[{\"confident\":false,\"label\":\"/shopping/resources/coupons\",\"score\":0.996826},{\"confident\":false,\"label\":\"/law, govt and politics/legal issues/legislation/building laws\",\"score\":0.0723636},{\"confident\":false,\"label\":\"/technology and computing/software\",\"score\":0.0196374}],\"annotationId\":\"582af526e4b01f7f73f8f3c3\",\"created\":1479210278397,\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"type\":\"message-nlp-taxonomy\"}",
+                    "{\"lens\":\"Question\",\"start\":0,\"end\":14,\"phrase\":\"Ready to Code?\",\"confidence\":0.7954629635434396,\"extractedInfo\":{\"entities\":[],\"keywords\":[],\"dates\":[]},\"focusVersion\":2,\"annotationId\":\"582af526e4b01f7f73f8f3c4\",\"created\":1479210278397,\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"type\":\"cognitive-aip-nlc\"}",
+                    "{\"lens\":\"Question\",\"start\":0,\"end\":14,\"phrase\":\"Ready to Code?\",\"confidence\":0.7954629635434396,\"extractedInfo\":{\"entities\":[],\"keywords\":[],\"dates\":[]},\"focusVersion\":2,\"annotationId\":\"582af526e4b01f7f73f8f3c5\",\"created\":1479210278397,\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"type\":\"message-focus\"}"
+                  ]
                 }
               ]
             }

@@ -1,13 +1,18 @@
 package org.opencode4workspace.bo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.opencode4workspace.json.ResultParser;
 
 /**
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Serializable object corresponding to a Message in a Conversation in a Watson Workspace space
+ *        Serializable object corresponding to a Message in a Conversation in a
+ *        Watson Workspace space
  *
  */
 public class Message implements Serializable {
@@ -58,6 +63,7 @@ public class Message implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
+	private List<String> annotations;
 
 	/**
 	 * @return String, id of the Message
@@ -162,6 +168,28 @@ public class Message implements Serializable {
 	 */
 	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public List<String> getAnnotations() {
+		return annotations;
+	}
+
+	public void setAnnotations(List<String> annotations) {
+		this.annotations = annotations;
+	}
+
+	public List<Annotation> getGenericAnnotations() {
+		List<Annotation> annos = new ArrayList<Annotation>();
+		if (annotations != null) {
+			ResultParser<Annotation> annoParser = new ResultParser<Annotation>(Annotation.class, "MILIS");
+			for (String anno : annotations) {
+				Annotation annoObject = annoParser.parse(anno);
+				if ("generic".equals(annoObject.getType())) {
+					annos.add(annoObject);
+				}
+			}
+		}
+		return annos;
 	}
 
 }
