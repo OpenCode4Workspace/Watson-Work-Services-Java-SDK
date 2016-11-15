@@ -1,10 +1,17 @@
 package org.opencode4workspace.json;
 
+import java.lang.reflect.Type;
+import java.util.Date;
+
 import org.opencode4workspace.authentication.AppToken.TokenScope;
 import org.opencode4workspace.authentication.AppToken.TokenType;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 /**
  * @author Christian Guedemann
@@ -34,6 +41,26 @@ public class ResultParser<T> {
 		this.gson = builder.create();
 	}
 
+	public ResultParser(Class<T> clazz, String dateFormat) {
+		this.clazz = clazz;
+		GsonBuilder builder = new GsonBuilder();
+		if ("MILIS".equals(dateFormat)) {
+			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
+				   public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+				      return new Date(json.getAsJsonPrimitive().getAsLong()); 
+				   } 
+				});
+
+		} else {
+			builder.setDateFormat(dateFormat);
+		}
+		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
+		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
+		this.gson = builder.create();
+	}
+	
+
+	
 	/**
 	 * Converts the JSON string passed into an instance of the relevant class
 	 * 
