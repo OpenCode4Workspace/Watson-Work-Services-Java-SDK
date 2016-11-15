@@ -1,4 +1,4 @@
-package org.opencode4workspace.graphql.builders;
+package org.opencode4workspace.builders;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -11,31 +11,30 @@ import java.util.Map;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
-public class ObjectDataSender implements DataSender, Serializable {
+public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String objectName;
 	private boolean hasItems;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
 	private List<String> fieldsList = new ArrayList<String>();
-	private List<DataSender> children = new ArrayList<DataSender>();
-	private String dataQuery;
-	private ObjectDataSender pageInfo;
+	private List<DataSenderBuilder> children = new ArrayList<DataSenderBuilder>();
+	private ObjectDataSenderBuilder pageInfo;
 
-	public ObjectDataSender() {
+	public ObjectDataSenderBuilder() {
 
 	}
 
-	public ObjectDataSender(String objectName) {
+	public ObjectDataSenderBuilder(String objectName) {
 		this(objectName, false);
 	}
 
-	public ObjectDataSender(String objectName, boolean hasItems) {
+	public ObjectDataSenderBuilder(String objectName, boolean hasItems) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 	}
 
-	public ObjectDataSender(String objectName, Class<?> clazz, Boolean hasItems, Boolean addAllFields) {
+	public ObjectDataSenderBuilder(String objectName, Class<?> clazz, Boolean hasItems, Boolean addAllFields) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 		if (addAllFields) {
@@ -48,11 +47,11 @@ public class ObjectDataSender implements DataSender, Serializable {
 		}
 	}
 
-	public ObjectDataSender(String objectName, Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
+	public ObjectDataSenderBuilder(String objectName, Class<?> clazz, WWFieldsAttributesInterface[] fieldsEnum) {
 		this(objectName, clazz, false, fieldsEnum);
 	}
 
-	public ObjectDataSender(String objectName, Class<?> clazz, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
+	public ObjectDataSenderBuilder(String objectName, Class<?> clazz, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
 		this.objectName = objectName;
 		this.hasItems = hasItems;
 		for (WWFieldsAttributesInterface f : fieldsEnum) {
@@ -69,8 +68,8 @@ public class ObjectDataSender implements DataSender, Serializable {
 	}
 
 	@Override
-	public String buildQuery() {
-		return buildQuery(false);
+	public String build() {
+		return build(false);
 	}
 
 	/*
@@ -80,7 +79,7 @@ public class ObjectDataSender implements DataSender, Serializable {
 	 * org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
 	 */
 	@Override
-	public String buildQuery(boolean pretty) {
+	public String build(boolean pretty) {
 		boolean isFirst = true;
 		StringBuilder s = new StringBuilder();
 		// Add object name
@@ -109,7 +108,7 @@ public class ObjectDataSender implements DataSender, Serializable {
 
 		// Add pageInfo, if required
 		if (null != pageInfo) {
-			s.append(pageInfo.buildQuery(pretty) + " ");
+			s.append(pageInfo.build(pretty) + " ");
 		}
 
 		// Open "items" container, if required
@@ -136,7 +135,7 @@ public class ObjectDataSender implements DataSender, Serializable {
 		}
 
 		// Add children, if exist
-		for (DataSender child : getChildren()) {
+		for (DataSenderBuilder child : getChildren()) {
 			if (!isFirst) {
 				if (pretty) {
 					s.append("\n\r");
@@ -146,7 +145,7 @@ public class ObjectDataSender implements DataSender, Serializable {
 			} else {
 				isFirst = false;
 			}
-			s.append(child.buildQuery(pretty));
+			s.append(child.build(pretty));
 		}
 
 		// Close "items" container, if required
@@ -165,15 +164,6 @@ public class ObjectDataSender implements DataSender, Serializable {
 		return s.toString();
 	}
 
-	@Override
-	public Object getDataQuery() {
-		return dataQuery;
-	}
-
-	public void setDataQuery(String query) {
-		this.dataQuery = query;
-	}
-
 	public String getObjectName() {
 		return objectName;
 	}
@@ -186,8 +176,9 @@ public class ObjectDataSender implements DataSender, Serializable {
 		return hasItems;
 	}
 
-	public void setHasItems(boolean hasItems) {
+	public ObjectDataSenderBuilder setHasItems(boolean hasItems) {
 		this.hasItems = hasItems;
+		return this;
 	}
 
 	public List<String> getFieldsList() {
@@ -198,62 +189,67 @@ public class ObjectDataSender implements DataSender, Serializable {
 		this.fieldsList = fieldsList;
 	}
 
-	public List<String> addField(String field) {
+	public ObjectDataSenderBuilder addField(String field) {
 		fieldsList.add(field);
-		return fieldsList;
+		return this;
 	}
 
-	public List<String> removeField(String field) {
+	public ObjectDataSenderBuilder removeField(String field) {
 		fieldsList.remove(field);
-		return fieldsList;
+		return this;
 	}
 
 	public Map<String, Object> getAttributesList() {
 		return attributesList;
 	}
 
-	public void setAttributesList(Map<String, Object> attributesList) {
+	public ObjectDataSenderBuilder setAttributesList(Map<String, Object> attributesList) {
 		this.attributesList = attributesList;
+		return this;
 	}
 
-	public Map<String, Object> addAttribute(String key, Object value) {
+	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
 		attributesList.put(key, value);
-		return attributesList;
+		return this;
 	}
 
-	public Map<String, Object> removeAttribute(String key) {
+	public ObjectDataSenderBuilder removeAttribute(String key) {
 		attributesList.remove(key);
-		return attributesList;
+		return this;
 	}
 
-	public List<DataSender> getChildren() {
+	public List<DataSenderBuilder> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<DataSender> children) {
+	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
 		this.children = children;
+		return this;
 	}
 
-	public List<DataSender> addChild(DataSender child) {
+	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
 		children.add(child);
-		return children;
+		return this;
 	}
 
-	public List<DataSender> removeChild(DataSender child) {
+	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
 		children.remove(child);
-		return children;
+		return this;
 	}
 
-	public void addPageInfo() {
-		pageInfo = new ObjectDataSender(PageInfo.LABEL, PageInfo.class, false, true);
+	public ObjectDataSenderBuilder addPageInfo() {
+		pageInfo = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false, true);
+		return this;
 	}
 
-	public void addPageInfo(ObjectDataSender pageInfoCustom) {
+	public ObjectDataSenderBuilder addPageInfo(ObjectDataSenderBuilder pageInfoCustom) {
 		pageInfo = pageInfoCustom;
+		return this;
 	}
 
-	public void removePageInfo() {
+	public ObjectDataSenderBuilder removePageInfo() {
 		pageInfo = null;
+		return this;
 	}
 
 }

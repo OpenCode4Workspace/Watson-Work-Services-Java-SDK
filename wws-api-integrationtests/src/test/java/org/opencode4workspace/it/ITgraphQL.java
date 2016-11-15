@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 
 public class ITgraphQL {
 
-	@Test(enabled=true)
+	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
 	public void testgetSpacesAsApp(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());

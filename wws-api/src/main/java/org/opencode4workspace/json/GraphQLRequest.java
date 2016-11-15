@@ -3,8 +3,8 @@ package org.opencode4workspace.json;
 import java.util.HashMap;
 
 import org.opencode4workspace.WWException;
-import org.opencode4workspace.graphql.builders.BaseGraphQLQuery;
-import org.opencode4workspace.graphql.builders.ObjectDataSender;
+import org.opencode4workspace.builders.BaseGraphQLQuery;
+import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 
 /**
  * @author Christian Guedemann
@@ -41,7 +41,7 @@ public class GraphQLRequest {
 	 * Initialises the GraphQLRequest object from a BaseGraphQLQuery object. This will have the operation name and will not pass any variables to Watson Work Services
 	 * 
 	 * @param queryObject
-	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataSender} which will be parsed to return the full query
+	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataSenderBuilder} which will be parsed to return the full query
 	 * @throws WWException
 	 *             error if encountered parsing the queryObject
 	 */
@@ -53,7 +53,7 @@ public class GraphQLRequest {
 	 * Initialises the GraphQLRequest object from a BaseGraphQLQuery object. This will have the operation name.
 	 * 
 	 * @param queryObject
-	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataSender} which will be parsed to return the full query
+	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataSenderBuilder} which will be parsed to return the full query
 	 * @param variables
 	 *            HashMap<String, String> of variables to pass with the query
 	 * @throws WWException
@@ -79,7 +79,7 @@ public class GraphQLRequest {
 	 * @throws WWException
 	 *             error if encountered parsing the queryObject
 	 */
-	public GraphQLRequest(ObjectDataSender queryObject, String operationName) throws WWException {
+	public GraphQLRequest(ObjectDataSenderBuilder queryObject, String operationName) throws WWException {
 		this(queryObject, new HashMap<String, String>(), operationName);
 	}
 
@@ -95,13 +95,13 @@ public class GraphQLRequest {
 	 * @throws WWException
 	 *             error if encountered parsing the queryObject
 	 */
-	public GraphQLRequest(ObjectDataSender queryObject, HashMap<String, String> variables, String operationName) throws WWException {
+	public GraphQLRequest(ObjectDataSenderBuilder queryObject, HashMap<String, String> variables, String operationName) throws WWException {
 		try {
 			this.operationName = operationName;
-			this.query = "query " + operationName + " {" + queryObject.buildQuery() + "}";
+			this.query = "query " + operationName + " {" + queryObject.build() + "}";
 			this.variables = variables;
 		} catch (Exception e) {
-			throw new WWException("Error creating request from query - " + e.getMessage());
+			throw new WWException("Error creating request from ObjectDataSender - " + e.getMessage());
 		}
 	}
 
