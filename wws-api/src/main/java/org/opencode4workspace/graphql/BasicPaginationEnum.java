@@ -1,4 +1,4 @@
-package org.opencode4workspace.graphql.builders;
+package org.opencode4workspace.graphql;
 
 public enum BasicPaginationEnum {
 
