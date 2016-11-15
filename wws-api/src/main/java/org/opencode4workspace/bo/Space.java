@@ -13,6 +13,43 @@ import java.util.List;
  */
 public class Space implements Serializable {
 
+	public enum SpaceFields implements WWFieldsAttributesInterface {
+		ID("id"), DESCRIPTION("description"), TITLE("title"), CREATED("created"), UPDATED("updated"), MEMBERS_UPDATED("membersUpdated");
+
+		private String label;
+
+		private SpaceFields(String label) {
+			this.label = label;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	public enum SpaceChildren implements WWChildInterface {
+		MEMBERS("members", Person.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+
+		private String label;
+		private Class<?> childEnumClass;
+
+		private SpaceChildren(String label, Class<?> childEnumClass) {
+			this.label = label;
+			this.childEnumClass = childEnumClass;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public Class<?> getEnumClass() {
+			return childEnumClass;
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -25,7 +62,8 @@ public class Space implements Serializable {
 	private Date updated;
 	private Person updatedBy;
 	private List<Person> memberList;
-	private Conversation conversationContent;
+	private String membersUpdated;
+	private Conversation conversation;
 
 	/**
 	 * @return String, id of the space
@@ -148,10 +186,25 @@ public class Space implements Serializable {
 	}
 
 	/**
+	 * @return String JSON date of when members were last updated
+	 */
+	public String getMembersUpdated() {
+		return membersUpdated;
+	}
+
+	/**
+	 * @param membersUpdated
+	 *            String JSON date of when members were last updated
+	 */
+	public void setMembersUpdated(String membersUpdated) {
+		this.membersUpdated = membersUpdated;
+	}
+
+	/**
 	 * @return Conversation, corresponding to all messages in the space
 	 */
 	public Conversation getConversation() {
-		return conversationContent;
+		return conversation;
 	}
 
 	/**
@@ -159,7 +212,7 @@ public class Space implements Serializable {
 	 *            Conversation, corresponding to all messages in the space
 	 */
 	public void setConversation(Conversation conversation) {
-		this.conversationContent = conversation;
+		this.conversation = conversation;
 	}
 
 }

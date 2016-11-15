@@ -13,6 +13,44 @@ import java.util.List;
  */
 public class Conversation implements Serializable {
 
+	public enum ConversationFields implements WWFieldsAttributesInterface {
+		ID("id"), CREATED("created"), UPDATED("updated");
+
+		private String label;
+
+		private ConversationFields(String label) {
+			this.label = label;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	public enum ConversationChildren implements WWChildInterface {
+		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+
+		private String label;
+		private Class<?> childEnumClass;
+
+		private ConversationChildren(String label, Class<?> childEnumClass) {
+			this.label = label;
+			this.childEnumClass = childEnumClass;
+		}
+
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		@Override
+		public Class<?> getEnumClass() {
+			return childEnumClass;
+		}
+
+	}
+
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private Date created;
