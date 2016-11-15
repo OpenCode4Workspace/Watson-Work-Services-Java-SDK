@@ -1,8 +1,11 @@
 package org.opencode4workspace.endpoints;
 
-import org.opencode4workspace.bo.Message;
+import java.io.Serializable;
+import java.util.List;
 
-public class AppMessage extends Message {
+import org.opencode4workspace.bo.Annotation;
+
+public class AppMessage implements Serializable {
 
 	/**
 	 * 
@@ -10,6 +13,7 @@ public class AppMessage extends Message {
 	private static final long serialVersionUID = 1L;
 	private String type = "appMessage";
 	private int version;
+	private List<? extends Annotation> annotations;
 
 	public String getType() {
 		return type;
@@ -26,4 +30,14 @@ public class AppMessage extends Message {
 	public int getVersion() {
 		return version;
 	}
+
+	public List<? extends Annotation> getAnnotations() {
+		return annotations;
+	}
+
+	public void setAnnotations(List<? extends Annotation> annotations) {
+		this.annotations = annotations;
+	}
+	
+	
 }

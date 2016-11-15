@@ -59,7 +59,7 @@ public class Message implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
-	private List<? extends Annotation> annotations;
+	private List<String> annotations;
 
 	/**
 	 * @return String, id of the Message
@@ -166,11 +166,11 @@ public class Message implements Serializable {
 		this.updatedBy = updatedBy;
 	}
 
-	public List<? extends Annotation> getAnnotations() {
+	public List<String> getAnnotations() {
 		return annotations;
 	}
 
-	public void setAnnotations(List<? extends Annotation> annotations) {
+	public void setAnnotations(List<String> annotations) {
 		this.annotations = annotations;
 	}
 

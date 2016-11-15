@@ -2,6 +2,8 @@ package org.opencode4workspace.endpoints;
 
 import java.util.List;
 
+import javax.xml.soap.MessageFactory;
+
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
@@ -78,6 +80,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		messages.addField(MessageFields.CONTENT.getLabel());
 		messages.addField(MessageFields.CREATED.getLabel());
 		messages.addField(MessageFields.UPDATED.getLabel());
+		messages.addField(MessageFields.ANNOTATIONS.getLabel());
 		messages.addChild(createdBy);
 		messages.addChild(updatedBy);
 		conversation.addChild(messages);
