@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
+import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable {
 

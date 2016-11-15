@@ -61,6 +61,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			messages.addField(MessageFields.CONTENT.getLabel());
 			messages.addField(MessageFields.CREATED.getLabel());
 			messages.addField(MessageFields.UPDATED.getLabel());
+			messages.addField(MessageFields.ANNOTATIONS.getLabel());
 			messages.addChild(createdBy);
 			messages.addChild(updatedBy);
 			conversation.addChild(messages);
