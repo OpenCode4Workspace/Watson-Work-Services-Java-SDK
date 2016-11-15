@@ -41,7 +41,8 @@ public class ObjectDataSender implements DataSender, Serializable {
 		if (addAllFields) {
 			for (Field f : clazz.getDeclaredFields()) {
 				if (!Modifier.isStatic(f.getModifiers())) {
-					fieldsList.add(f.getName());
+					String fieldName = extractFieldName(f);
+					fieldsList.add(fieldName);
 				}
 			}
 		}
@@ -59,6 +60,14 @@ public class ObjectDataSender implements DataSender, Serializable {
 		}
 	}
 
+	private String extractFieldName(Field f) {
+		String fieldName = f.getName();
+		if (f.isAnnotationPresent(GraphQLJsonPropertyHelper.class)) {
+			return f.getAnnotation(GraphQLJsonPropertyHelper.class).jsonProperty();
+		}
+		return fieldName;
+	}
+
 	@Override
 	public String buildQuery() {
 		return buildQuery(false);
@@ -67,7 +76,8 @@ public class ObjectDataSender implements DataSender, Serializable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
+	 * @see
+	 * org.opencode4workspace.graphql.builders.DataBringer#buildQuery(boolean)
 	 */
 	@Override
 	public String buildQuery(boolean pretty) {
