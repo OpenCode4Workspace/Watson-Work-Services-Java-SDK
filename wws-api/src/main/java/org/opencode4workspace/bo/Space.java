@@ -16,17 +16,25 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 public class Space implements Serializable {
 
 	public enum SpaceFields implements WWFieldsAttributesInterface {
-		ID("id"), DESCRIPTION("description"), TITLE("title"), CREATED("created"), UPDATED("updated"), MEMBERS_UPDATED("membersUpdated");
+		ID("id", String.class), DESCRIPTION("description", String.class), TITLE("title", String.class), CREATED("created", Date.class), UPDATED("updated",
+				Date.class), MEMBERS_UPDATED("membersUpdated", Date.class);
 
 		private String label;
+		private Class<?> objectClassType;
 
-		private SpaceFields(String label) {
+		private SpaceFields(String label, Class<?> objectClassType) {
 			this.label = label;
+			this.objectClassType = objectClassType;
 		}
 
 		@Override
 		public String getLabel() {
 			return label;
+		}
+
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
 		}
 	}
 

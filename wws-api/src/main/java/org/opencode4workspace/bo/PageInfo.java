@@ -5,17 +5,24 @@ import java.io.Serializable;
 public class PageInfo implements Serializable {
 
 	public enum PageInfoFields implements WWFieldsAttributesInterface {
-		START_CURSOR("startCursor"), END_CURSOR("endCursor"), HAS_NEXT_PAGE("hasNextPage"), HAS_PREVIOUS_PAGE("hasPreviousPage");
+		START_CURSOR("startCursor", String.class), END_CURSOR("endCursor", String.class), HAS_NEXT_PAGE("hasNextPage", Boolean.class), HAS_PREVIOUS_PAGE("hasPreviousPage", Boolean.class);
 
 		private String label;
+		private Class<?> objectClassType;
 
-		private PageInfoFields(String label) {
+		private PageInfoFields(String label, Class<?> objectClassType) {
 			this.label = label;
+			this.objectClassType = objectClassType;
 		}
 
 		@Override
 		public String getLabel() {
 			return label;
+		}
+
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
 		}
 	}
 

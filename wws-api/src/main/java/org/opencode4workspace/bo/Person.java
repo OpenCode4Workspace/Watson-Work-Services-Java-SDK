@@ -13,17 +13,25 @@ import java.util.Date;
 public class Person implements Serializable {
 
 	public enum PersonFields implements WWFieldsAttributesInterface {
-		ID("id"), PHOTO_URL("photoUrl"), EMAIL("email"), DISPLAY_NAME("displayName"), EXT_ID("extId"), EMAIL_ADDRESSES("emailAddresses"), CUSTOMER_ID("customerId"), CREATED("created");
+		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME("displayName", String.class), EXT_ID("extId",
+				String.class), EMAIL_ADDRESSES("emailAddresses", String.class), CUSTOMER_ID("customerId", String.class), CREATED("created", Date.class);
 
 		private String label;
+		private Class<?> objectClassType;
 
-		private PersonFields(String label) {
+		private PersonFields(String label, Class<?> objectClassType) {
 			this.label = label;
+			this.objectClassType = objectClassType;
 		}
 
 		@Override
 		public String getLabel() {
 			return label;
+		}
+
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
 		}
 	}
 

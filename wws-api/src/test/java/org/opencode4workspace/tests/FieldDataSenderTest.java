@@ -1,6 +1,7 @@
 package org.opencode4workspace.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.opencode4workspace.WWException;
@@ -43,7 +44,7 @@ public class FieldDataSenderTest {
 	public void testSpacesObjectQuery() throws WWException {
 		BaseGraphQLQuery query = new BaseGraphQLQuery("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
-		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
 		spaces.addField(SpaceFields.TITLE.getLabel());
@@ -57,11 +58,11 @@ public class FieldDataSenderTest {
 	}
 
 	@Test
-	public void testSpacesBiggerObjectQuery() {
+	public void testSpacesBiggerObjectQuery() throws WWException {
 		BaseGraphQLQuery query = new BaseGraphQLQuery();
 		query.setOperationName("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
-		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
 		spaces.addField(SpaceFields.TITLE.getLabel());
@@ -82,7 +83,7 @@ public class FieldDataSenderTest {
 		createdBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(createdBy);
 		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder((SpaceChildren.MEMBERS.getLabel()), true);
-		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		members.addAttribute(BasicPaginationEnum.FIRST, 100);
 		members.addField(PersonFields.ID.getLabel());
 		members.addField(PersonFields.PHOTO_URL.getLabel());
 		members.addField(PersonFields.EMAIL.getLabel());
@@ -97,7 +98,7 @@ public class FieldDataSenderTest {
 		BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
 		graphQuery.setOperationName("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
-		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID.getLabel());
 		spaces.addField(SpaceFields.TITLE.getLabel());
@@ -118,7 +119,7 @@ public class FieldDataSenderTest {
 		createdBy.addField(PersonFields.EMAIL.getLabel());
 		spaces.addChild(createdBy);
 		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
-		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		members.addAttribute(BasicPaginationEnum.FIRST, 100);
 		members.addField(PersonFields.ID.getLabel());
 		members.addField(PersonFields.PHOTO_URL.getLabel());
 		members.addField(PersonFields.EMAIL.getLabel());
@@ -141,7 +142,7 @@ public class FieldDataSenderTest {
 		updatedBy.addField(PersonFields.EMAIL.getLabel());
 		conversation.addChild(updatedBy);
 		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true);
-		messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 20);
+		messages.addAttribute(BasicPaginationEnum.FIRST, 20);
 		messages.addPageInfo();
 		messages.addField(MessageFields.CONTENT_TYPE.getLabel());
 		messages.addField(MessageFields.CONTENT.getLabel());
@@ -154,6 +155,19 @@ public class FieldDataSenderTest {
 		spaces.addChild(conversation);
 		graphQuery.setQueryObject(spaces);
 		assertEquals(GET_SPACES_FULL_QUERY, graphQuery.returnQuery());
+	}
+
+	@Test
+	public void attributesErrorTest() {
+		try {
+			BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
+			graphQuery.setOperationName("getSpaces");
+			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
+			spaces.addAttribute(BasicPaginationEnum.FIRST, "100");
+			assertTrue(false);
+		} catch (Exception e) {
+			assertEquals(e.getClass().getName(), WWException.class.getName());
+		}
 	}
 
 }

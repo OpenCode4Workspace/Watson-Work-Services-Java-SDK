@@ -16,17 +16,24 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 public class Conversation implements Serializable {
 
 	public enum ConversationFields implements WWFieldsAttributesInterface {
-		ID("id"), CREATED("created"), UPDATED("updated");
+		ID("id", String.class), CREATED("created", Date.class), UPDATED("updated", Date.class);
 
 		private String label;
+		private Class<?> objectClassType;
 
-		private ConversationFields(String label) {
+		private ConversationFields(String label, Class<?> objectClassType) {
 			this.label = label;
+			this.objectClassType = objectClassType;
 		}
 
 		@Override
 		public String getLabel() {
 			return label;
+		}
+
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
 		}
 	}
 

@@ -3,11 +3,15 @@ package org.opencode4workspace.builders;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
+import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
@@ -96,7 +100,16 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 					isFirst = false;
 				}
 				s.append(key + ": ");
-				s.append(attributesList.get(key));
+				Object obj = attributesList.get(key);
+				if (obj instanceof Date) {
+					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+					Date dt = (Date) obj;
+					TimeZone tz = TimeZone.getDefault();
+					df.setTimeZone(tz);
+					s.append(df.format(dt));
+				} else {
+					s.append(obj);
+				}
 			}
 			s.append(") ");
 		}
@@ -211,6 +224,15 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 
 	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
 		attributesList.put(key, value);
+		return this;
+	}
+
+	public ObjectDataSenderBuilder addAttribute(WWFieldsAttributesInterface enumName, Object value) throws WWException {
+		if (value.getClass().equals(enumName.getObjectClassType())) {
+			attributesList.put(enumName.getLabel(), value);
+		} else {
+			throw new WWException("Watson Work Services expects a " + enumName.getObjectClassType().getName() + " for this attribute. Object supplied is " + value.getClass().getName());
+		}
 		return this;
 	}
 

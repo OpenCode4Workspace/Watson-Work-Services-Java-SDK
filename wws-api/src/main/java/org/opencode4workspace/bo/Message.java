@@ -18,17 +18,25 @@ import org.opencode4workspace.json.ResultParser;
 public class Message implements Serializable {
 
 	public enum MessageFields implements WWFieldsAttributesInterface {
-		ID("id"), CONTENT("content"), CONTENT_TYPE("contentType"), ANNOTATIONS("annotations"), CREATED("created"), UPDATED("updated");
+		ID("id", String.class), CONTENT("content", String.class), CONTENT_TYPE("contentType", String.class), ANNOTATIONS("annotations", String.class), CREATED("created",
+				Date.class), UPDATED("updated", Date.class);
 
 		private String label;
+		private Class<?> objectClassType;
 
-		private MessageFields(String label) {
+		private MessageFields(String label, Class<?> objectClassType) {
 			this.label = label;
+			this.objectClassType = objectClassType;
 		}
 
 		@Override
 		public String getLabel() {
 			return label;
+		}
+
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
 		}
 	}
 

@@ -32,7 +32,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			updatedBy.addField(PersonFields.EMAIL.getLabel());
 
 			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
-			spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+			spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 			spaces.addPageInfo();
 			spaces.addField(SpaceFields.ID.getLabel());
 			spaces.addField(SpaceFields.TITLE.getLabel());
@@ -42,7 +42,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			spaces.addField(SpaceFields.CREATED.getLabel());
 			spaces.addChild(createdBy);
 			ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), SpaceChildren.MEMBERS.getEnumClass(), true, false);
-			members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+			members.addAttribute(BasicPaginationEnum.FIRST, 100);
 			members.addField(PersonFields.ID.getLabel());
 			members.addField(PersonFields.PHOTO_URL.getLabel());
 			members.addField(PersonFields.EMAIL.getLabel());
@@ -55,7 +55,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			conversation.addField(ConversationFields.UPDATED.getLabel());
 			conversation.addChild(updatedBy);
 			ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true);
-			messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 200);
+			messages.addAttribute(BasicPaginationEnum.FIRST, 200);
 			messages.addPageInfo();
 			messages.addField(MessageFields.CONTENT_TYPE.getLabel());
 			messages.addField(MessageFields.CONTENT.getLabel());

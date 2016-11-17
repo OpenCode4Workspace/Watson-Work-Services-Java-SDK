@@ -4,4 +4,6 @@ public interface WWFieldsAttributesInterface {
 
 	public String getLabel();
 
+	public Class<?> getObjectClassType();
+
 }
