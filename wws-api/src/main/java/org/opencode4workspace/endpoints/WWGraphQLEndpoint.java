@@ -21,7 +21,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	/**
 	 * Simplified access method, to load GraphQL query for getting spaces, execute the request, and parse the results
 	 * 
-	 * @return List<? extending Space> of Space details
+	 * @return List of Space details
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 */

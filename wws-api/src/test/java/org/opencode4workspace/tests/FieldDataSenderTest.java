@@ -30,9 +30,9 @@ public class FieldDataSenderTest {
 	public void testGetPageInfoFields() {
 		ObjectDataSenderBuilder fb = new ObjectDataSenderBuilder(PageInfo.LABEL, false);
 		assertEquals(0, fb.getFieldsList().size());
-		fb = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false, true);
+		fb = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false);
 		assertEquals(4, fb.getFieldsList().size());
-		fb = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, PageInfo.PageInfoFields.values());
+		fb = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.PageInfoFields.values());
 		assertEquals(4, fb.getFieldsList().size());
 		fb = new ObjectDataSenderBuilder(PageInfo.LABEL);
 		fb.addField(PageInfoFields.START_CURSOR.getLabel());

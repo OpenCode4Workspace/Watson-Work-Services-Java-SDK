@@ -17,7 +17,7 @@ public class MessageContainer {
 	private List<Message> items;
 
 	/**
-	 * @return List<Message> list of Messages items in the Conversation
+	 * @return List of {@linkplain Message} items in the Conversation
 	 */
 	public List<Message> getItems() {
 		return items;

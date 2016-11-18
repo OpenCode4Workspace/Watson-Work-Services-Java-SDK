@@ -8,6 +8,7 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  * 
  *        Serializable object corresponding to a Watson Workspace space
@@ -15,6 +16,13 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
  */
 public class Space implements Serializable {
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for scalar properties of a Space. See {@linkplain WWFieldsAttributesInterface}
+	 *
+	 */
 	public enum SpaceFields implements WWFieldsAttributesInterface {
 		ID("id", String.class), DESCRIPTION("description", String.class), TITLE("title", String.class), CREATED("created", Date.class), UPDATED("updated",
 				Date.class), MEMBERS_UPDATED("membersUpdated", Date.class);
@@ -22,38 +30,81 @@ public class Space implements Serializable {
 		private String label;
 		private Class<?> objectClassType;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private SpaceFields(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
 		@Override
 		public Class<?> getObjectClassType() {
 			return objectClassType;
 		}
 	}
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for child objects of a Space. See {@linkplain WWChildInterface}
+	 *
+	 */
 	public enum SpaceChildren implements WWChildInterface {
 		MEMBERS("members", Person.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param childEnumClass
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private SpaceChildren(String label, Class<?> childEnumClass) {
 			this.label = label;
 			this.childEnumClass = childEnumClass;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getEnumClass()
+		 */
 		@Override
 		public Class<?> getEnumClass() {
 			return childEnumClass;
@@ -73,7 +124,7 @@ public class Space implements Serializable {
 	private Person updatedBy;
 	private List<Person> memberList;
 	private String membersUpdated;
-	@GraphQLJsonPropertyHelper(jsonProperty="conversation")
+	@GraphQLJsonPropertyHelper(jsonProperty = "conversation")
 	private Conversation conversationContent;
 
 	/**
@@ -182,7 +233,7 @@ public class Space implements Serializable {
 	}
 
 	/**
-	 * @return List<Person>, members of the space
+	 * @return List of {@linkplain Person} objects corresponding to the members of the space
 	 */
 	public List<Person> getMembers() {
 		return memberList;
@@ -190,7 +241,7 @@ public class Space implements Serializable {
 
 	/**
 	 * @param members
-	 *            List<Person>, members of the space
+	 *            List of {@linkplain Person} objects corresponding to the members of the space
 	 */
 	public void setMembers(List<Person> members) {
 		this.memberList = members;

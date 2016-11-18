@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.opencode4workspace.bo.Annotation;
 
+// TODO: Add Javadoc
+
 public class AppMessage implements Serializable {
 
 	/**
@@ -38,6 +40,5 @@ public class AppMessage implements Serializable {
 	public void setAnnotations(List<? extends Annotation> annotations) {
 		this.annotations = annotations;
 	}
-	
-	
+
 }

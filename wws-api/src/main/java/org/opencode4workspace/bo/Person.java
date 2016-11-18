@@ -5,6 +5,7 @@ import java.util.Date;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  * 
  *        Serializable object corresponding to a Watson Workspace member
@@ -12,6 +13,13 @@ import java.util.Date;
  */
 public class Person implements Serializable {
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for scalar properties of a Person. See {@linkplain WWFieldsAttributesInterface}
+	 *
+	 */
 	public enum PersonFields implements WWFieldsAttributesInterface {
 		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME("displayName", String.class), EXT_ID("extId",
 				String.class), EMAIL_ADDRESSES("emailAddresses", String.class), CUSTOMER_ID("customerId", String.class), CREATED("created", Date.class);
@@ -19,38 +27,81 @@ public class Person implements Serializable {
 		private String label;
 		private Class<?> objectClassType;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private PersonFields(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
 		@Override
 		public Class<?> getObjectClassType() {
 			return objectClassType;
 		}
 	}
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for scalar properties of a Person. See {@linkplain WWChildInterface}
+	 *
+	 */
 	public enum PersonChildren implements WWChildInterface {
 		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param childEnumClass
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private PersonChildren(String label, Class<?> childEnumClass) {
 			this.label = label;
 			this.childEnumClass = childEnumClass;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getEnumClass()
+		 */
 		@Override
 		public Class<?> getEnumClass() {
 			return childEnumClass;

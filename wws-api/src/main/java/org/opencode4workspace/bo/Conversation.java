@@ -8,6 +8,7 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 /**
  * @author Christian Guedemann
+ * @author Paul Withers
  * @since 0.5.0
  * 
  *        Serializable object corresponding to a Conversation in a Watson Work Space
@@ -15,44 +16,94 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
  */
 public class Conversation implements Serializable {
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for scalar properties of a Conversation. See {@linkplain WWFieldsAttributesInterface}
+	 *
+	 */
 	public enum ConversationFields implements WWFieldsAttributesInterface {
 		ID("id", String.class), CREATED("created", Date.class), UPDATED("updated", Date.class);
 
 		private String label;
 		private Class<?> objectClassType;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private ConversationFields(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
 		@Override
 		public Class<?> getObjectClassType() {
 			return objectClassType;
 		}
 	}
 
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        Enum for scalar properties of a Conversation. See {@linkplain WWChildInterface}
+	 *
+	 */
 	public enum ConversationChildren implements WWChildInterface {
 		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
 
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param childEnumClass
+		 *            Class<?> Java data type expected for passing across
+		 */
 		private ConversationChildren(String label, Class<?> childEnumClass) {
 			this.label = label;
 			this.childEnumClass = childEnumClass;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getLabel()
+		 */
 		@Override
 		public String getLabel() {
 			return label;
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWChildInterface#getEnumClass()
+		 */
 		@Override
 		public Class<?> getEnumClass() {
 			return childEnumClass;
@@ -66,7 +117,7 @@ public class Conversation implements Serializable {
 	private Date updated;
 	private Person createdBy;
 	private Person updatedBy;
-	@GraphQLJsonPropertyHelper(jsonProperty="message")
+	@GraphQLJsonPropertyHelper(jsonProperty = "message")
 	private List<Message> messageList;
 
 	/**
@@ -145,7 +196,7 @@ public class Conversation implements Serializable {
 	}
 
 	/**
-	 * @return List<Message>, List of Messages in this Conversation
+	 * @return List of {@linkplain Message} objects corresponding to the messages in this Conversation
 	 */
 	public List<Message> getMessages() {
 		return messageList;
@@ -153,7 +204,7 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @param messages
-	 *            List<Message>, List of Messages in this Conversation
+	 *            List of {@linkplain Message} objects corresponding to the messages in this Conversation
 	 */
 	public void setMessages(List<Message> messages) {
 		this.messageList = messages;

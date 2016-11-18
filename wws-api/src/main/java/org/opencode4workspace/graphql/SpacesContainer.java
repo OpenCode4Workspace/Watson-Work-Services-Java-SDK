@@ -18,7 +18,7 @@ public class SpacesContainer implements Serializable {
 	private List<SpaceWrapper> items = new ArrayList<SpaceWrapper>();
 
 	/**
-	 * @return List<SpaceWrapper> List of space wrappers for Watson Workspace Spaces
+	 * @return List of {@linkplain SpaceWrapper} objects for Watson Workspace Spaces
 	 */
 	public List<SpaceWrapper> getItems() {
 		return items;

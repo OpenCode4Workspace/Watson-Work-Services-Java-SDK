@@ -19,7 +19,7 @@ public class MemberItemContainer implements Serializable {
 	private List<Person> items;
 
 	/**
-	 * @return List<Person> list of Member Person objects in a Space
+	 * @return List of {@linkplain Person} objects corresponding to the Members in a Space
 	 */
 	public List<Person> getItems() {
 		return items;

@@ -55,7 +55,7 @@ public class GraphQLRequest {
 	 * @param queryObject
 	 *            BaseGraphQLQuery containing an {@linkplain ObjectDataSenderBuilder} which will be parsed to return the full query
 	 * @param variables
-	 *            HashMap<String, String> of variables to pass with the query
+	 *            HashMap of variables to pass with the query, where the key is the variable name and the value is the variable value
 	 * @throws WWException
 	 *             error if encountered parsing the queryObject
 	 */
@@ -89,7 +89,7 @@ public class GraphQLRequest {
 	 * @param queryObject
 	 *            ObjectDataBringer containing the query settings
 	 * @param variables
-	 *            HashMap<String, String> of variables to pass with the query
+	 *            HashMap of variables to pass with the query, where the key is the variable name and the value is the variable value
 	 * @param operationName
 	 *            String operationName to use
 	 * @throws WWException
