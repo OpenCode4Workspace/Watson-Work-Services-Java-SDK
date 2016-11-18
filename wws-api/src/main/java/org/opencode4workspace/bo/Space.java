@@ -233,7 +233,7 @@ public class Space implements Serializable {
 	}
 
 	/**
-	 * @return List<Person>, members of the space
+	 * @return List of {@linkplain Person} objects corresponding to the members of the space
 	 */
 	public List<Person> getMembers() {
 		return memberList;
@@ -241,7 +241,7 @@ public class Space implements Serializable {
 
 	/**
 	 * @param members
-	 *            List<Person>, members of the space
+	 *            List of {@linkplain Person} objects corresponding to the members of the space
 	 */
 	public void setMembers(List<Person> members) {
 		this.memberList = members;

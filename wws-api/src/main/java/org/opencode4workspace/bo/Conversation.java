@@ -196,7 +196,7 @@ public class Conversation implements Serializable {
 	}
 
 	/**
-	 * @return List<Message>, List of Messages in this Conversation
+	 * @return List of {@linkplain Message} objects corresponding to the messages in this Conversation
 	 */
 	public List<Message> getMessages() {
 		return messageList;
@@ -204,7 +204,7 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @param messages
-	 *            List<Message>, List of Messages in this Conversation
+	 *            List of {@linkplain Message} objects corresponding to the messages in this Conversation
 	 */
 	public void setMessages(List<Message> messages) {
 		this.messageList = messages;

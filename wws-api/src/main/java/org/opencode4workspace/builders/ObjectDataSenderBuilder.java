@@ -71,7 +71,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param objectName
 	 *            String name of the object, used in the query. Consult WWS GraphQL Builder for details
 	 * @param clazz
-	 *            Class<?> from which to add all fields
+	 *            Class from which to add all fields
 	 * @param hasItems
 	 *            boolean whether the fields / children are wrapped in "items{}"
 	 */

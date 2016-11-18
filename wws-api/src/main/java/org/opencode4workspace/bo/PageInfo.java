@@ -95,7 +95,8 @@ public class PageInfo implements Serializable {
 	}
 
 	/**
-	 * @return endCursor String, cursor relating to the Object at the start of this pagination
+	 * @param endCursor
+	 *            String, cursor relating to the Object at the start of this pagination
 	 */
 	public void setEndCursor(String endCursor) {
 		this.endCursor = endCursor;

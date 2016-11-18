@@ -229,7 +229,7 @@ public class Message implements Serializable {
 	}
 
 	/**
-	 * @return List<String> of annotations for the Message
+	 * @return List of String annotations for the Message
 	 */
 	public List<String> getAnnotations() {
 		return annotations;
@@ -237,14 +237,14 @@ public class Message implements Serializable {
 
 	/**
 	 * @param annotations
-	 *            List<String> of annotations for the Message
+	 *            List of String annotations for the Message
 	 */
 	public void setAnnotations(List<String> annotations) {
 		this.annotations = annotations;
 	}
 
 	/**
-	 * @return List<String> of basic annotations for the Message
+	 * @return List of basic {@linkplain Annotation} objects corresponding to the annotations for the Message
 	 */
 	public List<Annotation> getGenericAnnotations() {
 		List<Annotation> annos = new ArrayList<Annotation>();

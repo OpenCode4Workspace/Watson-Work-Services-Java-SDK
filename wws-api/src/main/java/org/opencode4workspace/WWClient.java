@@ -103,6 +103,7 @@ public class WWClient implements Serializable {
 	 * 
 	 * @return String, content for Authorization header
 	 * @throws UnsupportedEncodingException
+	 *             if the encoding option is not supported
 	 * @since 0.5.0
 	 */
 	public String getAppCredentials() throws UnsupportedEncodingException {
