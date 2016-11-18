@@ -72,7 +72,7 @@ public class Space implements Serializable {
 	 *
 	 */
 	public enum SpaceChildren implements WWChildInterface {
-		MEMBERS("members", Person.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+		MEMBERS("members", Profile.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -119,10 +119,10 @@ public class Space implements Serializable {
 	private String description;
 	private String title;
 	private Date created;
-	private Person createdBy;
+	private Profile createdBy;
 	private Date updated;
-	private Person updatedBy;
-	private List<Person> memberList;
+	private Profile updatedBy;
+	private List<Profile> memberList;
 	private String membersUpdated;
 	@GraphQLJsonPropertyHelper(jsonProperty = "conversation")
 	private Conversation conversationContent;
@@ -190,7 +190,7 @@ public class Space implements Serializable {
 	/**
 	 * @return Person who created the space
 	 */
-	public Person getCreatedBy() {
+	public Profile getCreatedBy() {
 		return createdBy;
 	}
 
@@ -198,7 +198,7 @@ public class Space implements Serializable {
 	 * @param createdBy
 	 *            Person who created the space
 	 */
-	public void setCreatedBy(Person createdBy) {
+	public void setCreatedBy(Profile createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -220,7 +220,7 @@ public class Space implements Serializable {
 	/**
 	 * @return Person who last updated the space
 	 */
-	public Person getUpdatedBy() {
+	public Profile getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -228,22 +228,22 @@ public class Space implements Serializable {
 	 * @param updatedBy
 	 *            Person who last updated the space
 	 */
-	public void setUpdatedBy(Person updatedBy) {
+	public void setUpdatedBy(Profile updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @return List of {@linkplain Person} objects corresponding to the members of the space
+	 * @return List of {@linkplain Profile} objects corresponding to the members of the space
 	 */
-	public List<Person> getMembers() {
+	public List<Profile> getMembers() {
 		return memberList;
 	}
 
 	/**
 	 * @param members
-	 *            List of {@linkplain Person} objects corresponding to the members of the space
+	 *            List of {@linkplain Profile} objects corresponding to the members of the space
 	 */
-	public void setMembers(List<Person> members) {
+	public void setMembers(List<Profile> members) {
 		this.memberList = members;
 	}
 

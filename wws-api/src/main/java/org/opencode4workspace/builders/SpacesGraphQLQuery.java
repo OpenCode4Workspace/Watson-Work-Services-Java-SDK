@@ -4,15 +4,28 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
-import org.opencode4workspace.bo.Person.PersonFields;
+import org.opencode4workspace.bo.Profile.PersonFields;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
 
+/**
+ * @author Paul Withers
+ * @since 0.5.0
+ * 
+ *        Object for creating a Spaces query
+ *
+ */
 public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor
+	 * 
+	 * @throws WWException
+	 *             if there is an error building the object
+	 */
 	public SpacesGraphQLQuery() throws WWException {
 		try {
 			setOperationName("getSpaces");

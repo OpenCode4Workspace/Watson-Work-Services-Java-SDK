@@ -73,7 +73,7 @@ public class Message implements Serializable {
 	 *
 	 */
 	public enum MessageChildren implements WWChildInterface {
-		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+		CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -119,8 +119,8 @@ public class Message implements Serializable {
 	private String content;
 	private Date created;
 	private Date updated;
-	private Person createdBy;
-	private Person updatedBy;
+	private Profile createdBy;
+	private Profile updatedBy;
 	private List<String> annotations;
 
 	/**
@@ -201,7 +201,7 @@ public class Message implements Serializable {
 	/**
 	 * @return Person who created the Message
 	 */
-	public Person getCreatedBy() {
+	public Profile getCreatedBy() {
 		return createdBy;
 	}
 
@@ -209,14 +209,14 @@ public class Message implements Serializable {
 	 * @param createdBy
 	 *            Person who created the Message
 	 */
-	public void setCreatedBy(Person createdBy) {
+	public void setCreatedBy(Profile createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	/**
 	 * @return Person who last updated the Message
 	 */
-	public Person getUpdatedBy() {
+	public Profile getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -224,7 +224,7 @@ public class Message implements Serializable {
 	 * @param updatedBy
 	 *            Person who last updated the Message
 	 */
-	public void setUpdatedBy(Person updatedBy) {
+	public void setUpdatedBy(Profile updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

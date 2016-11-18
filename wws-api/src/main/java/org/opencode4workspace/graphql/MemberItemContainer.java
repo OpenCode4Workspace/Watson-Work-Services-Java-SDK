@@ -3,7 +3,7 @@ package org.opencode4workspace.graphql;
 import java.io.Serializable;
 import java.util.List;
 
-import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.Profile;
 
 /**
  * @author Christian Guedemann
@@ -16,12 +16,12 @@ import org.opencode4workspace.bo.Person;
 public class MemberItemContainer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private List<Person> items;
+	private List<Profile> items;
 
 	/**
-	 * @return List of {@linkplain Person} objects corresponding to the Members in a Space
+	 * @return List of {@linkplain Profile} objects corresponding to the Members in a Space
 	 */
-	public List<Person> getItems() {
+	public List<Profile> getItems() {
 		return items;
 	}
 }

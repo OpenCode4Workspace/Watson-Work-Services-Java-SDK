@@ -242,55 +242,134 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		return s.toString();
 	}
 
+	/**
+	 * @return String, name of the query object
+	 */
 	public String getObjectName() {
 		return objectName;
 	}
 
+	/**
+	 * @param objectName
+	 *            String, name of the query object
+	 */
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
 	}
 
+	/**
+	 * @return boolean, whether the object's properties are wrapped in an items container
+	 */
 	public boolean isHasItems() {
 		return hasItems;
 	}
 
+	/**
+	 * Defines whether the object's properties are wrapped in an items container
+	 * 
+	 * @param hasItems
+	 *            boolean, whether the object's fields and children are wrapped in an items container
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder setHasItems(boolean hasItems) {
 		this.hasItems = hasItems;
 		return this;
 	}
 
+	/**
+	 * @return List of string fields to return
+	 */
 	public List<String> getFieldsList() {
 		return fieldsList;
 	}
 
+	/**
+	 * @param fieldsList
+	 *            List of string fields to return
+	 */
 	public void setFieldsList(List<String> fieldsList) {
 		this.fieldsList = fieldsList;
 	}
 
+	/**
+	 * Add a field to return from the object
+	 * 
+	 * @param field
+	 *            String, name of the field to add
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder addField(String field) {
 		fieldsList.add(field);
 		return this;
 	}
 
+	/**
+	 * Add a field to request from the object
+	 * 
+	 * @param field
+	 *            WWFieldsAttributesInterface enum, whose label property is the name of the field to add
+	 * @return ObjectDataSenderBuilder, current object
+	 */
+	public ObjectDataSenderBuilder addField(WWFieldsAttributesInterface field) {
+		fieldsList.add(field.getLabel());
+		return this;
+	}
+
+	/**
+	 * Removes a field to request from the object
+	 * 
+	 * @param field
+	 *            String, name of the field to remove
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder removeField(String field) {
 		fieldsList.remove(field);
 		return this;
 	}
 
+	/**
+	 * @return Map of attributes to filter the request on. The key will be the attribute name, the value will be the value to filter against
+	 */
 	public Map<String, Object> getAttributesList() {
 		return attributesList;
 	}
 
+	/**
+	 * Adds a map of attributes by which the filter the request
+	 * 
+	 * @param attributesList
+	 *            Map of attributes to filter the request on. The key will be the attribute name, the value will be the value to filter against
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder setAttributesList(Map<String, Object> attributesList) {
 		this.attributesList = attributesList;
 		return this;
 	}
 
+	/**
+	 * Add an attribute by which to filter the request
+	 * 
+	 * @param key
+	 *            String, attribute name to filter on
+	 * @param value
+	 *            Object, value to filter on
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
 		attributesList.put(key, value);
 		return this;
 	}
 
+	/**
+	 * Add an attribute by which to filter the request
+	 * 
+	 * @param enumName
+	 *            enum, from which label property will give attribute name to filter on
+	 * @param value
+	 *            Object, value to filter on
+	 * @return ObjectDataSenderBuilder, current object
+	 * @throws WWException
+	 */
 	public ObjectDataSenderBuilder addAttribute(WWFieldsAttributesInterface enumName, Object value) throws WWException {
 		if (value.getClass().equals(enumName.getObjectClassType())) {
 			attributesList.put(enumName.getLabel(), value);
@@ -300,40 +379,86 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		return this;
 	}
 
+	/**
+	 * Remove an attribute from the request
+	 * 
+	 * @param key
+	 *            String, attribute to remove from the request
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder removeAttribute(String key) {
 		attributesList.remove(key);
 		return this;
 	}
 
+	/**
+	 * @return List of {@linkplain DataSenderBuilder} children to request from the object
+	 */
 	public List<DataSenderBuilder> getChildren() {
 		return children;
 	}
 
+	/**
+	 * @param children
+	 *            List of {@linkplain DataSenderBuilder} children to request from the object
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
 		this.children = children;
 		return this;
 	}
 
+	/**
+	 * Add a request for a specific child from the object
+	 * 
+	 * @param child
+	 *            DataSenderBuilder, child to add
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
 		children.add(child);
 		return this;
 	}
 
+	/**
+	 * Removes a request for a specific child from the object
+	 * 
+	 * @param child
+	 *            DataSenderBuilder, child to remove
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
 		children.remove(child);
 		return this;
 	}
 
+	/**
+	 * Adds a query to retrieve the full, default PageInfo object
+	 * 
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder addPageInfo() {
 		pageInfo = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false);
 		return this;
 	}
 
+	/**
+	 * Adds a query to retrieve a custom set of PageInfo
+	 * 
+	 * @param pageInfoCustom
+	 *            ObjectDataSenderBuilder containing the PageInfo fields to return
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder addPageInfo(ObjectDataSenderBuilder pageInfoCustom) {
 		pageInfo = pageInfoCustom;
 		return this;
 	}
 
+	/**
+	 * Remove the request for PageInfo from this object
+	 * 
+	 * @return ObjectDataSenderBuilder, current object
+	 */
 	public ObjectDataSenderBuilder removePageInfo() {
 		pageInfo = null;
 		return this;

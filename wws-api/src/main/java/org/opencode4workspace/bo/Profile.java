@@ -11,7 +11,7 @@ import java.util.Date;
  *        Serializable object corresponding to a Watson Workspace member
  *
  */
-public class Person implements Serializable {
+public class Profile implements Serializable {
 
 	/**
 	 * @author Paul Withers
@@ -22,7 +22,7 @@ public class Person implements Serializable {
 	 */
 	public enum PersonFields implements WWFieldsAttributesInterface {
 		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME("displayName", String.class), EXT_ID("extId",
-				String.class), EMAIL_ADDRESSES("emailAddresses", String.class), CUSTOMER_ID("customerId", String.class), CREATED("created", Date.class);
+				String.class), EMAIL_ADDRESSES("emailAddresses", String.class), CUSTOMER_ID("customerId", String.class), CREATED("created", Date.class), UPDATED("updated", Date.class);
 
 		private String label;
 		private Class<?> objectClassType;
@@ -69,7 +69,7 @@ public class Person implements Serializable {
 	 *
 	 */
 	public enum PersonChildren implements WWChildInterface {
-		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
+		CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -117,9 +117,9 @@ public class Person implements Serializable {
 	private String emailAddresses;
 	private String customerId;
 	private Date created;
-	private Person createdBy;
+	private Profile createdBy;
 	private Date updated;
-	private Person updatedBy;
+	private Profile updatedBy;
 
 	/**
 	 * @return String, id of the Person
@@ -213,11 +213,11 @@ public class Person implements Serializable {
 		this.created = created;
 	}
 
-	public Person getCreatedBy() {
+	public Profile getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Person createdBy) {
+	public void setCreatedBy(Profile createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -229,11 +229,11 @@ public class Person implements Serializable {
 		this.updated = updated;
 	}
 
-	public Person getUpdatedBy() {
+	public Profile getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(Person updatedBy) {
+	public void setUpdatedBy(Profile updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

@@ -2,7 +2,7 @@ package org.opencode4workspace.graphql;
 
 import java.util.List;
 
-import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.Profile;
 import org.opencode4workspace.bo.Space;
 
 /**
@@ -24,7 +24,7 @@ public class SpaceWrapper extends Space {
 	 * @see org.opencode4workspace.bo.Space#getMembers()
 	 */
 	@Override
-	public List<Person> getMembers() {
+	public List<Profile> getMembers() {
 		if (members == null) {
 			return null;
 		}
