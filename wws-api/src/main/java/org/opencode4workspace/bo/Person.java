@@ -79,7 +79,7 @@ public class Person implements Serializable {
 		 * 
 		 * @param label
 		 *            String, WWS variable
-		 * @param objectClassType
+		 * @param childEnumClass
 		 *            Class<?> Java data type expected for passing across
 		 */
 		private PersonChildren(String label, Class<?> childEnumClass) {

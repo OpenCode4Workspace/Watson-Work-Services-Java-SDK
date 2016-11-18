@@ -3,6 +3,8 @@ package org.opencode4workspace.bo;
 import java.io.Serializable;
 import java.util.Date;
 
+// TODO: Add JavaDoc
+
 public class Annotation implements Serializable {
 
 	/**

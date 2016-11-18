@@ -41,7 +41,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			spaces.addChild(updatedBy);
 			spaces.addField(SpaceFields.CREATED.getLabel());
 			spaces.addChild(createdBy);
-			ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), SpaceChildren.MEMBERS.getEnumClass(), true, false);
+			ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
 			members.addAttribute(BasicPaginationEnum.FIRST, 100);
 			members.addField(PersonFields.ID.getLabel());
 			members.addField(PersonFields.PHOTO_URL.getLabel());

@@ -82,7 +82,7 @@ public class Space implements Serializable {
 		 * 
 		 * @param label
 		 *            String, WWS variable
-		 * @param objectClassType
+		 * @param childEnumClass
 		 *            Class<?> Java data type expected for passing across
 		 */
 		private SpaceChildren(String label, Class<?> childEnumClass) {
