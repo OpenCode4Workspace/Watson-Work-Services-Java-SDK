@@ -31,7 +31,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			setOperationName("getSpaces");
 
 			// Basic createdBy ObjectDataBringer - same label for all
-			ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
+			ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
 			createdBy.addField(PersonFields.ID.getLabel());
 			createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
 			createdBy.addField(PersonFields.PHOTO_URL.getLabel());
