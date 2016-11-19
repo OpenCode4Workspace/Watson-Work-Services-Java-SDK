@@ -2,6 +2,8 @@ package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
 
+import org.opencode4workspace.bo.Profile;
+
 /**
  * @author Christian Guedemann
  * @author Paul Withers
@@ -14,12 +16,22 @@ public class DataContainer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private SpacesContainer spaces;
+	private Profile me;
+	private Profile person;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
 	 */
 	public SpacesContainer getSpaces() {
 		return spaces;
+	}
+
+	public Profile getMe() {
+		return me;
+	}
+
+	public Profile getProfile() {
+		return person;
 	}
 
 }

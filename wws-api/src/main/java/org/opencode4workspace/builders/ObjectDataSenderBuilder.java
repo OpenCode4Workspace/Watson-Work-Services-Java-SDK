@@ -171,6 +171,10 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 					TimeZone tz = TimeZone.getDefault();
 					df.setTimeZone(tz);
 					s.append(df.format(dt));
+				} else if (obj instanceof String) {
+					s.append("\"");
+					s.append(obj);
+					s.append("\"");
 				} else {
 					s.append(obj);
 				}

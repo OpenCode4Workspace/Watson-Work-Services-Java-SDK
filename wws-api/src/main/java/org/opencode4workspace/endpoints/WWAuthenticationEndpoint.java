@@ -50,7 +50,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
 				return AuthenticationResult.buildFromToken(appToken);
 			} else {
-				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
+				throw new WWException("Failure during login - " + response.getStatusLine().getReasonPhrase());
 			}
 		} catch (Exception e) {
 			throw new WWException(e);
