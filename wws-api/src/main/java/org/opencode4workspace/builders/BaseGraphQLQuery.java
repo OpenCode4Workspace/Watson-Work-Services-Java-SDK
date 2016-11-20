@@ -92,7 +92,7 @@ public class BaseGraphQLQuery implements Serializable {
 
 	protected ObjectDataSenderBuilder buildCreatedBy() {
 		// Basic createdBy ObjectDataBringer - same label for all
-		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
+		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
 		createdBy.addField(PersonFields.ID);
 		createdBy.addField(PersonFields.DISPLAY_NAME);
 		createdBy.addField(PersonFields.PHOTO_URL);
