@@ -2,11 +2,15 @@ package org.opencode4workspace.builders;
 
 import java.io.Serializable;
 
+import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Space.SpaceChildren;
+
 /**
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Abstract object for creating GraphQL Query. Use one of the in-built options
+ *        Abstract object for creating GraphQL Query. Use one of the in-built
+ *        options
  *
  */
 public class BaseGraphQLQuery implements Serializable {
@@ -76,12 +80,34 @@ public class BaseGraphQLQuery implements Serializable {
 	}
 
 	/**
-	 * Returns the full query to be passed to WWS, building the JSON object from an ObjectDataSenderBuilder
+	 * Returns the full query to be passed to WWS, building the JSON object from
+	 * an ObjectDataSenderBuilder
 	 * 
-	 * @return String query to pass to WWS containing "query", the operation name, and a JSON object containing the query settings
+	 * @return String query to pass to WWS containing "query", the operation
+	 *         name, and a JSON object containing the query settings
 	 */
 	public String returnQuery() {
 		return "query " + operationName + " {" + getQueryObject().build() + "}";
+	}
+
+	protected ObjectDataSenderBuilder buildCreatedBy() {
+		// Basic createdBy ObjectDataBringer - same label for all
+		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
+		createdBy.addField(PersonFields.ID);
+		createdBy.addField(PersonFields.DISPLAY_NAME);
+		createdBy.addField(PersonFields.PHOTO_URL);
+		createdBy.addField(PersonFields.EMAIL);
+		return createdBy;
+	}
+
+	protected ObjectDataSenderBuilder buildUpdatedBy() {
+		// Basic updatedBy ObjectDataBringer - same label for all
+		ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
+		updatedBy.addField(PersonFields.ID);
+		updatedBy.addField(PersonFields.DISPLAY_NAME);
+		updatedBy.addField(PersonFields.PHOTO_URL);
+		updatedBy.addField(PersonFields.EMAIL);
+		return updatedBy;
 	}
 
 }

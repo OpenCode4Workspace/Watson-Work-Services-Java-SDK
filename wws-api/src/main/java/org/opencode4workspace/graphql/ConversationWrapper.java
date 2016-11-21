@@ -15,7 +15,7 @@ import org.opencode4workspace.bo.Message;
 public class ConversationWrapper extends Conversation {
 
 	private static final long serialVersionUID = 1L;
-	private MessageContainer messages;
+	private MessageContainer messages = new MessageContainer();
 
 	/*
 	 * (non-Javadoc)
@@ -28,5 +28,12 @@ public class ConversationWrapper extends Conversation {
 			return null;
 		}
 		return messages.getItems();
+	}
+	
+	@Override
+	public void setMessages(List<Message> messagelist) {
+		if (messages != null) {
+			messages.setItems(messagelist);
+		}
 	}
 }

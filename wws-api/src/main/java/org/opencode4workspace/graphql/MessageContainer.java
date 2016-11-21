@@ -22,4 +22,8 @@ public class MessageContainer {
 	public List<Message> getItems() {
 		return items;
 	}
+
+	public void setItems(List<Message> messages) {
+		items = messages;
+	}
 }

@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Profile;
 import org.opencode4workspace.bo.Space;
+import org.opencode4workspace.builders.ConversationGraphQLQuery;
 import org.opencode4workspace.builders.ProfileGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.graphql.DataContainer;
@@ -65,6 +67,14 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
 		return (Profile) container.getProfile();
+	}
+	
+	public Conversation getConversation(String conversationId) throws WWException {
+		ConversationGraphQLQuery queryObject = new ConversationGraphQLQuery(conversationId);
+		setRequest(new GraphQLRequest(queryObject));
+		executeRequest();
+		DataContainer container = getResultContainer().getData();
+		return container.getConversation();
 	}
 
 }
