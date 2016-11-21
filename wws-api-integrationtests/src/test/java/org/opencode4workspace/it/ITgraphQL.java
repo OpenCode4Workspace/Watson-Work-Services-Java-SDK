@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Profile;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
@@ -15,7 +16,7 @@ public class ITgraphQL {
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
-	public void testgetSpacesAsApp(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
+	public void testGetSpacesAsApp(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
@@ -25,4 +26,29 @@ public class ITgraphQL {
 		assert (spaces.size() > 0);
 	}
 
+	@Test(enabled = false)
+	@Parameters({ "appId", "appSecret", "myDisplayName" })
+	public void testGetMe(String appId, String appSecret, String myDisplayName)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		Profile me = ep.getMe();
+		assert (myDisplayName.equals(me.getDisplayName()));
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
+	public void testGetProfile(String appId, String appSecret, String profileId, String myDisplayName)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		Profile profile = ep.getProfile(profileId);
+		assert (myDisplayName.equals(profile.getDisplayName()));
+	}
 }
