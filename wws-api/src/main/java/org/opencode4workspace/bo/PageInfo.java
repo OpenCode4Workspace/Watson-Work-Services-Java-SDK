@@ -59,7 +59,7 @@ public class PageInfo implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
-	public static final String LABEL = "pageInfo";
+	public static final String PAGE_QUERY_OBJECT_NAME = "pageInfo";
 	private String startCursor;
 	private String endCursor;
 	private boolean hasNextPage;

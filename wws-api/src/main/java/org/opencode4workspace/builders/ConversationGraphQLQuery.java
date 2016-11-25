@@ -1,6 +1,7 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
@@ -13,7 +14,7 @@ public class ConversationGraphQLQuery extends BaseGraphQLQuery {
 	public ConversationGraphQLQuery(String conversationId) throws WWException {
 		setOperationName("getConversation");
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
-		query.setObjectName("conversation");
+		query.setObjectName(Conversation.CONVERSATION_QUERY_OBJECT_NAME);
 		query.addAttribute(ConversationFields.ID, conversationId);
 		query.addField(ConversationFields.ID);
 		query.addField(ConversationFields.CREATED);

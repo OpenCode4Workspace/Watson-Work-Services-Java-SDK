@@ -115,6 +115,7 @@ public class Space implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String SPACE_QUERY_OBJECT_NAME = "spaces";
 	private String id;
 	private String description;
 	private String title;

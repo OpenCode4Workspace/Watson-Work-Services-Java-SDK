@@ -3,6 +3,7 @@ package org.opencode4workspace.tests;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
@@ -19,50 +20,50 @@ public class GraphQLBuilderTest {
 	public final static String SPACES_ALL_QUERY = "spaces {items {id description title created createdBy updated updatedBy memberList membersUpdated conversation}}";
 
 	@Test
-	public void testBuilder() {
+	public void testBuilder() throws WWException {
 		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-		createdBy.addField(PersonFields.ID.getLabel());
-		createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-		createdBy.addField(PersonFields.PHOTO_URL.getLabel());
-		createdBy.addField(PersonFields.EMAIL.getLabel());
+		createdBy.addField(PersonFields.ID);
+		createdBy.addField(PersonFields.DISPLAY_NAME);
+		createdBy.addField(PersonFields.PHOTO_URL);
+		createdBy.addField(PersonFields.EMAIL);
 
 		// Basic updatedBy ObjectDataBringer - same label for all
 		ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-		updatedBy.addField(PersonFields.ID.getLabel());
-		updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-		updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
-		updatedBy.addField(PersonFields.EMAIL.getLabel());
+		updatedBy.addField(PersonFields.ID);
+		updatedBy.addField(PersonFields.DISPLAY_NAME);
+		updatedBy.addField(PersonFields.PHOTO_URL);
+		updatedBy.addField(PersonFields.EMAIL);
 
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 		spaces.addPageInfo();
-		spaces.addField(SpaceFields.ID.getLabel());
-		spaces.addField(SpaceFields.TITLE.getLabel());
-		spaces.addField(SpaceFields.DESCRIPTION.getLabel());
-		spaces.addField(SpaceFields.UPDATED.getLabel());
+		spaces.addField(SpaceFields.ID);
+		spaces.addField(SpaceFields.TITLE);
+		spaces.addField(SpaceFields.DESCRIPTION);
+		spaces.addField(SpaceFields.UPDATED);
 		spaces.addChild(updatedBy);
-		spaces.addField(SpaceFields.CREATED.getLabel());
+		spaces.addField(SpaceFields.CREATED);
 		spaces.addChild(createdBy);
 		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
 		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
-		members.addField(PersonFields.ID.getLabel());
-		members.addField(PersonFields.PHOTO_URL.getLabel());
-		members.addField(PersonFields.EMAIL.getLabel());
-		members.addField(PersonFields.DISPLAY_NAME.getLabel());
+		members.addField(PersonFields.ID);
+		members.addField(PersonFields.PHOTO_URL);
+		members.addField(PersonFields.EMAIL);
+		members.addField(PersonFields.DISPLAY_NAME);
 		spaces.addChild(members);
 		ObjectDataSenderBuilder conversation = new ObjectDataSenderBuilder(SpaceChildren.CONVERSATION.getLabel());
-		conversation.addField(ConversationFields.ID.getLabel());
-		conversation.addField(ConversationFields.CREATED.getLabel());
+		conversation.addField(ConversationFields.ID);
+		conversation.addField(ConversationFields.CREATED);
 		conversation.addChild(createdBy);
-		conversation.addField(ConversationFields.UPDATED.getLabel());
+		conversation.addField(ConversationFields.UPDATED);
 		conversation.addChild(updatedBy);
 		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true);
-		messages.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 200);
+		messages.addAttribute(BasicPaginationEnum.FIRST, 200);
 		messages.addPageInfo();
-		messages.addField(MessageFields.CONTENT_TYPE.getLabel());
-		messages.addField(MessageFields.CONTENT.getLabel());
-		messages.addField(MessageFields.CREATED.getLabel());
-		messages.addField(MessageFields.UPDATED.getLabel());
+		messages.addField(MessageFields.CONTENT_TYPE);
+		messages.addField(MessageFields.CONTENT);
+		messages.addField(MessageFields.CREATED);
+		messages.addField(MessageFields.UPDATED);
 		messages.addChild(createdBy);
 		messages.addChild(updatedBy);
 		conversation.addChild(messages);
@@ -73,7 +74,7 @@ public class GraphQLBuilderTest {
 
 	@Test
 	public void testClazzBasedBuilder() {
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", Space.class, true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, Space.class, true);
 		assertEquals(SPACES_ALL_QUERY, spaces.build());
 	}
 }

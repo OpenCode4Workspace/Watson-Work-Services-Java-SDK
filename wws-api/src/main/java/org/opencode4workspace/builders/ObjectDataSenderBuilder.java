@@ -442,7 +442,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @return ObjectDataSenderBuilder, current object
 	 */
 	public ObjectDataSenderBuilder addPageInfo() {
-		pageInfo = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false);
+		pageInfo = new ObjectDataSenderBuilder(PageInfo.PAGE_QUERY_OBJECT_NAME, PageInfo.class, false);
 		return this;
 	}
 

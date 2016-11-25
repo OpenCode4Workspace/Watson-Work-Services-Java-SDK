@@ -112,6 +112,7 @@ public class Conversation implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	public static final String CONVERSATION_QUERY_OBJECT_NAME = "conversation";
 	private String id;
 	private Date created;
 	private Date updated;

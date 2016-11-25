@@ -5,6 +5,7 @@ import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
 import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
@@ -44,7 +45,7 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
 			updatedBy.addField(PersonFields.EMAIL.getLabel());
 
-			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
+			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
 			spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 			spaces.addPageInfo();
 			spaces.addField(SpaceFields.ID.getLabel());
