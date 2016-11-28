@@ -98,7 +98,7 @@ public class ITgraphQL {
 		assert (myDisplayName.equals(profile.getDisplayName()));
 	}
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "conversationId" })
 	public void testgetConversationAsApp(String appId, String appSecret, String conversationId)
 			throws UnsupportedEncodingException, WWException {
