@@ -12,7 +12,9 @@ import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
+import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
+import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
@@ -44,29 +46,16 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
 
-		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
-		createdBy.addField(PersonFields.ID);
-		createdBy.addField(PersonFields.DISPLAY_NAME);
-		createdBy.addField(PersonFields.PHOTO_URL);
-		createdBy.addField(PersonFields.EMAIL);
-
-		// Basic updatedBy ObjectDataBringer - same label for all
-		ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-		updatedBy.addField(PersonFields.ID);
-		updatedBy.addField(PersonFields.DISPLAY_NAME);
-		updatedBy.addField(PersonFields.PHOTO_URL);
-		updatedBy.addField(PersonFields.EMAIL);
-
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(SpaceFields.ID);
 		spaces.addField(SpaceFields.TITLE);
 		spaces.addField(SpaceFields.DESCRIPTION);
 		spaces.addField(SpaceFields.UPDATED);
-		spaces.addChild(updatedBy);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.UPDATED_BY));
 		spaces.addField(SpaceFields.CREATED);
-		spaces.addChild(createdBy);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.CREATED_BY));
 		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
 		members.addAttribute(BasicPaginationEnum.FIRST, 100);
 		members.addField(PersonFields.ID);
@@ -109,7 +98,7 @@ public class ITgraphQL {
 		assert (myDisplayName.equals(profile.getDisplayName()));
 	}
 
-	@Test(enabled = true)
+	@Test(enabled = false)
 	@Parameters({ "appId", "appSecret", "conversationId" })
 	public void testgetConversationAsApp(String appId, String appSecret, String conversationId)
 			throws UnsupportedEncodingException, WWException {
@@ -121,6 +110,26 @@ public class ITgraphQL {
 		Conversation conversation = ep.getConversation(conversationId);
 		assert (conversation != null);
 		assert (conversation.getMessages().size() > 0);
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret" })
+	public void testGetSpaceMembers(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+
+		SpacesGraphQLQuery queryObject = new SpacesGraphQLQuery();
+		ep.setRequest(new GraphQLRequest(queryObject));
+		ep.executeRequest();
+		List<? extends Space> spacesResult = ep.getResultContainer().getData().getSpaces().getItems();
+		assert (spacesResult.size() > 0);
+		String spaceId = spacesResult.get(0).getId();
+		assert (null != spaceId);
+		List<Profile> members = ep.getSpaceMembers(spaceId);
+		assert (members.size() > 0);
 	}
 
 }

@@ -19,6 +19,7 @@ public class DataContainer implements Serializable {
 	private Profile me;
 	private Profile person;
 	private ConversationWrapper conversation;
+	private SpaceWrapper space;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -27,20 +28,40 @@ public class DataContainer implements Serializable {
 		return spaces;
 	}
 
+	/**
+	 * @return Profile for current user
+	 */
 	public Profile getMe() {
 		return me;
 	}
 
+	/**
+	 * @return Profile for a given user
+	 */
 	public Profile getProfile() {
 		return person;
 	}
 
+	/**
+	 * @return ConversationWrapper for a given conversation
+	 */
 	public ConversationWrapper getConversation() {
 		return conversation;
 	}
 
+	/**
+	 * @param conversation
+	 *            ConversationWrapper for a given conversation
+	 */
 	public void setConversation(ConversationWrapper conversation) {
 		this.conversation = conversation;
+	}
+
+	/**
+	 * @return SpaceWrapper for a given Workspace
+	 */
+	public SpaceWrapper getSpace() {
+		return space;
 	}
 
 }

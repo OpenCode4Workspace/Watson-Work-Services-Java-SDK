@@ -1,8 +1,8 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Profile.PersonChildren;
 import org.opencode4workspace.bo.Profile.PersonFields;
-import org.opencode4workspace.bo.Space.SpaceChildren;
 
 /**
  * @author Paul Withers
@@ -30,20 +30,6 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 				setOperationName("getProfile");
 			}
 
-			// Basic createdBy ObjectDataBringer - same label for all
-			ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-			createdBy.addField(PersonFields.ID.getLabel());
-			createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-			createdBy.addField(PersonFields.PHOTO_URL.getLabel());
-			createdBy.addField(PersonFields.EMAIL.getLabel());
-
-			// Basic updatedBy ObjectDataBringer - same label for all
-			ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-			updatedBy.addField(PersonFields.ID.getLabel());
-			updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-			updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
-			updatedBy.addField(PersonFields.EMAIL.getLabel());
-
 			ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 			if (isMe) {
 				query.setObjectName("me");
@@ -60,8 +46,8 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 			query.addField(PersonFields.CUSTOMER_ID);
 			query.addField(PersonFields.CREATED);
 			query.addField(PersonFields.UPDATED);
-			query.addChild(createdBy);
-			query.addChild(updatedBy);
+			query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
+			query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
 			setQueryObject(query);
 		} catch (Exception e) {
 			throw new WWException(e);

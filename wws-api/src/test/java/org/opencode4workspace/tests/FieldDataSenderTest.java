@@ -43,7 +43,7 @@ public class FieldDataSenderTest {
 	@Test
 	public void testSpacesObjectQuery() throws WWException {
 		BaseGraphQLQuery query = new BaseGraphQLQuery("getSpaces");
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID);
@@ -61,7 +61,7 @@ public class FieldDataSenderTest {
 	public void testSpacesBiggerObjectQuery() throws WWException {
 		BaseGraphQLQuery query = new BaseGraphQLQuery();
 		query.setOperationName("getSpaces");
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID);
@@ -97,7 +97,7 @@ public class FieldDataSenderTest {
 	public void testSpacesFullObjectQuery() throws WWException {
 		BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
 		graphQuery.setOperationName("getSpaces");
-		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
 		spaces.addField(Space.SpaceFields.ID);
@@ -162,7 +162,7 @@ public class FieldDataSenderTest {
 		try {
 			BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
 			graphQuery.setOperationName("getSpaces");
-			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACE_QUERY_OBJECT_NAME, true);
+			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 			spaces.addAttribute(BasicPaginationEnum.FIRST, "100");
 			assertTrue(false);
 		} catch (Exception e) {
