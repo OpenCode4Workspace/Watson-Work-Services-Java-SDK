@@ -28,6 +28,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	private GraphQLRequest request;
 	private GraphResultContainer resultContainer;
 	private String resultContent;
+	private Boolean profileDump = false;
 
 	/**
 	 * @param client
@@ -116,7 +117,15 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		try {
 			StringEntity postPayload = new StringEntity(new RequestBuilder<GraphQLRequest>(GraphQLRequest.class).buildJson(request), "UTF-8");
 			post.setEntity(postPayload);
+			if (getProfileDump()) {
+				System.out.println("[WWS Profiler] Query is " + postPayload);
+			}
+			long start = System.nanoTime();
 			response = client.execute(post);
+			if (getProfileDump()) {
+				long elapsed = System.nanoTime() - start;
+				System.out.println("[WWS Profiler] Query took " + elapsed / 1000000 + "ms");
+			}
 			if (response.getStatusLine().getStatusCode() == 200) {
 				// TODO: Handle if we need to re-authenticate
 				String content = EntityUtils.toString(response.getEntity());
@@ -177,6 +186,21 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		post.addHeader("jwt", getClient().getJWTToken());
 		post.addHeader("content-type", ContentType.APPLICATION_JSON.toString());
 		return post;
+	}
+
+	/**
+	 * @return Boolean whether or not to dump profile data of query and response time
+	 */
+	public Boolean getProfileDump() {
+		return profileDump;
+	}
+
+	/**
+	 * @param profileDump
+	 *            Boolean whether or not to dump profile data of query and response time
+	 */
+	public void setProfileDump(Boolean profileDump) {
+		this.profileDump = profileDump;
 	}
 
 }
