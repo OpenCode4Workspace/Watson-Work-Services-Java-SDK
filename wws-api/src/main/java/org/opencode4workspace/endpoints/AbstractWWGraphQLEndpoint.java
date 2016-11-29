@@ -27,6 +27,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	private final WWClient client;
 	private GraphQLRequest request;
 	private GraphResultContainer resultContainer;
+	private String resultContent;
 
 	/**
 	 * @param client
@@ -119,6 +120,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				// TODO: Handle if we need to re-authenticate
 				String content = EntityUtils.toString(response.getEntity());
+				setResultContent(content);
 				setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content));
 			} else {
 				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
@@ -134,6 +136,21 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return String raw JSON results as String
+	 */
+	public String getResultContent() {
+		return resultContent;
+	}
+
+	/**
+	 * @param resultContent
+	 *            String raw JSON results as string
+	 */
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
 	}
 
 	/*

@@ -20,6 +20,7 @@ public class DataContainer implements Serializable {
 	private Profile person;
 	private ConversationWrapper conversation;
 	private SpaceWrapper space;
+	private MemberItemContainer people;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -62,6 +63,13 @@ public class DataContainer implements Serializable {
 	 */
 	public SpaceWrapper getSpace() {
 		return space;
+	}
+
+	/**
+	 * @return MemberItemContainer for people resulting from a query
+	 */
+	public MemberItemContainer getPeople() {
+		return people;
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Profile;
 import org.opencode4workspace.bo.Profile.PersonChildren;
 import org.opencode4workspace.bo.Profile.PersonFields;
 
@@ -32,9 +33,9 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 
 			ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 			if (isMe) {
-				query.setObjectName("me");
+				query.setObjectName(Profile.MY_PROFILE_QUERY_OBJECT_NAME);
 			} else {
-				query.setObjectName("person");
+				query.setObjectName(Profile.ONE_PROFILE_QUERY_OBJECT_NAME);
 				query.addAttribute(PersonFields.ID, profileId);
 			}
 			query.addField(PersonFields.ID);

@@ -109,6 +109,9 @@ public class Profile implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	public static final String PROFILES_QUERY_OBJECT_NAME = "people";
+	public static final String ONE_PROFILE_QUERY_OBJECT_NAME = "person";
+	public static final String MY_PROFILE_QUERY_OBJECT_NAME = "me";
 	private String id;
 	private String photoUrl;
 	private String email;
