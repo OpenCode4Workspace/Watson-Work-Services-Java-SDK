@@ -33,7 +33,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 */
 	public List<? extends Space> getSpaces() throws WWException {
 
-		SpacesGraphQLQuery queryObject = new SpacesGraphQLQuery();
+		SpacesGraphQLQuery queryObject = SpacesGraphQLQuery.buildStandardGetSpacesQuery();
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		return (List<? extends Space>) getResultContainer().getData().getSpaces().getItems();
@@ -47,7 +47,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 *             containing an error message, if the request was unsuccessful
 	 */
 	public Profile getMe() throws WWException {
-		ProfileGraphQLQuery queryObject = new ProfileGraphQLQuery("");
+		ProfileGraphQLQuery queryObject = ProfileGraphQLQuery.buildMyProfilleQuery();
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		return (Profile) getResultContainer().getData().getMe();
@@ -63,7 +63,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 *             containing an error message, if the request was unsuccessful
 	 */
 	public Profile getProfile(String profileId) throws WWException {
-		ProfileGraphQLQuery queryObject = new ProfileGraphQLQuery(profileId);
+		ProfileGraphQLQuery queryObject = ProfileGraphQLQuery.buildProfileQueryById(profileId);
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
@@ -71,7 +71,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	public Conversation getConversation(String conversationId) throws WWException {
-		ConversationGraphQLQuery queryObject = new ConversationGraphQLQuery(conversationId);
+		ConversationGraphQLQuery queryObject = ConversationGraphQLQuery.buildStandardConversationQueryById(conversationId);
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
@@ -79,7 +79,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	public List<Profile> getSpaceMembers(String spaceId) throws WWException {
-		SpaceMembersGraphQLQuery queryObject = new SpaceMembersGraphQLQuery(spaceId);
+		SpaceMembersGraphQLQuery queryObject = SpaceMembersGraphQLQuery.buildSpaceMemberGraphQueryBySpaceId(spaceId);
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();

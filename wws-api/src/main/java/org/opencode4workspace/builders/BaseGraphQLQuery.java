@@ -1,40 +1,29 @@
 package org.opencode4workspace.builders;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
+import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Profile.PersonFields;
 import org.opencode4workspace.bo.Space.SpaceChildren;
+import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
 /**
  * @author Paul Withers
+ * @author Christian Gudemann
  * @since 0.5.0
  * 
  *        Abstract object for creating GraphQL Query. Use one of the in-built
  *        options
  *
  */
-public class BaseGraphQLQuery implements Serializable {
+public abstract class BaseGraphQLQuery implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String operationName;
-	private ObjectDataSenderBuilder queryObject;
+	private final String operationName;
+	private final ObjectDataSenderBuilder queryObject;
 
-	/**
-	 * Constructor
-	 */
-	public BaseGraphQLQuery() {
-
-	}
-
-	/**
-	 * Constructor, passing in the operation name for the query
-	 * 
-	 * @param operationName
-	 *            String, operation name
-	 */
-	public BaseGraphQLQuery(String operationName) {
-		this.operationName = operationName;
-	}
 
 	/**
 	 * Constructor, passing in everything required to build the query
@@ -56,13 +45,6 @@ public class BaseGraphQLQuery implements Serializable {
 		return operationName;
 	}
 
-	/**
-	 * @param operationName
-	 *            String, operation name
-	 */
-	public void setOperationName(String operationName) {
-		this.operationName = operationName;
-	}
 
 	/**
 	 * @return ObjectDataSenderBuilder containing the query settings
@@ -71,13 +53,6 @@ public class BaseGraphQLQuery implements Serializable {
 		return queryObject;
 	}
 
-	/**
-	 * @param queryObject
-	 *            ObjectDataSenderBuilder containing the query settings
-	 */
-	public void setQueryObject(ObjectDataSenderBuilder queryObject) {
-		this.queryObject = queryObject;
-	}
 
 	/**
 	 * Returns the full query to be passed to WWS, building the JSON object from
@@ -91,23 +66,101 @@ public class BaseGraphQLQuery implements Serializable {
 	}
 
 	protected ObjectDataSenderBuilder buildCreatedBy() {
-		// Basic createdBy ObjectDataBringer - same label for all
-		ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
-		createdBy.addField(PersonFields.ID);
-		createdBy.addField(PersonFields.DISPLAY_NAME);
-		createdBy.addField(PersonFields.PHOTO_URL);
-		createdBy.addField(PersonFields.EMAIL);
-		return createdBy;
+		return new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.CREATED_BY);
 	}
 
 	protected ObjectDataSenderBuilder buildUpdatedBy() {
-		// Basic updatedBy ObjectDataBringer - same label for all
-		ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-		updatedBy.addField(PersonFields.ID);
-		updatedBy.addField(PersonFields.DISPLAY_NAME);
-		updatedBy.addField(PersonFields.PHOTO_URL);
-		updatedBy.addField(PersonFields.EMAIL);
-		return updatedBy;
+		return new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.UPDATED_BY);
+	}
+	
+	//Delegators
+
+	public String getObjectName() {
+		return queryObject.getObjectName();
+	}
+
+	public void setObjectName(String objectName) {
+		queryObject.setObjectName(objectName);
+	}
+
+	public boolean isHasItems() {
+		return queryObject.isHasItems();
+	}
+
+	public ObjectDataSenderBuilder setHasItems(boolean hasItems) {
+		return queryObject.setHasItems(hasItems);
+	}
+
+	public List<String> getFieldsList() {
+		return queryObject.getFieldsList();
+	}
+
+	public void setFieldsList(List<String> fieldsList) {
+		queryObject.setFieldsList(fieldsList);
+	}
+
+	public ObjectDataSenderBuilder addField(String field) {
+		return queryObject.addField(field);
+	}
+
+	public ObjectDataSenderBuilder addField(WWFieldsAttributesInterface field) {
+		return queryObject.addField(field);
+	}
+
+	public ObjectDataSenderBuilder removeField(String field) {
+		return queryObject.removeField(field);
+	}
+
+	public Map<String, Object> getAttributesList() {
+		return queryObject.getAttributesList();
+	}
+
+	public ObjectDataSenderBuilder setAttributesList(Map<String, Object> attributesList) {
+		return queryObject.setAttributesList(attributesList);
+	}
+
+	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
+		return queryObject.addAttribute(key, value);
+	}
+
+	public ObjectDataSenderBuilder addAttribute(WWFieldsAttributesInterface enumName, Object value) throws WWException {
+		return queryObject.addAttribute(enumName, value);
+	}
+
+	public ObjectDataSenderBuilder removeAttribute(String key) {
+		return queryObject.removeAttribute(key);
+	}
+
+	public List<DataSenderBuilder> getChildren() {
+		return queryObject.getChildren();
+	}
+
+	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
+		return queryObject.setChildren(children);
+	}
+
+	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
+		return queryObject.addChild(child);
+	}
+
+	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
+		return queryObject.removeChild(child);
+	}
+
+	public ObjectDataSenderBuilder addPageInfo() {
+		return queryObject.addPageInfo();
+	}
+
+	public ObjectDataSenderBuilder addPageInfo(ObjectDataSenderBuilder pageInfoCustom) {
+		return queryObject.addPageInfo(pageInfoCustom);
+	}
+
+	public int hashCode() {
+		return queryObject.hashCode();
+	}
+
+	public ObjectDataSenderBuilder removePageInfo() {
+		return queryObject.removePageInfo();
 	}
 
 }

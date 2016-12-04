@@ -19,18 +19,12 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
  */
 public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 
+	private static final String METHOD = "getSpaces";
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor
-	 * 
-	 * @throws WWException
-	 *             if there is an error building the object
-	 */
-	public SpacesGraphQLQuery() throws WWException {
-		try {
-			setOperationName("getSpaces");
-
+	
+	public static SpacesGraphQLQuery buildStandardGetSpacesQuery() throws WWException {
+	
 			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 			spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
 			spaces.addPageInfo();
@@ -67,11 +61,18 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 			messages.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(ConversationChildren.UPDATED_BY));
 			conversation.addChild(messages);
 			spaces.addChild(conversation);
-			setQueryObject(spaces);
-		} catch (Exception e) {
-			throw new WWException(e);
-		}
+			return new SpacesGraphQLQuery(spaces);
+	}
+	
+	/**
+	 * Constructor
+	 */
+	public SpacesGraphQLQuery() {
+		super(METHOD, new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true));
 
+	}
+	public SpacesGraphQLQuery(ObjectDataSenderBuilder query) {
+		super(METHOD, query);
 	}
 
 }

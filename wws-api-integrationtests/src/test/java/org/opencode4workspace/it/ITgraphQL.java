@@ -63,8 +63,7 @@ public class ITgraphQL {
 		members.addField(PersonFields.EMAIL);
 		members.addField(PersonFields.DISPLAY_NAME);
 		spaces.addChild(members);
-
-		BaseGraphQLQuery queryObject = new BaseGraphQLQuery("getSpaces", spaces);
+		SpacesGraphQLQuery queryObject = new SpacesGraphQLQuery(spaces);
 		ep.setRequest(new GraphQLRequest(queryObject));
 		ep.executeRequest();
 		List<? extends Space> spacesResult = ep.getResultContainer().getData().getSpaces().getItems();
@@ -121,7 +120,7 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
 
-		SpacesGraphQLQuery queryObject = new SpacesGraphQLQuery();
+		SpacesGraphQLQuery queryObject = SpacesGraphQLQuery.buildStandardGetSpacesQuery();
 		ep.setRequest(new GraphQLRequest(queryObject));
 		ep.executeRequest();
 		List<? extends Space> spacesResult = ep.getResultContainer().getData().getSpaces().getItems();

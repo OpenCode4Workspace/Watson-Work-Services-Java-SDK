@@ -16,6 +16,7 @@ import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
+import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
 import org.opencode4workspace.json.GraphQLRequest;
 
@@ -42,7 +43,6 @@ public class FieldDataSenderTest {
 
 	@Test
 	public void testSpacesObjectQuery() throws WWException {
-		BaseGraphQLQuery query = new BaseGraphQLQuery("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
@@ -52,15 +52,13 @@ public class FieldDataSenderTest {
 		spaces.addField(SpaceFields.CREATED);
 		spaces.addField(SpaceFields.UPDATED);
 		spaces.addField(SpaceFields.MEMBERS_UPDATED);
-		query.setQueryObject(spaces);
+		SpacesGraphQLQuery query = new SpacesGraphQLQuery(spaces);
 		GraphQLRequest request = new GraphQLRequest(query);
 		assertEquals(GET_SPACES_QUERY, request.getQuery());
 	}
 
 	@Test
 	public void testSpacesBiggerObjectQuery() throws WWException {
-		BaseGraphQLQuery query = new BaseGraphQLQuery();
-		query.setOperationName("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
@@ -89,14 +87,12 @@ public class FieldDataSenderTest {
 		members.addField(PersonFields.EMAIL);
 		members.addField(PersonFields.DISPLAY_NAME);
 		spaces.addChild(members);
-		query.setQueryObject(spaces);
+		SpacesGraphQLQuery query = new SpacesGraphQLQuery(spaces);
 		assertEquals(GET_SPACES_BIGGER_QUERY, query.returnQuery());
 	}
 
 	@Test
 	public void testSpacesFullObjectQuery() throws WWException {
-		BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
-		graphQuery.setOperationName("getSpaces");
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 		spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
 		spaces.addPageInfo();
@@ -153,15 +149,13 @@ public class FieldDataSenderTest {
 		messages.addChild(updatedBy);
 		conversation.addChild(messages);
 		spaces.addChild(conversation);
-		graphQuery.setQueryObject(spaces);
+		SpacesGraphQLQuery graphQuery = new SpacesGraphQLQuery(spaces);
 		assertEquals(GET_SPACES_FULL_QUERY, graphQuery.returnQuery());
 	}
 
 	@Test
 	public void attributesErrorTest() {
 		try {
-			BaseGraphQLQuery graphQuery = new BaseGraphQLQuery();
-			graphQuery.setOperationName("getSpaces");
 			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
 			spaces.addAttribute(BasicPaginationEnum.FIRST, "100");
 			assertTrue(false);

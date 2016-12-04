@@ -15,16 +15,10 @@ import org.opencode4workspace.bo.Space.SpaceFields;
  *
  */
 public class SpaceMembersGraphQLQuery extends BaseGraphQLQuery {
+	private static final String METHOD = "getSpaceMembers";
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param spaceId
-	 *            String, id for a Workspace
-	 * @throws WWException
-	 *             if there is an error building the object
-	 */
-	public SpaceMembersGraphQLQuery(String spaceId) throws WWException {
-		setOperationName("getSpaceMembers");
+	public static SpaceMembersGraphQLQuery buildSpaceMemberGraphQueryBySpaceId(String spaceId) throws WWException {
 
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Space.ONE_SPACE_QUERY_OBJECT_NAME);
@@ -39,7 +33,19 @@ public class SpaceMembersGraphQLQuery extends BaseGraphQLQuery {
 		members.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
 		members.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
 		query.addChild(members);
-		setQueryObject(query);
+		return new SpaceMembersGraphQLQuery(query);
+
+	}
+
+	/**
+	 * Default Constructor
+	 */
+	public SpaceMembersGraphQLQuery() {
+		super(METHOD, new ObjectDataSenderBuilder(Space.ONE_SPACE_QUERY_OBJECT_NAME));
+	}
+
+	public SpaceMembersGraphQLQuery(ObjectDataSenderBuilder query) {
+		super(METHOD, query);
 	}
 
 }

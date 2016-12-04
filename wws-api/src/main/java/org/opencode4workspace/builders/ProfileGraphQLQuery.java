@@ -13,31 +13,17 @@ import org.opencode4workspace.bo.Profile.PersonFields;
  */
 public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 
+	private static final String METHOD_GET_MYSELF = "getMyself";
+	private static final String METHOD_GET_PROFILE = "getProfile";
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param profileId
-	 *            String, id of the profile required or blank for "me"
-	 * @throws WWException
-	 *             if there is an error building the object
-	 */
-	public ProfileGraphQLQuery(String profileId) throws WWException {
-		try {
-			boolean isMe = false;
+	public static ProfileGraphQLQuery buildProfileQueryById(String profileId) throws WWException {
 			if ("".equals(profileId)) {
-				isMe = true;
-				setOperationName("getMyself");
-			} else {
-				setOperationName("getProfile");
+				return buildMyProfilleQuery();
 			}
-
 			ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
-			if (isMe) {
-				query.setObjectName(Profile.MY_PROFILE_QUERY_OBJECT_NAME);
-			} else {
-				query.setObjectName(Profile.ONE_PROFILE_QUERY_OBJECT_NAME);
-				query.addAttribute(PersonFields.ID, profileId);
-			}
+			query.setObjectName(Profile.ONE_PROFILE_QUERY_OBJECT_NAME);
+			query.addAttribute(PersonFields.ID, profileId);
 			query.addField(PersonFields.ID);
 			query.addField(PersonFields.DISPLAY_NAME);
 			query.addField(PersonFields.EMAIL);
@@ -49,10 +35,35 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 			query.addField(PersonFields.UPDATED);
 			query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
 			query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
-			setQueryObject(query);
-		} catch (Exception e) {
-			throw new WWException(e);
-		}
+			return new ProfileGraphQLQuery(METHOD_GET_PROFILE, query);
+	}
+	
+	public static ProfileGraphQLQuery buildMyProfilleQuery() {
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+			query.setObjectName(Profile.MY_PROFILE_QUERY_OBJECT_NAME);
+		query.addField(PersonFields.ID);
+		query.addField(PersonFields.DISPLAY_NAME);
+		query.addField(PersonFields.EMAIL);
+		query.addField(PersonFields.PHOTO_URL);
+		query.addField(PersonFields.EXT_ID);
+		query.addField(PersonFields.EMAIL_ADDRESSES);
+		query.addField(PersonFields.CUSTOMER_ID);
+		query.addField(PersonFields.CREATED);
+		query.addField(PersonFields.UPDATED);
+		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
+		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
+		return new ProfileGraphQLQuery(METHOD_GET_MYSELF, query);
+	}
+	
+	/**
+	 * Default constructor
+	 */
+	public ProfileGraphQLQuery() {
+		super(METHOD_GET_PROFILE, new ObjectDataSenderBuilder(Profile.ONE_PROFILE_QUERY_OBJECT_NAME));
+	}
+
+	public ProfileGraphQLQuery(String opersationName, ObjectDataSenderBuilder query) {
+		super(opersationName, query);
 	}
 
 }

@@ -29,13 +29,13 @@ public class ProfileTest {
 	private static final String PROFILES_QUERY = "people (first: 10) {items {displayName email extId created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}";
 
 	@Test
-	public void ProfileTest() throws WWException, UnsupportedEncodingException {
+	public void ProfileTestWithId() throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		ProfileGraphQLQuery queryObject = new ProfileGraphQLQuery(profileId);
+		ProfileGraphQLQuery queryObject = ProfileGraphQLQuery.buildProfileQueryById(profileId);
 		ep.setRequest(new GraphQLRequest(queryObject));
 		ep.executeRequest();
 		assert (null == ep.getResultContainer().getErrors());

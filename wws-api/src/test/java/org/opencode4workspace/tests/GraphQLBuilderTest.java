@@ -66,8 +66,8 @@ public class GraphQLBuilderTest {
 	}
 
 	@Test
-	public void testGetSpacesBuilder() throws WWException {
-		SpacesGraphQLQuery spaces = new SpacesGraphQLQuery();
+	public void testGetSpacesBuilderDefault() throws WWException {
+		SpacesGraphQLQuery spaces = SpacesGraphQLQuery.buildStandardGetSpacesQuery();
 		assertEquals(GET_SPACES_QUERY, spaces.getQueryObject().build());
 	}
 
@@ -79,7 +79,7 @@ public class GraphQLBuilderTest {
 
 	@Test
 	public void getSpaces() throws WWException {
-		SpaceMembersGraphQLQuery spaceMembers = new SpaceMembersGraphQLQuery("");
+		SpaceMembersGraphQLQuery spaceMembers = SpaceMembersGraphQLQuery.buildSpaceMemberGraphQueryBySpaceId("");
 		assertNotNull(spaceMembers.getQueryObject());
 	}
 }
