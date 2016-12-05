@@ -2,11 +2,20 @@ package org.opencode4workspace;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
+import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Profile;
+import org.opencode4workspace.bo.Space;
+import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.ProfileGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
+import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
 
 /**
  * @author Christian Guedemann
@@ -164,6 +173,51 @@ public class WWClient implements Serializable {
 	 */
 	public boolean isValid() {
 		return authenticationResult.isValid();
+	}
+
+	public List<? extends Space> getSpaces() throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpaces();
+	}
+	
+	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpacesWithQuery(query);
+	}
+	
+	public Conversation getConversationById(String conversationId) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getConversation(conversationId);
+	}
+	
+	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getConversationWithQuery(query);
+	}
+	
+	public Profile getProfileById(String profileId) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getProfile(profileId);
+	}
+	
+	public Profile getProfileWithQuery(ProfileGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getProfileWithQuery(query);
+	}
+	
+	public List<Profile> getSpaceMembersById(String spaceId) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpaceMembers(spaceId);
+	}
+	
+	public List<Profile> getSpaceMembersWithQuery(SpaceMembersGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpaceMembersWithQuery(query);
+	}
+	
+	public Profile getMe() throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMe();
 	}
 
 }
