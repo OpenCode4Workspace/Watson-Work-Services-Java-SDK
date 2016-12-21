@@ -11,6 +11,7 @@ import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
@@ -175,54 +176,169 @@ public class WWClient implements Serializable {
 		return authenticationResult.isValid();
 	}
 
+	/**
+	 * Easy helper method to get spaces from the WWClient
+	 * 
+	 * @return List of Space objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public List<? extends Space> getSpaces() throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaces();
 	}
 
+	/**
+	 * Easy helper method to get spaces with a query
+	 * 
+	 * @param query
+	 *            SpacesGraphQLQuery containing query parameters
+	 * @return List of Space objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpacesWithQuery(query);
 	}
 
+	/**
+	 * Easy helper method to get a Conversation and its details with a conversation id
+	 * 
+	 * @param conversationId
+	 *            String id of the conversation
+	 * @return Conversation object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public Conversation getConversationById(String conversationId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getConversation(conversationId);
 	}
 
+	/**
+	 * 
+	 * Easy helper method to get a Conversation and its details with a query
+	 * 
+	 * @param query
+	 *            ConversationGraphQLQuery containing query parameters
+	 * @return Conversation object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getConversationWithQuery(query);
 	}
 
-	public Person getProfileById(String profileId) throws WWException {
+	/**
+	 * Easy helper method to get a Person with a person id
+	 * 
+	 * @param personId
+	 *            String id of the person
+	 * @return Person object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
+	public Person getPersonById(String personId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.getPerson(profileId);
+		return ep.getPerson(personId);
 	}
 
+	/**
+	 * Easy helper method to get a Person with a query
+	 * 
+	 * @param query
+	 *            PersonGraphQLQuery containing query parameters
+	 * @return Person object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public Person getPersonWithQuery(PersonGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPersonWithQuery(query);
 	}
 
+	/**
+	 * Easy helper method to get members for a space with the space id
+	 * 
+	 * @param spaceId
+	 *            String id of the space
+	 * @return List of Person objects for the members of the space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public List<Person> getSpaceMembersById(String spaceId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaceMembers(spaceId);
 	}
 
+	/**
+	 * Easy helper method to get members of space with a query
+	 * 
+	 * @param query
+	 *            SpaceMembersGraphQLQuery containing query parameters
+	 * @return List of Person objects for the members of the space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public List<Person> getSpaceMembersWithQuery(SpaceMembersGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaceMembersWithQuery(query);
 	}
 
+	/**
+	 * Easy helper method to get My Person profile. This will not work from a client authenticated as an application.
+	 * 
+	 * @return Person object relating to current authenticated user
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public Person getMe() throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getMe();
 	}
 
+	/**
+	 * Easy helper method to get Person profiles with ids
+	 * 
+	 * @param ids
+	 *            List of String person ids
+	 * @return List of Person objects for the ids passed
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
 	public List<Person> getPeople(List<String> ids) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeople(ids);
+	}
+
+	/**
+	 * Easy helper method to get Person profiles with part of a name
+	 * 
+	 * @param name
+	 *            String part of a name. This needs to be a single word
+	 * @return List of Person objects for the name passed
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
+	public List<Person> getPeopleByName(String name) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getPeopleByName(name);
+	}
+
+	/**
+	 * Easy helper method to get Person profiles with a query
+	 * 
+	 * @param query
+	 *            PeopleGraphQLQuery containing query parameters
+	 * @return List of Person objects for the name passed
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 */
+	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getPeopleWithQuery(query);
 	}
 
 }

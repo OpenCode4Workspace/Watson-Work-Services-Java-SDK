@@ -129,4 +129,18 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		DataContainer container = getResultContainer().getData();
 		return (List<Person>) container.getPeople();
 	}
+
+	public List<Person> getPeopleByName(String name) throws WWException {
+		PeopleGraphQLQuery query = new PeopleGraphQLQuery();
+		query.addAttribute(PeopleAttributes.NAME, name);
+		setRequest(new GraphQLRequest(query));
+		DataContainer container = getResultContainer().getData();
+		return (List<Person>) container.getPeople();
+	}
+
+	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
+		setRequest(new GraphQLRequest(query));
+		DataContainer container = getResultContainer().getData();
+		return (List<Person>) container.getPeople();
+	}
 }
