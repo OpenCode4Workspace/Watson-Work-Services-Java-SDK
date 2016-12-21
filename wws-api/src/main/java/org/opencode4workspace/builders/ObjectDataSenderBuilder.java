@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.opencode4workspace.WWException;
@@ -165,19 +166,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 				}
 				s.append(key + ": ");
 				Object obj = attributesList.get(key);
-				if (obj instanceof Date) {
-					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-					Date dt = (Date) obj;
-					TimeZone tz = TimeZone.getDefault();
-					df.setTimeZone(tz);
-					s.append(df.format(dt));
-				} else if (obj instanceof String) {
-					s.append("\"");
-					s.append(obj);
-					s.append("\"");
-				} else {
-					s.append(obj);
-				}
+				convertAttributeValue(s, obj);
 			}
 			s.append(") ");
 		}
@@ -244,6 +233,34 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		}
 		s.append("}");
 		return s.toString();
+	}
+
+	private void convertAttributeValue(StringBuilder s, Object obj) {
+		if (obj instanceof Date) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+			Date dt = (Date) obj;
+			TimeZone tz = TimeZone.getDefault();
+			df.setTimeZone(tz);
+			s.append(df.format(dt));
+		} else if (obj instanceof String) {
+			s.append("\"");
+			s.append(obj);
+			s.append("\"");
+		} else if (obj instanceof List) {
+			s.append("[");
+			boolean isFirst = true;
+			for (Object innerObj : ((List) obj)) {
+				if (!isFirst) {
+					s.append(", ");
+				} else {
+					isFirst = false;
+				}
+				convertAttributeValue(s, innerObj);
+			}
+			s.append("]");
+		} else {
+			s.append(obj);
+		}
 	}
 
 	/**
@@ -378,7 +395,17 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		if (value.getClass().equals(enumName.getObjectClassType())) {
 			attributesList.put(enumName.getLabel(), value);
 		} else {
-			throw new WWException("Watson Work Services expects a " + enumName.getObjectClassType().getName() + " for this attribute. Object supplied is " + value.getClass().getName());
+			if ("java.util.List".equals(enumName.getObjectClassType().getName())) {
+				if (value instanceof List || value instanceof Set) {
+					attributesList.put(enumName.getLabel(), value);
+				}
+			} else if ("java.util.Map".equals(enumName.getObjectClassType().getName())) {
+				if (value instanceof Map) {
+					attributesList.put(enumName.getLabel(), value);
+				}
+			} else {
+				throw new WWException("Watson Work Services expects a " + enumName.getObjectClassType().getName() + " for this attribute. Object supplied is " + value.getClass().getName());
+			}
 		}
 		return this;
 	}

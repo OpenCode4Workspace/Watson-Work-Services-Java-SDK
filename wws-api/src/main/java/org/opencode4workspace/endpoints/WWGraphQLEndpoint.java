@@ -8,6 +8,8 @@ import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Profile;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.PeopleGraphQLQuery;
+import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
 import org.opencode4workspace.builders.ProfileGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
@@ -40,7 +42,8 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	/**
 	 * getSpaces by using a SpacesGraphQLQuery
 	 * 
-	 * @param query GraphQLQuery for the call
+	 * @param query
+	 *            GraphQLQuery for the call
 	 * @return List of Space details
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
@@ -59,7 +62,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 *             containing an error message, if the request was unsuccessful
 	 */
 	public Profile getMe() throws WWException {
-		ProfileGraphQLQuery queryObject = ProfileGraphQLQuery.buildMyProfilleQuery();
+		ProfileGraphQLQuery queryObject = ProfileGraphQLQuery.buildMyProfileQuery();
 		setRequest(new GraphQLRequest(queryObject));
 		executeRequest();
 		return (Profile) getResultContainer().getData().getMe();
@@ -70,7 +73,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * 
 	 * @param profileId
 	 *            String, WWS id of the Profile to return
-	 * @return Profile for me
+	 * @return Profile for relevant ID
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 */
@@ -84,7 +87,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * 
 	 * @param query
 	 *            ProfileGraupQLQuery with selection and return criterias
-	 * @return Profile for me
+	 * @return Profile for relevant query
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 */
@@ -117,5 +120,13 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
 		return container.getSpace().getMembers();
+	}
+
+	public List<Profile> getPeople(List<String> ids) throws WWException {
+		PeopleGraphQLQuery query = new PeopleGraphQLQuery();
+		query.addAttribute(PeopleAttributes.ID, ids);
+		setRequest(new GraphQLRequest(query));
+		DataContainer container = getResultContainer().getData();
+		return (List<Profile>) container.getPeople();
 	}
 }

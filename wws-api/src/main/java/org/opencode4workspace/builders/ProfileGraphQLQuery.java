@@ -19,7 +19,7 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 
 	public static ProfileGraphQLQuery buildProfileQueryById(String profileId) throws WWException {
 			if ("".equals(profileId)) {
-				return buildMyProfilleQuery();
+				return buildMyProfileQuery();
 			}
 			ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 			query.setObjectName(Profile.ONE_PROFILE_QUERY_OBJECT_NAME);
@@ -38,7 +38,7 @@ public class ProfileGraphQLQuery extends BaseGraphQLQuery {
 			return new ProfileGraphQLQuery(METHOD_GET_PROFILE, query);
 	}
 	
-	public static ProfileGraphQLQuery buildMyProfilleQuery() {
+	public static ProfileGraphQLQuery buildMyProfileQuery() {
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 			query.setObjectName(Profile.MY_PROFILE_QUERY_OBJECT_NAME);
 		query.addField(PersonFields.ID);

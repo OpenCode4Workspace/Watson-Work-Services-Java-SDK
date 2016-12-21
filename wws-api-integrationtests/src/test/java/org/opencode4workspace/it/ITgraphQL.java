@@ -1,6 +1,7 @@
 package org.opencode4workspace.it;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencode4workspace.WWClient;
@@ -11,9 +12,9 @@ import org.opencode4workspace.bo.Profile.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
-import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
+import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
@@ -129,6 +130,51 @@ public class ITgraphQL {
 		assert (null != spaceId);
 		List<Profile> members = ep.getSpaceMembers(spaceId);
 		assert (members.size() > 0);
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName", "myAppName" })
+	public void testGetPeople(String appId, String appSecret, String profileId, String myDisplayName, String myAppName)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+
+		ArrayList<String> ids = new ArrayList<String>();
+		ids.add(profileId);
+		ids.add(appId);
+		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildProfileQueryById(ids);
+
+		ep.setRequest(new GraphQLRequest(queryObject));
+		ep.executeRequest();
+		List<Profile> profileResult = ep.getResultContainer().getData().getPeople().getItems();
+
+		assert (profileResult.size() == 2);
+		assert (myDisplayName.equals(profileResult.get(0).getDisplayName()));
+		assert (myAppName.equals(profileResult.get(1).getDisplayName()));
+	}
+
+	@Test(enabled = false)
+	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName", "myAppName" })
+	public void testGetPeopleByName(String appId, String appSecret, String profileId, String myDisplayName,
+			String myAppName) throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+
+		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildProfileQueryByName("Paul");
+
+		ep.setRequest(new GraphQLRequest(queryObject));
+		System.out.println(queryObject.returnQuery());
+		ep.executeRequest();
+		List<Profile> profileResult = ep.getResultContainer().getData().getPeople().getItems();
+
+		assert (profileResult.size() == 1);
+		assert (appId.equals(profileResult.get(0).getId()));
 	}
 
 }
