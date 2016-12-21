@@ -10,7 +10,7 @@ import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.PageInfo.PageInfoFields;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;

@@ -2,7 +2,7 @@ package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
 
-import org.opencode4workspace.bo.Profile;
+import org.opencode4workspace.bo.Person;
 
 /**
  * @author Christian Guedemann
@@ -16,8 +16,8 @@ public class DataContainer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private SpacesContainer spaces;
-	private Profile me;
-	private Profile person;
+	private Person me;
+	private Person person;
 	private ConversationWrapper conversation;
 	private SpaceWrapper space;
 	private MemberItemContainer people;
@@ -32,14 +32,14 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return Profile for current user
 	 */
-	public Profile getMe() {
+	public Person getMe() {
 		return me;
 	}
 
 	/**
 	 * @return Profile for a given user
 	 */
-	public Profile getProfile() {
+	public Person getPerson() {
 		return person;
 	}
 

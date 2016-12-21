@@ -1,6 +1,6 @@
 package org.opencode4workspace.builders;
 
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.WWChildInterface;
 
 public class BasicCreatedByUpdatedByDataSenderBuilder extends ObjectDataSenderBuilder {

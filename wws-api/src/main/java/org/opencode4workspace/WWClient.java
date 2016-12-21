@@ -8,10 +8,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.bo.Conversation;
-import org.opencode4workspace.bo.Profile;
+import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
-import org.opencode4workspace.builders.ProfileGraphQLQuery;
+import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
@@ -195,32 +195,32 @@ public class WWClient implements Serializable {
 		return ep.getConversationWithQuery(query);
 	}
 
-	public Profile getProfileById(String profileId) throws WWException {
+	public Person getProfileById(String profileId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.getProfile(profileId);
+		return ep.getPerson(profileId);
 	}
 
-	public Profile getProfileWithQuery(ProfileGraphQLQuery query) throws WWException {
+	public Person getPersonWithQuery(PersonGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.getProfileWithQuery(query);
+		return ep.getPersonWithQuery(query);
 	}
 
-	public List<Profile> getSpaceMembersById(String spaceId) throws WWException {
+	public List<Person> getSpaceMembersById(String spaceId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaceMembers(spaceId);
 	}
 
-	public List<Profile> getSpaceMembersWithQuery(SpaceMembersGraphQLQuery query) throws WWException {
+	public List<Person> getSpaceMembersWithQuery(SpaceMembersGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaceMembersWithQuery(query);
 	}
 
-	public Profile getMe() throws WWException {
+	public Person getMe() throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getMe();
 	}
 
-	public List<Profile> getPeople(List<String> ids) throws WWException {
+	public List<Person> getPeople(List<String> ids) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeople(ids);
 	}

@@ -71,7 +71,7 @@ public class Conversation implements Serializable {
 	 *
 	 */
 	public enum ConversationChildren implements WWChildInterface {
-		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
+		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -116,8 +116,8 @@ public class Conversation implements Serializable {
 	private String id;
 	private Date created;
 	private Date updated;
-	private Profile createdBy;
-	private Profile updatedBy;
+	private Person createdBy;
+	private Person updatedBy;
 	@GraphQLJsonPropertyHelper(jsonProperty = "message")
 	private List<Message> messageList;
 
@@ -169,7 +169,7 @@ public class Conversation implements Serializable {
 	/**
 	 * @return Person the Conversation was created by
 	 */
-	public Profile getCreatedBy() {
+	public Person getCreatedBy() {
 		return createdBy;
 	}
 
@@ -177,14 +177,14 @@ public class Conversation implements Serializable {
 	 * @param createdBy
 	 *            Person the Conversation was created by
 	 */
-	public void setCreatedBy(Profile createdBy) {
+	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	/**
 	 * @return Person the Conversation was last updated by
 	 */
-	public Profile getUpdatedBy() {
+	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
@@ -192,7 +192,7 @@ public class Conversation implements Serializable {
 	 * @param updatedBy
 	 *            Person the Conversation was last updated by
 	 */
-	public void setUpdatedBy(Profile updatedBy) {
+	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

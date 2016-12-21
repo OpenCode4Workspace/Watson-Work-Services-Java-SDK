@@ -11,7 +11,7 @@ import java.util.Date;
  *        Serializable object corresponding to a Watson Workspace member
  *
  */
-public class Profile implements Serializable {
+public class Person implements Serializable {
 
 	/**
 	 * @author Paul Withers
@@ -69,7 +69,7 @@ public class Profile implements Serializable {
 	 *
 	 */
 	public enum PersonChildren implements WWChildInterface {
-		CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
+		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -109,8 +109,8 @@ public class Profile implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
-	public static final String PROFILES_QUERY_OBJECT_NAME = "people";
-	public static final String ONE_PROFILE_QUERY_OBJECT_NAME = "person";
+	public static final String PEOPLE_QUERY_OBJECT_NAME = "people";
+	public static final String ONE_PERSON_QUERY_OBJECT_NAME = "person";
 	public static final String MY_PROFILE_QUERY_OBJECT_NAME = "me";
 	private String id;
 	private String photoUrl;
@@ -120,9 +120,9 @@ public class Profile implements Serializable {
 	private String emailAddresses;
 	private String customerId;
 	private Date created;
-	private Profile createdBy;
+	private Person createdBy;
 	private Date updated;
-	private Profile updatedBy;
+	private Person updatedBy;
 
 	/**
 	 * @return String, id of the Person
@@ -216,11 +216,11 @@ public class Profile implements Serializable {
 		this.created = created;
 	}
 
-	public Profile getCreatedBy() {
+	public Person getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Profile createdBy) {
+	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -232,11 +232,11 @@ public class Profile implements Serializable {
 		this.updated = updated;
 	}
 
-	public Profile getUpdatedBy() {
+	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(Profile updatedBy) {
+	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

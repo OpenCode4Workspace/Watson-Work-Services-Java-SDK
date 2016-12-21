@@ -1,8 +1,8 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
-import org.opencode4workspace.bo.Profile.PersonChildren;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonChildren;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;

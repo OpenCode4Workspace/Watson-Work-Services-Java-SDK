@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opencode4workspace.WWException;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 

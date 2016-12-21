@@ -7,8 +7,8 @@ import java.util.List;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
-import org.opencode4workspace.bo.Profile;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
@@ -81,20 +81,20 @@ public class ITgraphQL {
 		client.authenticate();
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Profile me = ep.getMe();
+		Person me = ep.getMe();
 		assert (myDisplayName.equals(me.getDisplayName()));
 	}
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
-	public void testGetProfile(String appId, String appSecret, String profileId, String myDisplayName)
+	public void testGetPerson(String appId, String appSecret, String profileId, String myDisplayName)
 			throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Profile profile = ep.getProfile(profileId);
+		Person profile = ep.getPerson(profileId);
 		assert (myDisplayName.equals(profile.getDisplayName()));
 	}
 
@@ -128,7 +128,7 @@ public class ITgraphQL {
 		assert (spacesResult.size() > 0);
 		String spaceId = spacesResult.get(0).getId();
 		assert (null != spaceId);
-		List<Profile> members = ep.getSpaceMembers(spaceId);
+		List<Person> members = ep.getSpaceMembers(spaceId);
 		assert (members.size() > 0);
 	}
 
@@ -145,15 +145,15 @@ public class ITgraphQL {
 		ArrayList<String> ids = new ArrayList<String>();
 		ids.add(profileId);
 		ids.add(appId);
-		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildProfileQueryById(ids);
+		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildPersonQueryById(ids);
 
 		ep.setRequest(new GraphQLRequest(queryObject));
 		ep.executeRequest();
-		List<Profile> profileResult = ep.getResultContainer().getData().getPeople().getItems();
+		List<Person> peopleResult = ep.getResultContainer().getData().getPeople().getItems();
 
-		assert (profileResult.size() == 2);
-		assert (myDisplayName.equals(profileResult.get(0).getDisplayName()));
-		assert (myAppName.equals(profileResult.get(1).getDisplayName()));
+		assert (peopleResult.size() == 2);
+		assert (myDisplayName.equals(peopleResult.get(0).getDisplayName()));
+		assert (myAppName.equals(peopleResult.get(1).getDisplayName()));
 	}
 
 	@Test(enabled = false)
@@ -166,15 +166,15 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
 
-		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildProfileQueryByName("Paul");
+		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildPersonQueryByName("Paul");
 
 		ep.setRequest(new GraphQLRequest(queryObject));
 		System.out.println(queryObject.returnQuery());
 		ep.executeRequest();
-		List<Profile> profileResult = ep.getResultContainer().getData().getPeople().getItems();
+		List<Person> peopleResult = ep.getResultContainer().getData().getPeople().getItems();
 
-		assert (profileResult.size() == 1);
-		assert (appId.equals(profileResult.get(0).getId()));
+		assert (peopleResult.size() == 1);
+		assert (appId.equals(peopleResult.get(0).getId()));
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.opencode4workspace.WWException;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
 
