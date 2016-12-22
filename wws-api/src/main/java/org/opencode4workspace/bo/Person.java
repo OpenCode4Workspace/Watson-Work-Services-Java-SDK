@@ -17,7 +17,7 @@ public class Person implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See {@linkplain WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Person. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum PersonFields implements WWFieldsAttributesInterface {
@@ -65,7 +65,7 @@ public class Person implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See {@linkplain WWChildInterface}
+	 *        Enum for scalar properties of a Person. See {@link WWChildInterface}
 	 *
 	 */
 	public enum PersonChildren implements WWChildInterface {
@@ -126,6 +126,8 @@ public class Person implements Serializable {
 
 	/**
 	 * @return String, id of the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getId() {
 		return id;
@@ -134,6 +136,8 @@ public class Person implements Serializable {
 	/**
 	 * @param id
 	 *            String, id of the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -141,6 +145,8 @@ public class Person implements Serializable {
 
 	/**
 	 * @return String, URL for the Person's photo
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getPhotoUrl() {
 		return photoUrl;
@@ -149,6 +155,8 @@ public class Person implements Serializable {
 	/**
 	 * @param photoUrl
 	 *            String, URL for the Person's photo
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
@@ -156,6 +164,8 @@ public class Person implements Serializable {
 
 	/**
 	 * @return String, email address associated with the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getEmail() {
 		return email;
@@ -164,6 +174,8 @@ public class Person implements Serializable {
 	/**
 	 * @param email
 	 *            String, email address associated with the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -171,6 +183,8 @@ public class Person implements Serializable {
 
 	/**
 	 * @return String, display name of the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getDisplayName() {
 		return displayName;
@@ -179,63 +193,143 @@ public class Person implements Serializable {
 	/**
 	 * @param displayName
 	 *            String, display name of the Person
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
 
+	/**
+	 * @return String external id of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public String getExtId() {
 		return extId;
 	}
 
+	/**
+	 * @param extId
+	 *            String external id of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setExtId(String extId) {
 		this.extId = extId;
 	}
 
+	/**
+	 * @return String email addresses of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public String getEmailAddresses() {
 		return emailAddresses;
 	}
 
+	/**
+	 * 
+	 * @param emailAddresses
+	 *            String email addresses of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setEmailAddresses(String emailAddresses) {
 		this.emailAddresses = emailAddresses;
 	}
 
+	/**
+	 * @return String customer id of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public String getCustomerId() {
 		return customerId;
 	}
 
+	/**
+	 * @param customerId
+	 *            String customer id of the Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
+	/**
+	 * @return Date the Person signed up to Watson Workspace
+	 * 
+	 * @since 0.5.0
+	 */
 	public Date getCreated() {
 		return created;
 	}
 
+	/**
+	 * @param created
+	 *            Date the Person signed up to Watson Workspace
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setCreated(Date created) {
 		this.created = created;
 	}
 
+	/**
+	 * @return Person who created this Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public Person getCreatedBy() {
 		return createdBy;
 	}
 
+	/**
+	 * @param createdBy
+	 *            Person who created this Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
+	/**
+	 * @return Date the Person was last updated
+	 * 
+	 * @since 0.5.0
+	 */
 	public Date getUpdated() {
 		return updated;
 	}
 
+	/**
+	 * @param updated
+	 *            Date the Person was last updated
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
 
+	/**
+	 * @return Person who last updated this Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
+	/**
+	 * @param updatedBy
+	 *            Person who last updated this Person
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}

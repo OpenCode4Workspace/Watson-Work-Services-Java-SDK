@@ -17,12 +17,20 @@ public class MessageContainer {
 	private List<Message> items;
 
 	/**
-	 * @return List of {@linkplain Message} items in the Conversation
+	 * @return List of Message items in the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Message> getItems() {
 		return items;
 	}
 
+	/**
+	 * @param messages
+	 *            List of Message items in the Conversation
+	 * 
+	 * @since 0.5.0
+	 */
 	public void setItems(List<Message> messages) {
 		items = messages;
 	}

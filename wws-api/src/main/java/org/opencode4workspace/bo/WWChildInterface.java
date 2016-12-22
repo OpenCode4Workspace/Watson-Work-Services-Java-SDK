@@ -6,18 +6,22 @@ package org.opencode4workspace.bo;
  * 
  *        Interface for child objects in WWS objects. The label maps to WWS variable name and the objectClassType maps to the Java data type to pass across.
  * 
- *        This may be merged with {@linkplain WWFieldsAttributesInterface} in the future. Leaving currently, in case differences are required.
+ *        This may be merged with {@link WWFieldsAttributesInterface} in the future. Leaving currently, in case differences are required.
  *
  */
 public interface WWChildInterface {
 
 	/**
 	 * @return String, WWS variable name
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getLabel();
 
 	/**
 	 * @return Class, Java data type corresponding to this object
+	 * 
+	 * @since 0.5.0
 	 */
 	public Class<?> getEnumClass();
 

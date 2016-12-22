@@ -28,7 +28,7 @@ public class ResultParser<T> {
 
 	/**
 	 * @param clazz
-	 *            Class with which to initialitse the ResultParser
+	 *            Class with which to initialise the ResultParser
 	 * 
 	 * @since 0.5.0
 	 */
@@ -41,15 +41,23 @@ public class ResultParser<T> {
 		this.gson = builder.create();
 	}
 
+	/**
+	 * @param clazz
+	 *            Class with which to initialise the ResultParser
+	 * @param dateFormat
+	 *            String dateFormat to deserialise JSON with, currently only accepts "MILIS"
+	 * 
+	 * @since 0.5.0
+	 */
 	public ResultParser(Class<T> clazz, String dateFormat) {
 		this.clazz = clazz;
 		GsonBuilder builder = new GsonBuilder();
 		if ("MILIS".equals(dateFormat)) {
-			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() { 
-				   public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-				      return new Date(json.getAsJsonPrimitive().getAsLong()); 
-				   } 
-				});
+			builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+				public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+					return new Date(json.getAsJsonPrimitive().getAsLong());
+				}
+			});
 
 		} else {
 			builder.setDateFormat(dateFormat);
@@ -58,9 +66,7 @@ public class ResultParser<T> {
 		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
 		this.gson = builder.create();
 	}
-	
 
-	
 	/**
 	 * Converts the JSON string passed into an instance of the relevant class
 	 * 

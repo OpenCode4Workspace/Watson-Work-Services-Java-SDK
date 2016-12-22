@@ -57,7 +57,7 @@ public class WWClient implements Serializable {
 	 * @param appSecret
 	 *            String, the secret for the application the code is being run from
 	 * @param authenticationEndpoint
-	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof. Typically {@linkplain WWAuthenticationEndpoint}
+	 *            {@link AuthenticationEndpoint} or any sub-class thereof. Typically {@link WWAuthenticationEndpoint}
 	 * @param redirectTo
 	 *            String, URL to redirect to after authentication
 	 * @return WWClient, a Watson Workspace Client contructed with the passed params
@@ -83,7 +83,7 @@ public class WWClient implements Serializable {
 	 * @param appSecret
 	 *            String, the secret for the application the code is being run from
 	 * @param authenticationEndpoint
-	 *            {@linkplain AuthenticationEndpoint} or any sub-class thereof. Typically {@linkplain WWAuthenticationEndpoint}
+	 *            {@link AuthenticationEndpoint} or any sub-class thereof. Typically {@link WWAuthenticationEndpoint}
 	 * @return WWClient, a Watson Workspace Client contructed with the passed params
 	 * 
 	 * @since 0.5.0
@@ -100,7 +100,7 @@ public class WWClient implements Serializable {
 	/**
 	 * Getter for ClientType, dependent upon the initialiser user
 	 * 
-	 * @return {@linkplain ClientType#USER} or {@linkplain ClientType#APPLICATON}
+	 * @return {@link ClientType#USER} or {@link ClientType#APPLICATON}
 	 * 
 	 * @since 0.5.0
 	 */
@@ -114,6 +114,7 @@ public class WWClient implements Serializable {
 	 * @return String, content for Authorization header
 	 * @throws UnsupportedEncodingException
 	 *             if the encoding option is not supported
+	 * 
 	 * @since 0.5.0
 	 */
 	public String getAppCredentials() throws UnsupportedEncodingException {
@@ -122,7 +123,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Whether or not authentication has successfully occurred. Call {@linkplain #authenticate()} first
+	 * Whether or not authentication has successfully occurred. Call {@link #authenticate()} first
 	 * 
 	 * @return boolean, whether or not already authenticated
 	 * 
@@ -139,6 +140,8 @@ public class WWClient implements Serializable {
 	 *             Authorization header could not be constructed
 	 * @throws WWException
 	 *             Some other error occurred during authentication
+	 * 
+	 * @since 0.5.0
 	 */
 	public void authenticate() throws UnsupportedEncodingException, WWException {
 		if (clientType == ClientType.APPLICATON) {
@@ -149,28 +152,34 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Gets JWT token for the user / application from the {@linkplain AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This
+	 * Gets JWT token for the user / application from the {@link AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This
 	 * JWT token is what you have to use in your App to pass to Watson Work Services on API calls so that you can use its services securely"
 	 * 
 	 * @return String, JWT token
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getJWTToken() {
 		return authenticationResult.getJwtToken();
 	}
 
 	/**
-	 * Gets the length of time until the token expires from the {@linkplain AuthenticationResult}
+	 * Gets the length of time until the token expires from the {@link AuthenticationResult}
 	 * 
 	 * @return Object, a long that determines the time until expiry
+	 * 
+	 * @since 0.5.0
 	 */
 	public Object getExpiresIn() {
 		return authenticationResult.getExpires();
 	}
 
 	/**
-	 * Tests whether the {@linkplain AuthenticationResult} is valid
+	 * Tests whether the {@link AuthenticationResult} is valid
 	 * 
-	 * @return boolean, whether or not valild
+	 * @return boolean, whether or not valid
+	 * 
+	 * @since 0.5.0
 	 */
 	public boolean isValid() {
 		return authenticationResult.isValid();
@@ -182,6 +191,8 @@ public class WWClient implements Serializable {
 	 * @return List of Space objects
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<? extends Space> getSpaces() throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -196,6 +207,8 @@ public class WWClient implements Serializable {
 	 * @return List of Space objects
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -210,6 +223,8 @@ public class WWClient implements Serializable {
 	 * @return Conversation object
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public Conversation getConversationById(String conversationId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -225,6 +240,8 @@ public class WWClient implements Serializable {
 	 * @return Conversation object
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -239,6 +256,8 @@ public class WWClient implements Serializable {
 	 * @return Person object
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public Person getPersonById(String personId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -253,6 +272,8 @@ public class WWClient implements Serializable {
 	 * @return Person object
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public Person getPersonWithQuery(PersonGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -267,6 +288,8 @@ public class WWClient implements Serializable {
 	 * @return List of Person objects for the members of the space
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getSpaceMembersById(String spaceId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -281,6 +304,8 @@ public class WWClient implements Serializable {
 	 * @return List of Person objects for the members of the space
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getSpaceMembersWithQuery(SpaceMembersGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -293,6 +318,8 @@ public class WWClient implements Serializable {
 	 * @return Person object relating to current authenticated user
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public Person getMe() throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -307,6 +334,8 @@ public class WWClient implements Serializable {
 	 * @return List of Person objects for the ids passed
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getPeople(List<String> ids) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -321,6 +350,8 @@ public class WWClient implements Serializable {
 	 * @return List of Person objects for the name passed
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getPeopleByName(String name) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -335,6 +366,8 @@ public class WWClient implements Serializable {
 	 * @return List of Person objects for the name passed
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);

@@ -19,7 +19,9 @@ public class MemberItemContainer implements Serializable {
 	private List<Person> items;
 
 	/**
-	 * @return List of {@linkplain Person} objects corresponding to the Members in a Space
+	 * @return List of {@link Person} objects corresponding to the Members in a Space
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Person> getItems() {
 		return items;

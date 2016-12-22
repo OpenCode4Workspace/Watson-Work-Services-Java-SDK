@@ -17,6 +17,8 @@ public class GraphResultContainer {
 
 	/**
 	 * @return Data Container containing the contents of the result of the query
+	 * 
+	 * @since 0.5.0
 	 */
 	public DataContainer getData() {
 		return data;
@@ -24,6 +26,8 @@ public class GraphResultContainer {
 
 	/**
 	 * @return Errors Container containing any errors of the result of the query
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<ErrorContainer> getErrors() {
 		return errors;

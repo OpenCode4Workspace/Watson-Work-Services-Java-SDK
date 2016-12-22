@@ -68,7 +68,6 @@ public class ITgraphQL {
 		ep.setRequest(new GraphQLRequest(queryObject));
 		ep.executeRequest();
 		List<? extends Space> spacesResult = ep.getResultContainer().getData().getSpaces().getItems();
-		System.out.println("Total spaces found - " + spacesResult.size());
 		assert (spacesResult.size() > 0);
 	}
 

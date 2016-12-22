@@ -15,7 +15,7 @@ public class PageInfo implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of PageInfo. See {@linkplain WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of PageInfo. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum PageInfoFields implements WWFieldsAttributesInterface {
@@ -74,6 +74,8 @@ public class PageInfo implements Serializable {
 
 	/**
 	 * @return String, cursor relating to the Object at the start of this pagination
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getStartCursor() {
 		return startCursor;
@@ -82,6 +84,8 @@ public class PageInfo implements Serializable {
 	/**
 	 * @param startCursor
 	 *            String, cursor relating to the Object at the start of this pagination
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setStartCursor(String startCursor) {
 		this.startCursor = startCursor;
@@ -89,6 +93,8 @@ public class PageInfo implements Serializable {
 
 	/**
 	 * @return String, cursor relating to the Object at the end of this pagination
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getEndCursor() {
 		return endCursor;
@@ -97,6 +103,8 @@ public class PageInfo implements Serializable {
 	/**
 	 * @param endCursor
 	 *            String, cursor relating to the Object at the start of this pagination
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setEndCursor(String endCursor) {
 		this.endCursor = endCursor;
@@ -104,6 +112,8 @@ public class PageInfo implements Serializable {
 
 	/**
 	 * @return boolean, whether there are any more elements after this page
+	 * 
+	 * @since 0.5.0
 	 */
 	public boolean isHasNextPage() {
 		return hasNextPage;
@@ -112,6 +122,8 @@ public class PageInfo implements Serializable {
 	/**
 	 * @param hasNextPage
 	 *            boolean, whether there are any more elements after this page
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setHasNextPage(boolean hasNextPage) {
 		this.hasNextPage = hasNextPage;
@@ -119,6 +131,8 @@ public class PageInfo implements Serializable {
 
 	/**
 	 * @return boolean, whether there are any more elements before this page
+	 * 
+	 * @since 0.5.0
 	 */
 	public boolean isHasPreviousPage() {
 		return hasPreviousPage;
@@ -127,6 +141,8 @@ public class PageInfo implements Serializable {
 	/**
 	 * @param hasPreviousPage
 	 *            boolean, whether there are any more elements before this page
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setHasPreviousPage(boolean hasPreviousPage) {
 		this.hasPreviousPage = hasPreviousPage;

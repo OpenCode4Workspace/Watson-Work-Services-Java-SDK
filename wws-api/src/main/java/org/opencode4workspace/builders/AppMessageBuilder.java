@@ -1,6 +1,5 @@
 package org.opencode4workspace.builders;
 
-// TODO: Add Javadoc
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,6 +7,12 @@ import org.opencode4workspace.bo.Actor;
 import org.opencode4workspace.bo.Annotation;
 import org.opencode4workspace.endpoints.AppMessage;
 
+/**
+ * @author Christian Guedemann
+ * @since 0.5.0
+ * 
+ *        Class for building a Message to post to a Space
+ */
 public class AppMessageBuilder {
 
 	private String text;
@@ -17,40 +22,92 @@ public class AppMessageBuilder {
 	private String actorUrl;
 	private String color;
 
+	/**
+	 * Constructor
+	 */
 	public AppMessageBuilder() {
 
 	}
 
-	public AppMessageBuilder message(String text) {
+	/**
+	 * @param text
+	 *            String text for the message
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setMessage(String text) {
 		this.text = text;
 		return this;
 	}
 
-	public AppMessageBuilder messageTitle(String title) {
+	/**
+	 * @param title
+	 *            String title for the message
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setMessageTitle(String title) {
 		this.title = title;
 		return this;
 	}
 
-	public AppMessageBuilder actorName(String name) {
+	/**
+	 * @param name
+	 *            String name of the actor
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setActorName(String name) {
 		this.actorName = name;
 		return this;
 	}
 
-	public AppMessageBuilder actorAvatar(String avatar) {
+	/**
+	 * @param avatar
+	 *            String url for the avatar of the Actor
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setActorAvatar(String avatar) {
 		this.actorAvatar = avatar;
 		return this;
 	}
 
-	public AppMessageBuilder actorUrl(String url) {
+	/**
+	 * @param url
+	 *            String url for the Actor's web page
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setActorUrl(String url) {
 		this.actorUrl = url;
 		return this;
 	}
 
-	public AppMessageBuilder color(String color) {
+	/**
+	 * @param color
+	 *            String hex colour for the message
+	 * @return AppMessageBuilder, this object
+	 * 
+	 * @since 0.5.0
+	 */
+	public AppMessageBuilder setColor(String color) {
 		this.color = color;
 		return this;
 	}
 
+	/**
+	 * Build the AppMessage object (Actor is a child of AppMessage)
+	 * 
+	 * @return AppMessage, ready to post to WWS
+	 * 
+	 * @since 0.5.0
+	 */
 	public AppMessage build() {
 		AppMessage message = new AppMessage();
 		message.setVersion(1);

@@ -79,7 +79,7 @@ public class GraphQLBuilderTest {
 
 	@Test
 	public void getSpaces() throws WWException {
-		SpaceMembersGraphQLQuery spaceMembers = SpaceMembersGraphQLQuery.buildSpaceMemberGraphQueryBySpaceId("");
+		SpaceMembersGraphQLQuery spaceMembers = SpaceMembersGraphQLQuery.buildSpaceMemberGraphQueryBySpaceId("testIdRequired");
 		assertNotNull(spaceMembers.getQueryObject());
 	}
 }

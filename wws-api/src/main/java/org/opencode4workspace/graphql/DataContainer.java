@@ -24,6 +24,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
+	 * 
+	 * @since 0.5.0
 	 */
 	public SpacesContainer getSpaces() {
 		return spaces;
@@ -31,6 +33,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return Person object for current user
+	 * 
+	 * @since 0.5.0
 	 */
 	public Person getMe() {
 		return me;
@@ -38,6 +42,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return Person object for a given user
+	 * 
+	 * @since 0.5.0
 	 */
 	public Person getPerson() {
 		return person;
@@ -45,6 +51,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return ConversationWrapper for a given conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public ConversationWrapper getConversation() {
 		return conversation;
@@ -53,6 +61,8 @@ public class DataContainer implements Serializable {
 	/**
 	 * @param conversation
 	 *            ConversationWrapper for a given conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setConversation(ConversationWrapper conversation) {
 		this.conversation = conversation;
@@ -60,6 +70,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return SpaceWrapper for a given Workspace
+	 * 
+	 * @since 0.5.0
 	 */
 	public SpaceWrapper getSpace() {
 		return space;
@@ -67,6 +79,8 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return MemberItemContainer for people resulting from a query
+	 * 
+	 * @since 0.5.0
 	 */
 	public MemberItemContainer getPeople() {
 		return people;

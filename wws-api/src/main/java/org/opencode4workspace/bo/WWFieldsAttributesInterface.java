@@ -12,11 +12,15 @@ public interface WWFieldsAttributesInterface {
 
 	/**
 	 * @return String, WWS variable name
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getLabel();
 
 	/**
 	 * @return Class, Java data type expected when using this field as an attribute for a WWS query
+	 * 
+	 * @since 0.5.0
 	 */
 	public Class<?> getObjectClassType();
 

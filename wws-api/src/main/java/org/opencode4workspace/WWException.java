@@ -14,6 +14,8 @@ public class WWException extends Exception {
 	/**
 	 * @param message
 	 *            String, error message to log
+	 * 
+	 * @since 0.5.0
 	 */
 	public WWException(String message) {
 		super(message);
@@ -22,6 +24,8 @@ public class WWException extends Exception {
 	/**
 	 * @param e
 	 *            Exception to log
+	 * 
+	 * @since 0.5.0
 	 */
 	public WWException(Exception e) {
 		super(e);

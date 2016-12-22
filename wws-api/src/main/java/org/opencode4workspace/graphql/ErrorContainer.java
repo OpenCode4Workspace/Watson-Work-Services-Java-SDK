@@ -19,6 +19,8 @@ public class ErrorContainer {
 
 	/**
 	 * @return String message object, e.g. "500 Internal Server Error"
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getMessage() {
 		return message;
@@ -26,6 +28,8 @@ public class ErrorContainer {
 
 	/**
 	 * @return Map of error field details, e.g. name="People", type="PersonCollection"
+	 * 
+	 * @since 0.5.0
 	 */
 	public Map<String, Object> getField() {
 		return field;

@@ -22,6 +22,15 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 	private static final String METHOD = "getSpaces";
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Easy method to create a basic Spaces query ObjectDataSenderBuilder
+	 * 
+	 * @return SpacesGraphQLQuery, this object
+	 * @throws WWException
+	 *             if the attributes are invalid
+	 * 
+	 * @since 0.5.0
+	 */
 	public static SpacesGraphQLQuery buildStandardGetSpacesQuery() throws WWException {
 
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
@@ -64,13 +73,23 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 	}
 
 	/**
-	 * Constructor
+	 * Creates a Spaces query with a blank ObjectDataSenderBuilder query object
+	 * 
+	 * @since 0.5.0
 	 */
 	public SpacesGraphQLQuery() {
 		super(METHOD, new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true));
 
 	}
 
+	/**
+	 * Creates a Spaces query with a pre-populated ObjectDataSenderBuilder query object
+	 * 
+	 * @param query
+	 *            ObjectDataSenderBuilder containing the query settings
+	 * 
+	 * @since 0.5.0
+	 */
 	public SpacesGraphQLQuery(ObjectDataSenderBuilder query) {
 		super(METHOD, query);
 	}

@@ -21,7 +21,7 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * @since 0.5.0
 	 * 
 	 *        <p>
-	 *        Enum for filtering a . See {@linkplain WWFieldsAttributesInterface}.
+	 *        Enum for filtering a . See {@link WWFieldsAttributesInterface}.
 	 *        </p>
 	 *        <ul>
 	 *        <li>ID expects a list of IDs for people</li>
@@ -69,7 +69,7 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 		}
 	}
 
-	private static final String METHOD_GET_PEOPLE = "getPeople";
+	private static final String METHOD = "getPeople";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -80,6 +80,8 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * @return PeopleGraphQLQuery of basic unfiltered person fields and children
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public static PeopleGraphQLQuery buildPersonQueryById(List<String> personId) throws WWException {
 		if ("".equals(personId)) {
@@ -98,6 +100,8 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * @return PeopleGraphQLQuery of basic unfiltered person fields and children
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public static PeopleGraphQLQuery buildPersonQueryByName(String personName) throws WWException {
 		if ("".equals(personName)) {
@@ -112,6 +116,8 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * Builds a query of all fields and children in a Person object
 	 * 
 	 * @return PeopleGraphQLQuery for all Person fields and children
+	 * 
+	 * @since 0.5.0
 	 */
 	private static PeopleGraphQLQuery buildUnfilteredPersonQuery() {
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
@@ -127,26 +133,28 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 		query.addField(PersonFields.UPDATED);
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
-		return new PeopleGraphQLQuery(METHOD_GET_PEOPLE, query);
+		return new PeopleGraphQLQuery(query);
 	}
 
 	/**
-	 * Default constructor
+	 * Creates a People query with a blank ObjectDataSenderBuilder query object
+	 * 
+	 * @since 0.5.0
 	 */
 	public PeopleGraphQLQuery() {
-		super(METHOD_GET_PEOPLE, new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME));
+		super(METHOD, new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME));
 	}
 
 	/**
-	 * Overloaded constructor with paramters
+	 * Creates a People query with a pre-populated ObjectDataSenderBuilder query object
 	 * 
-	 * @param operationName
-	 *            String name for the query operation
 	 * @param query
 	 *            ObjectDataSenderBuilder containing query options
+	 * 
+	 * @since 0.5.0
 	 */
-	public PeopleGraphQLQuery(String operationName, ObjectDataSenderBuilder query) {
-		super(operationName, query);
+	public PeopleGraphQLQuery(ObjectDataSenderBuilder query) {
+		super(METHOD, query);
 	}
 
 }

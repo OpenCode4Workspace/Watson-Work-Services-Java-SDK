@@ -16,9 +16,10 @@ import org.opencode4workspace.json.ResultParser;
 
 /**
  * @author Paul Withers
+ * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@linkplain #parseResultContainer()}
+ *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@link #parseResultContainer()}
  *        method needs to be overloaded.
  *
  */
@@ -33,6 +34,8 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	/**
 	 * @param client
 	 *            WWClient containing authentication details and token
+	 * 
+	 * @since 0.5.0
 	 */
 	public AbstractWWGraphQLEndpoint(WWClient client) {
 		this.client = client;
@@ -52,6 +55,8 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * Tests the token against its expireDate.
 	 * 
 	 * @return boolean, whether or not the token should be valid
+	 * 
+	 * @since 0.5.0
 	 */
 	private boolean isShouldBeValid() {
 		if (getClient().isValid()) {
@@ -147,16 +152,19 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		}
 	}
 
-	/**
-	 * @return String raw JSON results as String
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#getResultContent()
 	 */
 	public String getResultContent() {
 		return resultContent;
 	}
 
-	/**
-	 * @param resultContent
-	 *            String raw JSON results as string
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setResultContent(java.lang.String)
 	 */
 	public void setResultContent(String resultContent) {
 		this.resultContent = resultContent;
@@ -180,6 +188,8 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * Prepares the HttpPost with relevant headers - JWT Token and Content-Type
 	 * 
 	 * @return HttpPost containing the relevant headers
+	 * 
+	 * @since 0.5.0
 	 */
 	private HttpPost preparePost() {
 		HttpPost post = new HttpPost(WWDefinedEndpoints.GRAPHQL);
@@ -188,16 +198,19 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		return post;
 	}
 
-	/**
-	 * @return Boolean whether or not to dump profile data of query and response time
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#getProfileDump()
 	 */
 	public Boolean getProfileDump() {
 		return profileDump;
 	}
 
-	/**
-	 * @param profileDump
-	 *            Boolean whether or not to dump profile data of query and response time
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setProfileDump(java.lang.Boolean)
 	 */
 	public void setProfileDump(Boolean profileDump) {
 		this.profileDump = profileDump;

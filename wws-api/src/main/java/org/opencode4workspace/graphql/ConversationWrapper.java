@@ -29,7 +29,12 @@ public class ConversationWrapper extends Conversation {
 		}
 		return messages.getItems();
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.bo.Conversation#setMessages(java.util.List)
+	 */
 	@Override
 	public void setMessages(List<Message> messagelist) {
 		if (messages != null) {
