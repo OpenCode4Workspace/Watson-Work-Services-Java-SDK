@@ -288,7 +288,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get My Person profile. This will not work from a client authenticated as an application.
+	 * Easy helper method to get My Person object. This will not work from a client authenticated as an application.
 	 * 
 	 * @return Person object relating to current authenticated user
 	 * @throws WWException
@@ -300,7 +300,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get Person profiles with ids
+	 * Easy helper method to get Person objects with ids
 	 * 
 	 * @param ids
 	 *            List of String person ids
@@ -314,7 +314,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get Person profiles with part of a name
+	 * Easy helper method to get Person objects with part of a name
 	 * 
 	 * @param name
 	 *            String part of a name. This needs to be a single word
@@ -328,7 +328,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get Person profiles with a query
+	 * Easy helper method to get Person objects with a query
 	 * 
 	 * @param query
 	 *            PeopleGraphQLQuery containing query parameters

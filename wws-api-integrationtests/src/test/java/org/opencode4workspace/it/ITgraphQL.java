@@ -94,8 +94,8 @@ public class ITgraphQL {
 		client.authenticate();
 		assert client.isAuthenticated();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Person profile = ep.getPerson(profileId);
-		assert (myDisplayName.equals(profile.getDisplayName()));
+		Person person = ep.getPerson(profileId);
+		assert (myDisplayName.equals(person.getDisplayName()));
 	}
 
 	@Test(enabled = true)

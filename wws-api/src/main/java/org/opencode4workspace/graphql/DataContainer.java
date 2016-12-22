@@ -30,14 +30,14 @@ public class DataContainer implements Serializable {
 	}
 
 	/**
-	 * @return Profile for current user
+	 * @return Person object for current user
 	 */
 	public Person getMe() {
 		return me;
 	}
 
 	/**
-	 * @return Profile for a given user
+	 * @return Person object for a given user
 	 */
 	public Person getPerson() {
 		return person;

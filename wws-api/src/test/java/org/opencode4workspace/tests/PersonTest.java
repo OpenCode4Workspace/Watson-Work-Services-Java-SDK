@@ -45,8 +45,8 @@ public class PersonTest {
 
 	@Test
 	public void peopleQueryTest() throws WWException {
-		ObjectDataSenderBuilder profileNames = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
-		profileNames.addAttribute(BasicPaginationEnum.FIRST, 10)
+		ObjectDataSenderBuilder personNames = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
+		personNames.addAttribute(BasicPaginationEnum.FIRST, 10)
 				.addField(PersonFields.DISPLAY_NAME)
 				.addField(PersonFields.EMAIL)
 				.addField(PersonFields.EXT_ID)
@@ -54,7 +54,7 @@ public class PersonTest {
 				.addField(PersonFields.UPDATED)
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY))
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
-		assertEquals(PEOPLE_QUERY, profileNames.build());
+		assertEquals(PEOPLE_QUERY, personNames.build());
 	}
 
 	@Test
@@ -62,8 +62,8 @@ public class PersonTest {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		ObjectDataSenderBuilder profileNames = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
-		profileNames.addAttribute(BasicPaginationEnum.FIRST, 10)
+		ObjectDataSenderBuilder personNames = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
+		personNames.addAttribute(BasicPaginationEnum.FIRST, 10)
 				.addField(PersonFields.DISPLAY_NAME)
 				.addField(PersonFields.EMAIL)
 				.addField(PersonFields.EXT_ID)
@@ -71,7 +71,7 @@ public class PersonTest {
 				.addField(PersonFields.UPDATED)
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY))
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
-		ep.setRequest(new GraphQLRequest(profileNames, "getProfileNames"));
+		ep.setRequest(new GraphQLRequest(personNames, "getProfileNames"));
 		ep.executeRequest();
 		GraphResultContainer results = ep.getResultContainer();
 		assert (null != results.getErrors());
