@@ -4,7 +4,8 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
-import org.opencode4workspace.bo.Profile.PersonFields;
+import org.opencode4workspace.bo.Person.PersonFields;
+import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
@@ -13,77 +14,84 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Object for creating a Spaces query
+ *        Object for creating a Spaces query. The only attributes available are from BasicPaginationEnum.
  *
  */
 public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 
+	private static final String METHOD = "getSpaces";
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor
+	 * Easy method to create a basic Spaces query ObjectDataSenderBuilder
 	 * 
+	 * @return SpacesGraphQLQuery, this object
 	 * @throws WWException
-	 *             if there is an error building the object
+	 *             if the attributes are invalid
+	 * 
+	 * @since 0.5.0
 	 */
-	public SpacesGraphQLQuery() throws WWException {
-		try {
-			setOperationName("getSpaces");
+	public static SpacesGraphQLQuery buildStandardGetSpacesQuery() throws WWException {
 
-			// Basic createdBy ObjectDataBringer - same label for all
-			ObjectDataSenderBuilder createdBy = new ObjectDataSenderBuilder(SpaceChildren.CREATED_BY.getLabel());
-			createdBy.addField(PersonFields.ID.getLabel());
-			createdBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-			createdBy.addField(PersonFields.PHOTO_URL.getLabel());
-			createdBy.addField(PersonFields.EMAIL.getLabel());
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
+		spaces.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		spaces.addPageInfo();
+		spaces.addField(SpaceFields.ID);
+		spaces.addField(SpaceFields.TITLE);
+		spaces.addField(SpaceFields.DESCRIPTION);
+		spaces.addField(SpaceFields.UPDATED);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.UPDATED_BY));
+		spaces.addField(SpaceFields.CREATED);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.CREATED_BY));
+		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
+		members.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 100);
+		members.addField(PersonFields.ID);
+		members.addField(PersonFields.PHOTO_URL);
+		members.addField(PersonFields.EMAIL);
+		members.addField(PersonFields.DISPLAY_NAME);
+		spaces.addChild(members);
+		ObjectDataSenderBuilder conversation = new ObjectDataSenderBuilder(SpaceChildren.CONVERSATION.getLabel());
+		conversation.addField(ConversationFields.ID);
+		conversation.addField(ConversationFields.CREATED);
+		conversation.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(ConversationChildren.CREATED_BY));
+		conversation.addField(ConversationFields.UPDATED);
+		conversation.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(ConversationChildren.UPDATED_BY));
+		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true);
+		messages.addAttribute(BasicPaginationEnum.FIRST, 200);
+		messages.addPageInfo();
+		messages.addField(MessageFields.CONTENT_TYPE);
+		messages.addField(MessageFields.CONTENT);
+		messages.addField(MessageFields.CREATED);
+		messages.addField(MessageFields.UPDATED);
+		messages.addField(MessageFields.ANNOTATIONS);
+		messages.addField(MessageFields.ID);
+		messages.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(ConversationChildren.CREATED_BY));
+		messages.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(ConversationChildren.UPDATED_BY));
+		conversation.addChild(messages);
+		spaces.addChild(conversation);
+		return new SpacesGraphQLQuery(spaces);
+	}
 
-			// Basic updatedBy ObjectDataBringer - same label for all
-			ObjectDataSenderBuilder updatedBy = new ObjectDataSenderBuilder(SpaceChildren.UPDATED_BY.getLabel());
-			updatedBy.addField(PersonFields.ID.getLabel());
-			updatedBy.addField(PersonFields.DISPLAY_NAME.getLabel());
-			updatedBy.addField(PersonFields.PHOTO_URL.getLabel());
-			updatedBy.addField(PersonFields.EMAIL.getLabel());
+	/**
+	 * Creates a Spaces query with a blank ObjectDataSenderBuilder query object
+	 * 
+	 * @since 0.5.0
+	 */
+	public SpacesGraphQLQuery() {
+		super(METHOD, new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true));
 
-			ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder("spaces", true);
-			spaces.addAttribute(BasicPaginationEnum.FIRST, 100);
-			spaces.addPageInfo();
-			spaces.addField(SpaceFields.ID.getLabel());
-			spaces.addField(SpaceFields.TITLE.getLabel());
-			spaces.addField(SpaceFields.DESCRIPTION.getLabel());
-			spaces.addField(SpaceFields.UPDATED.getLabel());
-			spaces.addChild(updatedBy);
-			spaces.addField(SpaceFields.CREATED.getLabel());
-			spaces.addChild(createdBy);
-			ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
-			members.addAttribute(BasicPaginationEnum.FIRST, 100);
-			members.addField(PersonFields.ID.getLabel());
-			members.addField(PersonFields.PHOTO_URL.getLabel());
-			members.addField(PersonFields.EMAIL.getLabel());
-			members.addField(PersonFields.DISPLAY_NAME.getLabel());
-			spaces.addChild(members);
-			ObjectDataSenderBuilder conversation = new ObjectDataSenderBuilder(SpaceChildren.CONVERSATION.getLabel());
-			conversation.addField(ConversationFields.ID.getLabel());
-			conversation.addField(ConversationFields.CREATED.getLabel());
-			conversation.addChild(createdBy);
-			conversation.addField(ConversationFields.UPDATED.getLabel());
-			conversation.addChild(updatedBy);
-			ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true);
-			messages.addAttribute(BasicPaginationEnum.FIRST, 200);
-			messages.addPageInfo();
-			messages.addField(MessageFields.CONTENT_TYPE.getLabel());
-			messages.addField(MessageFields.CONTENT.getLabel());
-			messages.addField(MessageFields.CREATED.getLabel());
-			messages.addField(MessageFields.UPDATED.getLabel());
-			messages.addField(MessageFields.ANNOTATIONS.getLabel());
-			messages.addChild(createdBy);
-			messages.addChild(updatedBy);
-			conversation.addChild(messages);
-			spaces.addChild(conversation);
-			setQueryObject(spaces);
-		} catch (Exception e) {
-			throw new WWException(e);
-		}
+	}
 
+	/**
+	 * Creates a Spaces query with a pre-populated ObjectDataSenderBuilder query object
+	 * 
+	 * @param query
+	 *            ObjectDataSenderBuilder containing the query settings
+	 * 
+	 * @since 0.5.0
+	 */
+	public SpacesGraphQLQuery(ObjectDataSenderBuilder query) {
+		super(METHOD, query);
 	}
 
 }

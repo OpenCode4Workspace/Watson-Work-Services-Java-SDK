@@ -29,7 +29,7 @@ public class RequestBuilder<T> {
 	 * Builds JSON string from the object passed
 	 * 
 	 * @param object
-	 *            Object, instance of {@linkplain #clazz}
+	 *            Object, instance of {@link #clazz}
 	 * @return String, JSON conversion of the parameter passed
 	 * 
 	 * @since 0.5.0

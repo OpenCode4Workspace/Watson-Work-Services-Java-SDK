@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.opencode4workspace.WWException;
@@ -18,6 +19,7 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 /**
  * @author Paul Withers
+ * @author Christian Guedemann
  * @since 0.5.0
  * 
  *        DataSender for sending GraphQL query objects. The object will have a name, may have attributes (parameter to filter the query), fields and/or children to return. Each child will be an
@@ -46,6 +48,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * 
 	 * @param objectName
 	 *            String name of the object, used in the query. Consult WWS GraphQL Builder for details
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder(String objectName) {
 		this(objectName, false);
@@ -58,6 +62,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 *            String name of the object, used in the query. Consult WWS GraphQL Builder for details
 	 * @param hasItems
 	 *            boolean whether the fields / children are wrapped in "items{}"
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder(String objectName, boolean hasItems) {
 		this.objectName = objectName;
@@ -74,6 +80,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 *            Class from which to add all fields
 	 * @param hasItems
 	 *            boolean whether the fields / children are wrapped in "items{}"
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder(String objectName, Class<?> clazz, Boolean hasItems) {
 		this.objectName = objectName;
@@ -93,6 +101,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 *            String name of the object, used in the query. Consult WWS GraphQL Builder for details
 	 * @param fieldsEnum
 	 *            Enum of fields, all of which will be added
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder(String objectName, WWFieldsAttributesInterface[] fieldsEnum) {
 		this(objectName, false, fieldsEnum);
@@ -107,6 +117,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 *            boolean whether the fields / children are wrapped in "items{}"
 	 * @param fieldsEnum
 	 *            Enum of fields, all of which will be added
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder(String objectName, boolean hasItems, WWFieldsAttributesInterface[] fieldsEnum) {
 		this.objectName = objectName;
@@ -117,12 +129,14 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	}
 
 	/**
-	 * Extracts a field name from a class's property. If the {@linkplain GraphQLJsonPropertyHelper} annotation is present, instead of using the class's property name, the annotation label will be used
+	 * Extracts a field name from a class's property. If the {@link GraphQLJsonPropertyHelper} annotation is present, instead of using the class's property name, the annotation label will be used
 	 * instead. This is for e.g. "conversationContent" property, which maps to "conversation" field in GraphQL query, but cannot have that property name in this API.
 	 * 
 	 * @param f
 	 *            Field property of a class
 	 * @return String property name or annotation
+	 * 
+	 * @since 0.5.0
 	 */
 	private String extractFieldName(Field f) {
 		String fieldName = f.getName();
@@ -165,15 +179,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 				}
 				s.append(key + ": ");
 				Object obj = attributesList.get(key);
-				if (obj instanceof Date) {
-					SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-					Date dt = (Date) obj;
-					TimeZone tz = TimeZone.getDefault();
-					df.setTimeZone(tz);
-					s.append(df.format(dt));
-				} else {
-					s.append(obj);
-				}
+				convertAttributeValue(s, obj);
 			}
 			s.append(") ");
 		}
@@ -243,7 +249,47 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	}
 
 	/**
+	 * Converts a value used as an attribute to filter the query to the correct JSON format
+	 * 
+	 * @param s
+	 *            StringBuilder containing the JSON for the query
+	 * @param obj
+	 *            Object value for the attribute
+	 * 
+	 * @since 0.5.0
+	 */
+	private void convertAttributeValue(StringBuilder s, Object obj) {
+		if (obj instanceof Date) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+			Date dt = (Date) obj;
+			TimeZone tz = TimeZone.getDefault();
+			df.setTimeZone(tz);
+			s.append(df.format(dt));
+		} else if (obj instanceof String) {
+			s.append("\"");
+			s.append(obj);
+			s.append("\"");
+		} else if (obj instanceof List) {
+			s.append("[");
+			boolean isFirst = true;
+			for (Object innerObj : ((List) obj)) {
+				if (!isFirst) {
+					s.append(", ");
+				} else {
+					isFirst = false;
+				}
+				convertAttributeValue(s, innerObj);
+			}
+			s.append("]");
+		} else {
+			s.append(obj);
+		}
+	}
+
+	/**
 	 * @return String, name of the query object
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getObjectName() {
 		return objectName;
@@ -252,6 +298,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	/**
 	 * @param objectName
 	 *            String, name of the query object
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
@@ -259,6 +307,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 
 	/**
 	 * @return boolean, whether the object's properties are wrapped in an items container
+	 * 
+	 * @since 0.5.0
 	 */
 	public boolean isHasItems() {
 		return hasItems;
@@ -270,6 +320,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param hasItems
 	 *            boolean, whether the object's fields and children are wrapped in an items container
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder setHasItems(boolean hasItems) {
 		this.hasItems = hasItems;
@@ -278,6 +330,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 
 	/**
 	 * @return List of string fields to return
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<String> getFieldsList() {
 		return fieldsList;
@@ -286,6 +340,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	/**
 	 * @param fieldsList
 	 *            List of string fields to return
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setFieldsList(List<String> fieldsList) {
 		this.fieldsList = fieldsList;
@@ -297,6 +353,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param field
 	 *            String, name of the field to add
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addField(String field) {
 		fieldsList.add(field);
@@ -309,6 +367,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param field
 	 *            WWFieldsAttributesInterface enum, whose label property is the name of the field to add
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addField(WWFieldsAttributesInterface field) {
 		fieldsList.add(field.getLabel());
@@ -321,6 +381,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param field
 	 *            String, name of the field to remove
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder removeField(String field) {
 		fieldsList.remove(field);
@@ -328,7 +390,23 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	}
 
 	/**
+	 * Removes a field to request from the object
+	 * 
+	 * @param field
+	 *            String, WWFieldsAttributesInterface field to remove
+	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
+	 */
+	public ObjectDataSenderBuilder removeField(WWFieldsAttributesInterface field) {
+		fieldsList.remove(field.getLabel());
+		return this;
+	}
+
+	/**
 	 * @return Map of attributes to filter the request on. The key will be the attribute name, the value will be the value to filter against
+	 * 
+	 * @since 0.5.0
 	 */
 	public Map<String, Object> getAttributesList() {
 		return attributesList;
@@ -340,6 +418,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param attributesList
 	 *            Map of attributes to filter the request on. The key will be the attribute name, the value will be the value to filter against
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder setAttributesList(Map<String, Object> attributesList) {
 		this.attributesList = attributesList;
@@ -354,6 +434,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param value
 	 *            Object, value to filter on
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
 		attributesList.put(key, value);
@@ -369,12 +451,25 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 *            Object, value to filter on
 	 * @return ObjectDataSenderBuilder, current object
 	 * @throws WWException
+	 *             containing an error message, if the value is a different data type to what the enum expects
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addAttribute(WWFieldsAttributesInterface enumName, Object value) throws WWException {
 		if (value.getClass().equals(enumName.getObjectClassType())) {
 			attributesList.put(enumName.getLabel(), value);
 		} else {
-			throw new WWException("Watson Work Services expects a " + enumName.getObjectClassType().getName() + " for this attribute. Object supplied is " + value.getClass().getName());
+			if ("java.util.List".equals(enumName.getObjectClassType().getName())) {
+				if (value instanceof List || value instanceof Set) {
+					attributesList.put(enumName.getLabel(), value);
+				}
+			} else if ("java.util.Map".equals(enumName.getObjectClassType().getName())) {
+				if (value instanceof Map) {
+					attributesList.put(enumName.getLabel(), value);
+				}
+			} else {
+				throw new WWException("Watson Work Services expects a " + enumName.getObjectClassType().getName() + " for this attribute. Object supplied is " + value.getClass().getName());
+			}
 		}
 		return this;
 	}
@@ -385,6 +480,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param key
 	 *            String, attribute to remove from the request
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder removeAttribute(String key) {
 		attributesList.remove(key);
@@ -392,7 +489,23 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	}
 
 	/**
-	 * @return List of {@linkplain DataSenderBuilder} children to request from the object
+	 * Remove an attribute from the request
+	 * 
+	 * @param enumName
+	 *            enum, from which label property will give attribute name to filter on
+	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
+	 */
+	public ObjectDataSenderBuilder removeAttribute(WWFieldsAttributesInterface enumName) {
+		attributesList.remove(enumName.getLabel());
+		return this;
+	}
+
+	/**
+	 * @return List of {@link DataSenderBuilder} children to request from the object
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<DataSenderBuilder> getChildren() {
 		return children;
@@ -400,8 +513,10 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 
 	/**
 	 * @param children
-	 *            List of {@linkplain DataSenderBuilder} children to request from the object
+	 *            List of {@link DataSenderBuilder} children to request from the object
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
 		this.children = children;
@@ -414,6 +529,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param child
 	 *            DataSenderBuilder, child to add
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
 		children.add(child);
@@ -426,6 +543,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param child
 	 *            DataSenderBuilder, child to remove
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
 		children.remove(child);
@@ -436,9 +555,11 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * Adds a query to retrieve the full, default PageInfo object
 	 * 
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addPageInfo() {
-		pageInfo = new ObjectDataSenderBuilder(PageInfo.LABEL, PageInfo.class, false);
+		pageInfo = new ObjectDataSenderBuilder(PageInfo.PAGE_QUERY_OBJECT_NAME, PageInfo.class, false);
 		return this;
 	}
 
@@ -448,6 +569,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * @param pageInfoCustom
 	 *            ObjectDataSenderBuilder containing the PageInfo fields to return
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder addPageInfo(ObjectDataSenderBuilder pageInfoCustom) {
 		pageInfo = pageInfoCustom;
@@ -458,6 +581,8 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * Remove the request for PageInfo from this object
 	 * 
 	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.5.0
 	 */
 	public ObjectDataSenderBuilder removePageInfo() {
 		pageInfo = null;

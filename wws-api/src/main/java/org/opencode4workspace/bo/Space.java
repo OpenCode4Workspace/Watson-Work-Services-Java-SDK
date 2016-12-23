@@ -20,7 +20,7 @@ public class Space implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Space. See {@linkplain WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Space. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum SpaceFields implements WWFieldsAttributesInterface {
@@ -68,11 +68,11 @@ public class Space implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for child objects of a Space. See {@linkplain WWChildInterface}
+	 *        Enum for child objects of a Space. See {@link WWChildInterface}
 	 *
 	 */
 	public enum SpaceChildren implements WWChildInterface {
-		MEMBERS("members", Profile.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
+		MEMBERS("members", Person.class), CONVERSATION("conversation", Conversation.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -111,24 +111,25 @@ public class Space implements Serializable {
 		}
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	public static final String SPACES_QUERY_OBJECT_NAME = "spaces";
+	public static final String ONE_SPACE_QUERY_OBJECT_NAME = "space";
 	private String id;
 	private String description;
 	private String title;
 	private Date created;
-	private Profile createdBy;
+	private Person createdBy;
 	private Date updated;
-	private Profile updatedBy;
-	private List<Profile> memberList;
+	private Person updatedBy;
+	private List<Person> memberList;
 	private String membersUpdated;
 	@GraphQLJsonPropertyHelper(jsonProperty = "conversation")
 	private Conversation conversationContent;
 
 	/**
 	 * @return String, id of the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getId() {
 		return id;
@@ -137,6 +138,8 @@ public class Space implements Serializable {
 	/**
 	 * @param id
 	 *            String, id of the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -144,6 +147,8 @@ public class Space implements Serializable {
 
 	/**
 	 * @return String, description set for the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getDescription() {
 		return description;
@@ -152,6 +157,8 @@ public class Space implements Serializable {
 	/**
 	 * @param description
 	 *            String, description set for the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -159,6 +166,8 @@ public class Space implements Serializable {
 
 	/**
 	 * @return String, title of the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getTitle() {
 		return title;
@@ -167,6 +176,8 @@ public class Space implements Serializable {
 	/**
 	 * @param title
 	 *            String, title of the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setTitle(String title) {
 		this.title = title;
@@ -174,6 +185,8 @@ public class Space implements Serializable {
 
 	/**
 	 * @return Date the space was created
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getCreated() {
 		return created;
@@ -182,6 +195,8 @@ public class Space implements Serializable {
 	/**
 	 * @param created
 	 *            Date the space was created
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setCreated(Date created) {
 		this.created = created;
@@ -189,21 +204,27 @@ public class Space implements Serializable {
 
 	/**
 	 * @return Person who created the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getCreatedBy() {
+	public Person getCreatedBy() {
 		return createdBy;
 	}
 
 	/**
 	 * @param createdBy
 	 *            Person who created the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setCreatedBy(Profile createdBy) {
+	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	/**
 	 * @return Date the space was last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getUpdated() {
 		return updated;
@@ -212,6 +233,8 @@ public class Space implements Serializable {
 	/**
 	 * @param updated
 	 *            Date the space was last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setUpdated(Date updated) {
 		this.updated = updated;
@@ -219,36 +242,46 @@ public class Space implements Serializable {
 
 	/**
 	 * @return Person who last updated the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getUpdatedBy() {
+	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
 	/**
 	 * @param updatedBy
 	 *            Person who last updated the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setUpdatedBy(Profile updatedBy) {
+	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @return List of {@linkplain Profile} objects corresponding to the members of the space
+	 * @return List of {@link Person} objects corresponding to the members of the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public List<Profile> getMembers() {
+	public List<Person> getMembers() {
 		return memberList;
 	}
 
 	/**
 	 * @param members
-	 *            List of {@linkplain Profile} objects corresponding to the members of the space
+	 *            List of {@link Person} objects corresponding to the members of the space
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setMembers(List<Profile> members) {
+	public void setMembers(List<Person> members) {
 		this.memberList = members;
 	}
 
 	/**
 	 * @return String JSON date of when members were last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getMembersUpdated() {
 		return membersUpdated;
@@ -257,6 +290,8 @@ public class Space implements Serializable {
 	/**
 	 * @param membersUpdated
 	 *            String JSON date of when members were last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setMembersUpdated(String membersUpdated) {
 		this.membersUpdated = membersUpdated;
@@ -264,6 +299,8 @@ public class Space implements Serializable {
 
 	/**
 	 * @return Conversation, corresponding to all messages in the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public Conversation getConversation() {
 		return conversationContent;
@@ -272,6 +309,8 @@ public class Space implements Serializable {
 	/**
 	 * @param conversation
 	 *            Conversation, corresponding to all messages in the space
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setConversation(Conversation conversation) {
 		this.conversationContent = conversation;

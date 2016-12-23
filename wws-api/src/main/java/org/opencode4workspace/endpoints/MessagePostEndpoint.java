@@ -41,6 +41,8 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @return MessageResponse response object for the successful posting
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
 	 */
 	public MessageResponse postMessage(AppMessage message, String spaceId) throws WWException {
 		// TODO: If we pass the message and space id to the constructor, we may be able to make this more generic, and pass the response to resultContainer, then call parseResultContainer
@@ -79,6 +81,8 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @param spaceId
 	 *            String id of the space to post to
 	 * @return HttpPost containing the relevant headers
+	 * 
+	 * @since 0.5.0
 	 */
 	private HttpPost preparePost(String spaceId) {
 		HttpPost post = new HttpPost(WWDefinedEndpoints.V1_SPACE_ID + spaceId + "/messages");

@@ -21,6 +21,8 @@ public class Actor implements Serializable {
 
 	/**
 	 * @return String, name of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getName() {
 		return name;
@@ -29,6 +31,8 @@ public class Actor implements Serializable {
 	/**
 	 * @param name
 	 *            String, name of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -36,6 +40,8 @@ public class Actor implements Serializable {
 
 	/**
 	 * @return String, avatar url of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getAvatar() {
 		return avatar;
@@ -44,6 +50,8 @@ public class Actor implements Serializable {
 	/**
 	 * @param avatar
 	 *            String, avatar url of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
@@ -51,6 +59,8 @@ public class Actor implements Serializable {
 
 	/**
 	 * @return String, url of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getUrl() {
 		return url;
@@ -59,6 +69,8 @@ public class Actor implements Serializable {
 	/**
 	 * @param url
 	 *            String, url of the actor
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setUrl(String url) {
 		this.url = url;

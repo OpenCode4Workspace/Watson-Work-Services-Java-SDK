@@ -15,8 +15,8 @@ public interface AuthenticationEndpoint {
 	 * Creates POST request for authentication and returns result, if successful, or generates error, if not
 	 * 
 	 * @param basicAuthApp
-	 *            String, content for Authroization header constructed from {@linkplain WWClient#getAppCredentials()}
-	 * @return {@linkplain AuthenticationResult} containing response details
+	 *            String, content for Authroization header constructed from {@link WWClient#getAppCredentials()}
+	 * @return {@link AuthenticationResult} containing response details
 	 * @throws WWException
 	 *             error details
 	 * 
@@ -28,12 +28,12 @@ public interface AuthenticationEndpoint {
 	 * Creates POST request for authorizing user and returns result, if successful, or generates error, if not
 	 * 
 	 * @param basicAuthApp
-	 *            String, content for Authroization header constructed from {@linkplain WWClient#getAppCredentials()}
+	 *            String, content for Authroization header constructed from {@link WWClient#getAppCredentials()}
 	 * @param userToken
 	 *            String, user token to pass
 	 * @param redirectTo
 	 *            String, URL to redirect to if successful
-	 * @return {@linkplain AuthenticationResult} containing response details
+	 * @return {@link AuthenticationResult} containing response details
 	 * @throws WWException
 	 *             error details
 	 * 
