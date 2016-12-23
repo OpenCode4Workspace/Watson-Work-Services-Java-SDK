@@ -9,7 +9,11 @@ import org.opencode4workspace.bo.Space;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Wrapper for Watson Workspace Space object
+ *        Wrapper for Watson Workspace Space object. This is required for two reasons:<br>
+ *        <ol>
+ *        <li>To navigate down to the Members - getMembers() will skip the "items" child of the resulting JSON for the Space</li>
+ *        <li>To convert the result of {@link #getConversation()} to a ConversationWrapper (so it can navigate down to the Messages)</li>
+ *        </ol>
  *
  */
 public class SpaceWrapper extends Space {

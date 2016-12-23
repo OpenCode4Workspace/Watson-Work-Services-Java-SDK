@@ -9,7 +9,7 @@ import org.opencode4workspace.bo.Message;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Serializable wrapper for a Conversation. This is required to navigate down to the Messages.
+ *        Serializable wrapper for a Conversation. This is required to navigate down to the Messages - getMessages will skip the "items" child of the resulting JSON for the Conversation
  *
  */
 public class ConversationWrapper extends Conversation {
