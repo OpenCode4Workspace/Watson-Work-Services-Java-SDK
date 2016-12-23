@@ -6,6 +6,7 @@ import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageChildren;
 import org.opencode4workspace.bo.Message.MessageFields;
+import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
 
 /**
@@ -15,6 +16,58 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
  *        Object for creating a Conversation GraphQL query
  */
 public class ConversationGraphQLQuery extends BaseGraphQLQuery {
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        <p>
+	 *        Enum for filtering a Conversation. See {@link WWFieldsAttributesInterface}.
+	 *        </p>
+	 *        <ul>
+	 *        <li>ID expects a String ID for the Conversation</li>
+	 *        </ul>
+	 *
+	 */
+	public enum ConversationAttributes implements WWFieldsAttributesInterface {
+		ID("id", String.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private ConversationAttributes(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+
+	}
 
 	private static final String METHOD = "getConversation";
 	private static final long serialVersionUID = 1L;
@@ -36,7 +89,7 @@ public class ConversationGraphQLQuery extends BaseGraphQLQuery {
 		}
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Conversation.CONVERSATION_QUERY_OBJECT_NAME);
-		query.addAttribute(ConversationFields.ID, conversationId);
+		query.addAttribute(ConversationAttributes.ID, conversationId);
 		query.addField(ConversationFields.ID);
 		query.addField(ConversationFields.CREATED);
 		query.addField(ConversationFields.UPDATED);

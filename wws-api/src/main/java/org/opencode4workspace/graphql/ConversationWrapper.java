@@ -9,13 +9,13 @@ import org.opencode4workspace.bo.Message;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Serializable wrapper for a Conversation
+ *        Serializable wrapper for a Conversation. This is required to navigate down to the Messages.
  *
  */
 public class ConversationWrapper extends Conversation {
 
 	private static final long serialVersionUID = 1L;
-	private MessageContainer messages = new MessageContainer();
+	private MessagesContainer messages = new MessagesContainer();
 
 	/*
 	 * (non-Javadoc)

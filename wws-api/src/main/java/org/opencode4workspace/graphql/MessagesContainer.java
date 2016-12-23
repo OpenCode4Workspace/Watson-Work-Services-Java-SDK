@@ -9,10 +9,10 @@ import org.opencode4workspace.bo.Message;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Serializable container for Messages in a Watson Workspace Conversation
+ *        Serializable container for Messages in a Watson Workspace Conversation. This is required because the query contains an items object.
  *
  */
-public class MessageContainer {
+public class MessagesContainer {
 
 	private List<Message> items;
 

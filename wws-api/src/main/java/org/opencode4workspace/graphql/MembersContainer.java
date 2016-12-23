@@ -10,10 +10,10 @@ import org.opencode4workspace.bo.Person;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Serializable container for Members in a Watson Workspace Space
+ *        Serializable container for Members in a Watson Workspace Space. This is required because the query contains an items object.
  *
  */
-public class MemberItemContainer implements Serializable {
+public class MembersContainer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private List<Person> items;

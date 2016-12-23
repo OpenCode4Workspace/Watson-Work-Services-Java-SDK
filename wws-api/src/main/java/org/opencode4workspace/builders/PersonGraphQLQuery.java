@@ -4,6 +4,7 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
+import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
 /**
  * @author Paul Withers
@@ -12,13 +13,65 @@ import org.opencode4workspace.bo.Person.PersonFields;
  *        Object for creating Me or Person query
  */
 public class PersonGraphQLQuery extends BaseGraphQLQuery {
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        <p>
+	 *        Enum for filtering a Person. See {@link WWFieldsAttributesInterface}.
+	 *        </p>
+	 *        <ul>
+	 *        <li>ID expects a String ID for the Person</li>
+	 *        </ul>
+	 *
+	 */
+	public enum PersonAttributes implements WWFieldsAttributesInterface {
+		ID("id", String.class), EMAIL("email", String.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private PersonAttributes(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+
+	}
 
 	private static final String METHOD_GET_MYSELF = "getMyself";
 	private static final String METHOD_GET_PROFILE = "getProfile";
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * East method to create a basic Person query ObjectDataSenderBuilder for the relevant Person
+	 * East method to create a basic Person query ObjectDataSenderBuilder for the relevant Person, filtered on id
 	 * 
 	 * @param personId
 	 *            String id for the Person to retrieve. If blank, returns "me"
@@ -34,7 +87,39 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 		}
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Person.ONE_PERSON_QUERY_OBJECT_NAME);
-		query.addAttribute(PersonFields.ID, personId);
+		query.addAttribute(PersonAttributes.ID, personId);
+		query.addField(PersonFields.ID);
+		query.addField(PersonFields.DISPLAY_NAME);
+		query.addField(PersonFields.EMAIL);
+		query.addField(PersonFields.PHOTO_URL);
+		query.addField(PersonFields.EXT_ID);
+		query.addField(PersonFields.EMAIL_ADDRESSES);
+		query.addField(PersonFields.CUSTOMER_ID);
+		query.addField(PersonFields.CREATED);
+		query.addField(PersonFields.UPDATED);
+		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
+		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
+		return new PersonGraphQLQuery(METHOD_GET_PROFILE, query);
+	}
+
+	/**
+	 * East method to create a basic Person query ObjectDataSenderBuilder for the relevant Person filtered on email
+	 * 
+	 * @param email
+	 *            String email for the Person to retrieve. If blank, returns "me"
+	 * @return PersonGraphQLQuery, the current object
+	 * @throws WWException
+	 *             if the email attribute is invalid
+	 * 
+	 * @since 0.5.0
+	 */
+	public static PersonGraphQLQuery buildPersonQueryByEmail(String email) throws WWException {
+		if ("".equals(email)) {
+			return buildMyProfileQuery();
+		}
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+		query.setObjectName(Person.ONE_PERSON_QUERY_OBJECT_NAME);
+		query.addAttribute(PersonAttributes.ID, email);
 		query.addField(PersonFields.ID);
 		query.addField(PersonFields.DISPLAY_NAME);
 		query.addField(PersonFields.EMAIL);

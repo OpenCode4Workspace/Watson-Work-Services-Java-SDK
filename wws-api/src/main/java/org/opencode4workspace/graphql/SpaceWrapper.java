@@ -15,7 +15,7 @@ import org.opencode4workspace.bo.Space;
 public class SpaceWrapper extends Space {
 
 	private static final long serialVersionUID = 1L;
-	private MemberItemContainer members;
+	private MembersContainer members;
 	private ConversationWrapper conversation;
 
 	/*

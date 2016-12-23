@@ -9,7 +9,7 @@ import java.util.List;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Serializable container for SpaceWrappers for Watson Workspace Spaces
+ *        Serializable container for SpaceWrappers for Watson Workspace Spaces. This is required because the query contains an items object.
  *
  */
 public class SpacesContainer implements Serializable {

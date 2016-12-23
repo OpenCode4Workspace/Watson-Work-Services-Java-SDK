@@ -5,14 +5,14 @@ import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
-import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.builders.SpaceGraphQLQuery.SpaceAttributes;
 
 /**
  * @author Paul Withers
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Object for querying members from a Workspace
+ *        Object for querying members from a Space
  *
  */
 public class SpaceMembersGraphQLQuery extends BaseGraphQLQuery {
@@ -36,7 +36,7 @@ public class SpaceMembersGraphQLQuery extends BaseGraphQLQuery {
 		}
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Space.ONE_SPACE_QUERY_OBJECT_NAME);
-		query.addAttribute(SpaceFields.ID, spaceId);
+		query.addAttribute(SpaceAttributes.ID, spaceId);
 		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
 		members.addField(PersonFields.ID);
 		members.addField(PersonFields.PHOTO_URL);

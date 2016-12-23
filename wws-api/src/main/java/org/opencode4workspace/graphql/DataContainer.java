@@ -2,6 +2,7 @@ package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
 
+import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 
 /**
@@ -20,7 +21,8 @@ public class DataContainer implements Serializable {
 	private Person person;
 	private ConversationWrapper conversation;
 	private SpaceWrapper space;
-	private MemberItemContainer people;
+	private MembersContainer people;
+	private Message message;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -82,8 +84,17 @@ public class DataContainer implements Serializable {
 	 * 
 	 * @since 0.5.0
 	 */
-	public MemberItemContainer getPeople() {
+	public MembersContainer getPeople() {
 		return people;
+	}
+
+	/**
+	 * @return Message resulting from a query
+	 * 
+	 * @since 0.5.0
+	 */
+	public Message getMessage() {
+		return message;
 	}
 
 }

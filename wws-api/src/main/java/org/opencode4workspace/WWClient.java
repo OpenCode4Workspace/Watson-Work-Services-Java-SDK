@@ -8,6 +8,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
@@ -152,8 +153,8 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Gets JWT token for the user / application from the {@link AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This
-	 * JWT token is what you have to use in your App to pass to Watson Work Services on API calls so that you can use its services securely"
+	 * Gets JWT token for the user / application from the {@link AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This JWT
+	 * token is what you have to use in your App to pass to Watson Work Services on API calls so that you can use its services securely"
 	 * 
 	 * @return String, JWT token
 	 * 
@@ -200,7 +201,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get spaces with a query
+	 * Easy helper method to get Spaces with a query
 	 * 
 	 * @param query
 	 *            SpacesGraphQLQuery containing query parameters
@@ -216,7 +217,23 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get a Conversation and its details with a conversation id
+	 * Easy helper method to get a Space by a Space id
+	 * 
+	 * @param spaceId
+	 *            id of the Space
+	 * @return Space objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Space getSpaceById(String spaceId) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpaceById(spaceId);
+	}
+
+	/**
+	 * Easy helper method to get a Conversation and its details by a conversation id
 	 * 
 	 * @param conversationId
 	 *            String id of the conversation
@@ -246,6 +263,22 @@ public class WWClient implements Serializable {
 	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getConversationWithQuery(query);
+	}
+
+	/**
+	 * Easy helper method to get a Message and its details by id
+	 * 
+	 * @param messageId
+	 *            String id of the Message
+	 * @return Message details of the Message
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Message getMessageById(String messageId) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMessageById(messageId);
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.List;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
@@ -129,6 +130,8 @@ public class ITgraphQL {
 		assert (null != spaceId);
 		List<Person> members = ep.getSpaceMembers(spaceId);
 		assert (members.size() > 0);
+		Space space = ep.getSpaceById(spaceId);
+		assert (space.getMembers().size() > 0);
 	}
 
 	@Test(enabled = true)
@@ -174,6 +177,20 @@ public class ITgraphQL {
 
 		assert (peopleResult.size() == 1);
 		assert (appId.equals(peopleResult.get(0).getId()));
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "messageId", "myDisplayName" })
+	public void testGetMessage(String appId, String appSecret, String messageId, String myDisplayName)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		Message message = client.getMessageById(messageId);
+		assert (!"".equals(message.getContentType()));
+		assert (myDisplayName.equals(message.getCreatedBy().getDisplayName()));
 	}
 
 }

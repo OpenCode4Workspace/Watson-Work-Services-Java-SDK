@@ -5,12 +5,15 @@ import java.util.List;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.graphql.DataContainer;
@@ -59,6 +62,24 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		setRequest(new GraphQLRequest(query));
 		executeRequest();
 		return (List<? extends Space>) getResultContainer().getData().getSpaces().getItems();
+	}
+
+	/**
+	 * Get a Space by using a spaceId
+	 * 
+	 * @param spaceId
+	 *            String id for the Space
+	 * @return Space details
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Space getSpaceById(String spaceId) throws WWException {
+		SpaceGraphQLQuery queryObject = SpaceGraphQLQuery.buildSpaceGraphQueryWithSpaceId(spaceId);
+		setRequest(new GraphQLRequest(queryObject));
+		executeRequest();
+		return (Space) getResultContainer().getData().getSpace();
 	}
 
 	/**
@@ -143,6 +164,24 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
 		return container.getConversation();
+	}
+
+	/**
+	 * Get a Message by using a messageId
+	 * 
+	 * @param messageId
+	 *            String id of the message
+	 * @return Message details
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Message getMessageById(String messageId) throws WWException {
+		MessageGraphQLQuery queryObject = MessageGraphQLQuery.buildMessageGraphQueryWithMessageId(messageId);
+		setRequest(new GraphQLRequest(queryObject));
+		executeRequest();
+		return (Message) getResultContainer().getData().getMessage();
 	}
 
 	/**

@@ -113,6 +113,7 @@ public class Message implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	public static final String ONE_MESSAGE_QUERY_OBJECT_NAME = "message";
 	private String id;
 	// TODO: Make this an enum
 	private String contentType;
