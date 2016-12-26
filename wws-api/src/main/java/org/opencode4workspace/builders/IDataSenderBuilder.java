@@ -7,7 +7,7 @@ package org.opencode4workspace.builders;
  *        DataSender interface, with basic methods
  *
  */
-public interface DataSenderBuilder {
+public interface IDataSenderBuilder {
 
 	/**
 	 * Builds the JSON stream to send. Calls {@link #build(boolean)}, passing false

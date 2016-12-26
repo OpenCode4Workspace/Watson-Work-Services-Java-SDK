@@ -26,14 +26,14 @@ import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
  *        ObjectDataSenderBuilder of its own. Consult WWS Graph QL Builder for details of what attributes etc at https://workspace.ibm.com/graphql
  *
  */
-public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable {
+public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String objectName;
 	private boolean hasItems;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
 	private List<String> fieldsList = new ArrayList<String>();
-	private List<DataSenderBuilder> children = new ArrayList<DataSenderBuilder>();
+	private List<IDataSenderBuilder> children = new ArrayList<IDataSenderBuilder>();
 	private ObjectDataSenderBuilder pageInfo;
 
 	/**
@@ -219,7 +219,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 		}
 
 		// Add children, if exist
-		for (DataSenderBuilder child : getChildren()) {
+		for (IDataSenderBuilder child : getChildren()) {
 			if (!isFirst) {
 				if (pretty) {
 					s.append("\n\r");
@@ -503,22 +503,22 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	}
 
 	/**
-	 * @return List of {@link DataSenderBuilder} children to request from the object
+	 * @return List of {@link IDataSenderBuilder} children to request from the object
 	 * 
 	 * @since 0.5.0
 	 */
-	public List<DataSenderBuilder> getChildren() {
+	public List<IDataSenderBuilder> getChildren() {
 		return children;
 	}
 
 	/**
 	 * @param children
-	 *            List of {@link DataSenderBuilder} children to request from the object
+	 *            List of {@link IDataSenderBuilder} children to request from the object
 	 * @return ObjectDataSenderBuilder, current object
 	 * 
 	 * @since 0.5.0
 	 */
-	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
+	public ObjectDataSenderBuilder setChildren(List<IDataSenderBuilder> children) {
 		this.children = children;
 		return this;
 	}
@@ -532,7 +532,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * 
 	 * @since 0.5.0
 	 */
-	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
+	public ObjectDataSenderBuilder addChild(IDataSenderBuilder child) {
 		children.add(child);
 		return this;
 	}
@@ -546,7 +546,7 @@ public class ObjectDataSenderBuilder implements DataSenderBuilder, Serializable 
 	 * 
 	 * @since 0.5.0
 	 */
-	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
+	public ObjectDataSenderBuilder removeChild(IDataSenderBuilder child) {
 		children.remove(child);
 		return this;
 	}

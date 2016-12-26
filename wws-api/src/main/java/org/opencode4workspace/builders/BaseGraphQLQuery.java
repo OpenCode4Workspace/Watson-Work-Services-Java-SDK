@@ -16,7 +16,7 @@ import org.opencode4workspace.bo.WWFieldsAttributesInterface;
  *        Abstract object for creating GraphQL Query. Use one of the in-built options
  *
  */
-public abstract class BaseGraphQLQuery implements Serializable {
+public abstract class BaseGraphQLQuery implements Serializable, IGraphQLQuery {
 
 	private static final long serialVersionUID = 1L;
 	private final String operationName;
@@ -35,31 +35,26 @@ public abstract class BaseGraphQLQuery implements Serializable {
 		this.queryObject = queryObject;
 	}
 
-	/**
-	 * @return String, operation name
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getOperationName()
 	 */
+	@Override
 	public String getOperationName() {
 		return operationName;
 	}
 
-	/**
-	 * @return ObjectDataSenderBuilder containing the query settings
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getQueryObject()
 	 */
+	@Override
 	public ObjectDataSenderBuilder getQueryObject() {
 		return queryObject;
 	}
 
-	/**
-	 * Returns the full query to be passed to WWS, building the JSON object from an ObjectDataSenderBuilder
-	 * 
-	 * @return String query to pass to WWS containing "query", the operation name, and a JSON object containing the query settings
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#returnQuery()
 	 */
+	@Override
 	public String returnQuery() {
 		return "query " + operationName + " {" + getQueryObject().build() + "}";
 	}
@@ -88,290 +83,186 @@ public abstract class BaseGraphQLQuery implements Serializable {
 
 	// Delegators
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#getObjectName()}
-	 * 
-	 * @return String the objectName property from queryObject property
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getObjectName()
 	 */
+	@Override
 	public String getObjectName() {
 		return queryObject.getObjectName();
 	}
 
-	/**
-	 * Helper method, to give easy to {@link ObjectDataSenderBuilder#setObjectName(String)}
-	 * 
-	 * @param objectName
-	 *            the objectName property from queryObject property
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#setObjectName(java.lang.String)
 	 */
+	@Override
 	public void setObjectName(String objectName) {
 		queryObject.setObjectName(objectName);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#isHasItems()}
-	 * 
-	 * @return boolean whether queryObject includes an items level in returned JSON
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#isHasItems()
 	 */
+	@Override
 	public boolean isHasItems() {
 		return queryObject.isHasItems();
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#setHasItems(boolean)}
-	 * 
-	 * @param hasItems
-	 *            whether queryObject includes an items level in returned JSON
-	 * 
-	 * @return ObjectDataSenderBuilder queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#setHasItems(boolean)
 	 */
+	@Override
 	public ObjectDataSenderBuilder setHasItems(boolean hasItems) {
 		return queryObject.setHasItems(hasItems);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#getFieldsList()}
-	 * 
-	 * @return List of String fields queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getFieldsList()
 	 */
+	@Override
 	public List<String> getFieldsList() {
 		return queryObject.getFieldsList();
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#setFieldsList(List)}
-	 * 
-	 * @param fieldsList
-	 *            List of String fields in the queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#setFieldsList(java.util.List)
 	 */
+	@Override
 	public void setFieldsList(List<String> fieldsList) {
 		queryObject.setFieldsList(fieldsList);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addField(String)}
-	 * 
-	 * @param field
-	 *            String field to add to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addField(java.lang.String)
 	 */
+	@Override
 	public ObjectDataSenderBuilder addField(String field) {
 		return queryObject.addField(field);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addField(WWFieldsAttributesInterface)}
-	 * 
-	 * @param field
-	 *            WWFIeldAttributesInterface field to add to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addField(org.opencode4workspace.bo.WWFieldsAttributesInterface)
 	 */
+	@Override
 	public ObjectDataSenderBuilder addField(WWFieldsAttributesInterface field) {
 		return queryObject.addField(field);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeField(String)}
-	 * 
-	 * @param field
-	 *            String field to remove from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removeField(java.lang.String)
 	 */
+	@Override
 	public ObjectDataSenderBuilder removeField(String field) {
 		return queryObject.removeField(field);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeField(WWFieldsAttributesInterface)}
-	 * 
-	 * @param field
-	 *            WWFieldsAttributesInterface field to remove from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removeField(org.opencode4workspace.bo.WWFieldsAttributesInterface)
 	 */
+	@Override
 	public ObjectDataSenderBuilder removeField(WWFieldsAttributesInterface field) {
 		return queryObject.removeField(field);
 	}
 
-	/**
-	 * @return Map of attributes used to filter this Query, retrieved from the queryObject
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getAttributesList()
 	 */
+	@Override
 	public Map<String, Object> getAttributesList() {
 		return queryObject.getAttributesList();
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#setAttributesList(Map)}
-	 * 
-	 * @param attributesList
-	 *            Map of attributes used to filter the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of the queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#setAttributesList(java.util.Map)
 	 */
+	@Override
 	public ObjectDataSenderBuilder setAttributesList(Map<String, Object> attributesList) {
 		return queryObject.setAttributesList(attributesList);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addAttribute(String, Object)}
-	 * 
-	 * @param key
-	 *            String, attribute name to filter the queryObject of this Query
-	 * @param value
-	 *            Object, value to filter the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the queryObject object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addAttribute(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public ObjectDataSenderBuilder addAttribute(String key, Object value) {
 		return queryObject.addAttribute(key, value);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addAttribute(WWFieldsAttributesInterface, Object)}
-	 * 
-	 * @param enumName
-	 *            enum, from which label property will give attribute name to filter the queryObject of this Query
-	 * @param value
-	 *            Object, value to filter the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the queryObject object of this Query
-	 * @throws WWException
-	 *             containing an error message, if the value is a different data type to what the enum expects
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addAttribute(org.opencode4workspace.bo.WWFieldsAttributesInterface, java.lang.Object)
 	 */
+	@Override
 	public ObjectDataSenderBuilder addAttribute(WWFieldsAttributesInterface enumName, Object value) throws WWException {
 		return queryObject.addAttribute(enumName, value);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeAttribute(String)}
-	 * 
-	 * @param key
-	 *            String, attribute name to filter the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the queryObject object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removeAttribute(java.lang.String)
 	 */
+	@Override
 	public ObjectDataSenderBuilder removeAttribute(String key) {
 		return queryObject.removeAttribute(key);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeAttribute(WWFieldsAttributesInterface)}
-	 * 
-	 * @param enumName
-	 *            enum, from which label property will give attribute name to filter the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the queryObject object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removeAttribute(org.opencode4workspace.bo.WWFieldsAttributesInterface)
 	 */
+	@Override
 	public ObjectDataSenderBuilder removeAttribute(WWFieldsAttributesInterface enumName) {
 		return queryObject.removeAttribute(enumName);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#getChildren()}
-	 * 
-	 * @return List of DataSenderBuilders corresponding to the children of the queryObject of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#getChildren()
 	 */
-	public List<DataSenderBuilder> getChildren() {
+	@Override
+	public List<IDataSenderBuilder> getChildren() {
 		return queryObject.getChildren();
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#setChildren(List)}
-	 * 
-	 * @param children
-	 *            List of DataSenderBuilders corresponding to the children of the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#setChildren(java.util.List)
 	 */
-	public ObjectDataSenderBuilder setChildren(List<DataSenderBuilder> children) {
+	@Override
+	public ObjectDataSenderBuilder setChildren(List<IDataSenderBuilder> children) {
 		return queryObject.setChildren(children);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addChild(DataSenderBuilder)}
-	 * 
-	 * @param child
-	 *            DataSenderBuilder for the child to be added to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addChild(org.opencode4workspace.builders.IDataSenderBuilder)
 	 */
-	public ObjectDataSenderBuilder addChild(DataSenderBuilder child) {
+	@Override
+	public ObjectDataSenderBuilder addChild(IDataSenderBuilder child) {
 		return queryObject.addChild(child);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeChild(DataSenderBuilder)}
-	 * 
-	 * @param child
-	 *            DataSenderBuilder for the child to be removed from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removeChild(org.opencode4workspace.builders.IDataSenderBuilder)
 	 */
-	public ObjectDataSenderBuilder removeChild(DataSenderBuilder child) {
+	@Override
+	public ObjectDataSenderBuilder removeChild(IDataSenderBuilder child) {
 		return queryObject.removeChild(child);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addPageInfo()}
-	 * 
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addPageInfo()
 	 */
+	@Override
 	public ObjectDataSenderBuilder addPageInfo() {
 		return queryObject.addPageInfo();
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addPageInfo(ObjectDataSenderBuilder)}
-	 * 
-	 * @param pageInfoCustom
-	 *            ObjectDataSenderBuilder containing the custom pageInfo fields to return from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#addPageInfo(org.opencode4workspace.builders.ObjectDataSenderBuilder)
 	 */
+	@Override
 	public ObjectDataSenderBuilder addPageInfo(ObjectDataSenderBuilder pageInfoCustom) {
 		return queryObject.addPageInfo(pageInfoCustom);
 	}
 
-	/**
-	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removePageInfo()}
-	 * 
-	 * @return ObjectDataSenderBuilder, the query object of this Query
-	 * 
-	 * @since 0.5.0
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.builders.IGraphQLQuery#removePageInfo()
 	 */
+	@Override
 	public ObjectDataSenderBuilder removePageInfo() {
 		return queryObject.removePageInfo();
 	}

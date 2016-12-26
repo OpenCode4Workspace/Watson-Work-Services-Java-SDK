@@ -3,7 +3,7 @@ package org.opencode4workspace.json;
 import java.util.HashMap;
 
 import org.opencode4workspace.WWException;
-import org.opencode4workspace.builders.BaseGraphQLQuery;
+import org.opencode4workspace.builders.IGraphQLQuery;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 
 /**
@@ -49,7 +49,7 @@ public class GraphQLRequest {
 	 * 
 	 * @since 0.5.0
 	 */
-	public GraphQLRequest(BaseGraphQLQuery queryObject) throws WWException {
+	public GraphQLRequest(IGraphQLQuery queryObject) throws WWException {
 		this(queryObject, new HashMap<String, String>());
 	}
 
@@ -65,7 +65,7 @@ public class GraphQLRequest {
 	 * 
 	 * @since 0.5.0
 	 */
-	public GraphQLRequest(BaseGraphQLQuery queryObject, HashMap<String, String> variables) throws WWException {
+	public GraphQLRequest(IGraphQLQuery queryObject, HashMap<String, String> variables) throws WWException {
 		try {
 			this.operationName = queryObject.getOperationName();
 			this.query = queryObject.returnQuery();
