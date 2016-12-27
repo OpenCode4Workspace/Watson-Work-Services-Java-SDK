@@ -94,7 +94,7 @@ public class ITgraphQL {
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "conversationId" })
-	public void testgetConversationAsApp(String appId, String appSecret, String conversationId)
+	public void testGetConversationAsApp(String appId, String appSecret, String conversationId)
 			throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
