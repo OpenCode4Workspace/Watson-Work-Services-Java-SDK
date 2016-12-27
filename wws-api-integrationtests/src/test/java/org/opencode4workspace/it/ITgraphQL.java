@@ -100,8 +100,8 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Conversation conversation = ep.getConversation(conversationId);
+
+		Conversation conversation = client.getConversationById(conversationId);
 		assert (conversation != null);
 		assert (conversation.getMessages().size() > 0);
 	}
@@ -122,9 +122,9 @@ public class ITgraphQL {
 		assert (spacesResult.size() > 0);
 		String spaceId = spacesResult.get(0).getId();
 		assert (null != spaceId);
-		List<Person> members = ep.getSpaceMembers(spaceId);
+		List<Person> members = client.getSpaceMembersById(spaceId);
 		assert (members.size() > 0);
-		Space space = ep.getSpaceById(spaceId);
+		Space space = client.getSpaceById(spaceId);
 		assert (space.getMembers().size() > 0);
 	}
 
@@ -141,11 +141,8 @@ public class ITgraphQL {
 		ArrayList<String> ids = new ArrayList<String>();
 		ids.add(profileId);
 		ids.add(appId);
-		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildPersonQueryById(ids);
 
-		ep.setRequest(new GraphQLRequest(queryObject));
-		ep.executeRequest();
-		List<Person> peopleResult = ep.getResultContainer().getData().getPeople().getItems();
+		List<Person> peopleResult = client.getPeople(ids);
 
 		assert (peopleResult.size() == 2);
 		assert (myDisplayName.equals(peopleResult.get(0).getDisplayName()));
@@ -181,14 +178,7 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-
-		PeopleGraphQLQuery queryObject = PeopleGraphQLQuery.buildPersonQueryByName("Paul");
-
-		ep.setRequest(new GraphQLRequest(queryObject));
-		System.out.println(queryObject.returnQuery());
-		ep.executeRequest();
-		List<Person> peopleResult = ep.getResultContainer().getData().getPeople().getItems();
+		List<Person> peopleResult = client.getPeopleByName("Paul");
 
 		assert (peopleResult.size() == 1);
 		assert (appId.equals(peopleResult.get(0).getId()));

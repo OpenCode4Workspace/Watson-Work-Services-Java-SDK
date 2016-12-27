@@ -12,8 +12,10 @@ import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
@@ -221,7 +223,7 @@ public class WWClient implements Serializable {
 	 * 
 	 * @param spaceId
 	 *            id of the Space
-	 * @return Space objects
+	 * @return Space object
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
@@ -230,6 +232,22 @@ public class WWClient implements Serializable {
 	public Space getSpaceById(String spaceId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpaceById(spaceId);
+	}
+
+	/**
+	 * Easy helper method to get a Space by using a SpaceGraphQLQuery
+	 * 
+	 * @param query
+	 *            SpaceGraphQLQuery for the call
+	 * @return Space object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Space getSpaceWithQuery(SpaceGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpaceWithQuery(query);
 	}
 
 	/**
@@ -279,6 +297,22 @@ public class WWClient implements Serializable {
 	public Message getMessageById(String messageId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getMessageById(messageId);
+	}
+
+	/**
+	 * Easy helper method to get a Message and its details with a query
+	 * 
+	 * @param query
+	 *            MessageGraphQLQuery containing query parameters
+	 * @return Message details of the Message
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Message getMessageWithQuery(MessageGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMessageWithQuery(query);
 	}
 
 	/**

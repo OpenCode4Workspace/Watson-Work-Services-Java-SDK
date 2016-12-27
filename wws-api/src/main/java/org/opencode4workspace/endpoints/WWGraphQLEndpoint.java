@@ -83,6 +83,23 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
+	 * getSpace by using a SpaceGraphQLQuery
+	 * 
+	 * @param query
+	 *            GraphQLQuery for the call
+	 * @return Space details
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Space getSpaceWithQuery(SpaceGraphQLQuery query) throws WWException {
+		setRequest(new GraphQLRequest(query));
+		executeRequest();
+		return (Space) getResultContainer().getData().getSpace();
+	}
+
+	/**
 	 * Simplified access method, to load GraphQL query for getting Me object
 	 * 
 	 * @return Person object relating to "me"
@@ -196,6 +213,23 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	public Message getMessageById(String messageId) throws WWException {
 		MessageGraphQLQuery queryObject = MessageGraphQLQuery.buildMessageGraphQueryWithMessageId(messageId);
 		setRequest(new GraphQLRequest(queryObject));
+		executeRequest();
+		return (Message) getResultContainer().getData().getMessage();
+	}
+
+	/**
+	 * Get a Message by using a messageId
+	 * 
+	 * @param query
+	 *            MessageGraphQLQuery with selection and return criteria
+	 * @return Message details
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Message getMessageWithQuery(MessageGraphQLQuery query) throws WWException {
+		setRequest(new GraphQLRequest(query));
 		executeRequest();
 		return (Message) getResultContainer().getData().getMessage();
 	}
