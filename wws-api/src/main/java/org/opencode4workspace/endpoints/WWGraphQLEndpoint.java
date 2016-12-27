@@ -99,7 +99,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Simplified access method, to load GraphQL query for getting Me object
+	 * Simplified access method, to load GraphQL query for getting Person by ID or "me" if personId is blank
 	 * 
 	 * @param personId
 	 *            String, WWS id of the Person to return
@@ -109,8 +109,24 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * 
 	 * @since 0.5.0
 	 */
-	public Person getPerson(String personId) throws WWException {
+	public Person getPersonById(String personId) throws WWException {
 		PersonGraphQLQuery queryObject = PersonGraphQLQuery.buildPersonQueryById(personId);
+		return getPersonWithQuery(queryObject);
+	}
+
+	/**
+	 * Simplified access method, to load GraphQL query for getting Person by email or "me" if personId is blank
+	 * 
+	 * @param personEmail
+	 *            String, WWS email of the Person to return
+	 * @return Person for relevant email
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Person getPersonByEmail(String personEmail) throws WWException {
+		PersonGraphQLQuery queryObject = PersonGraphQLQuery.buildPersonQueryById(personEmail);
 		return getPersonWithQuery(queryObject);
 	}
 

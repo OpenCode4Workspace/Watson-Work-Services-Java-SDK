@@ -157,4 +157,18 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 		super(METHOD, query);
 	}
 
+	/**
+	 * Creates a People query with a passed operation name and pre-populated ObjectDataSenderBuilder query object
+	 * 
+	 * @param operationName
+	 *            String operation name, e.g. METHOD
+	 * @param query
+	 *            ObjectDataSenderBuilder containing the query settings
+	 * 
+	 * @since 0.5.0
+	 */
+	public PeopleGraphQLQuery(String operationName, ObjectDataSenderBuilder query) {
+		super(operationName, query);
+	}
+
 }

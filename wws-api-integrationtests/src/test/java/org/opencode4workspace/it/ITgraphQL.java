@@ -76,8 +76,7 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Person me = ep.getMe();
+		Person me = client.getMe();
 		assert (myDisplayName.equals(me.getDisplayName()));
 	}
 
@@ -89,8 +88,7 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		Person person = ep.getPerson(profileId);
+		Person person = client.getPersonById(profileId);
 		assert (myDisplayName.equals(person.getDisplayName()));
 	}
 
@@ -152,6 +150,27 @@ public class ITgraphQL {
 		assert (peopleResult.size() == 2);
 		assert (myDisplayName.equals(peopleResult.get(0).getDisplayName()));
 		assert (myAppName.equals(peopleResult.get(1).getDisplayName()));
+	}
+
+	@Test(enabled = false)
+	@Parameters({ "appId", "appSecret" })
+	public void testGetPeopleFirstTen(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
+		query.addAttribute(BasicPaginationEnum.FIRST.getLabel(), 10);
+		query.addField(PersonFields.DISPLAY_NAME);
+
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ep.setRequest(new GraphQLRequest(new PeopleGraphQLQuery(query)));
+		ep.executeRequest();
+		System.out.println(ep.getResultContent());
+		// Following line throws error
+		List<Person> peopleResult = ep.getResultContainer().getData().getPeople().getItems();
+
+		assert (peopleResult.size() == 2);
 	}
 
 	@Test(enabled = false)

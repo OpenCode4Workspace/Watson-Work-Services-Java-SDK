@@ -2,6 +2,7 @@ package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
 
+import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 
@@ -26,37 +27,53 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public SpacesContainer getSpaces() {
+	public SpacesContainer getSpaces() throws WWException {
+		if (null == spaces) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return spaces;
 	}
 
 	/**
 	 * @return Person object for current user
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public Person getMe() {
+	public Person getMe() throws WWException {
+		if (null == me) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return me;
 	}
 
 	/**
 	 * @return Person object for a given user
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public Person getPerson() {
+	public Person getPerson() throws WWException {
+		if (null == person) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return person;
 	}
 
 	/**
 	 * @return ConversationWrapper for a given conversation
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public ConversationWrapper getConversation() {
+	public ConversationWrapper getConversation() throws WWException {
+		if (null == conversation) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return conversation;
 	}
 
@@ -72,28 +89,40 @@ public class DataContainer implements Serializable {
 
 	/**
 	 * @return SpaceWrapper for a given Workspace
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public SpaceWrapper getSpace() {
+	public SpaceWrapper getSpace() throws WWException {
+		if (null == space) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return space;
 	}
 
 	/**
 	 * @return MemberItemContainer for people resulting from a query
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public MembersContainer getPeople() {
+	public MembersContainer getPeople() throws WWException {
+		if (null == people) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return people;
 	}
 
 	/**
 	 * @return Message resulting from a query
+	 * @throws WWException
 	 * 
 	 * @since 0.5.0
 	 */
-	public Message getMessage() {
+	public Message getMessage() throws WWException {
+		if (null == message) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
 		return message;
 	}
 

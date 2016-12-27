@@ -282,7 +282,7 @@ public class WWClient implements Serializable {
 	}
 
 	/**
-	 * Easy helper method to get a Person with a person id
+	 * Easy helper method to get a Person with a person id. The method gets "me" if id is blank.
 	 * 
 	 * @param personId
 	 *            String id of the person
@@ -294,7 +294,23 @@ public class WWClient implements Serializable {
 	 */
 	public Person getPersonById(String personId) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.getPerson(personId);
+		return ep.getPersonById(personId);
+	}
+
+	/**
+	 * Easy helper method to get a Person with a person email. The method gets "me" if email is blank.
+	 * 
+	 * @param personEmail
+	 *            String email of the person
+	 * @return Person object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public Person getPersonByEmail(String personEmail) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getPersonById(personEmail);
 	}
 
 	/**
