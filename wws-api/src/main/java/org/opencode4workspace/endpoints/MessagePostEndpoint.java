@@ -51,16 +51,13 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 		CloseableHttpResponse response = null;
 		try {
 			StringEntity postPayload = new StringEntity(new RequestBuilder<AppMessage>(AppMessage.class).buildJson(message), "UTF-8");
-			System.out.println("Post payload: " + EntityUtils.toString(postPayload));
 			post.setEntity(postPayload);
 			response = client.execute(post);
 			if (response.getStatusLine().getStatusCode() == 201) {
 				String content = EntityUtils.toString(response.getEntity());
-				System.out.println(content);
 				MessageResponse messageResponse = new ResultParser<MessageResponse>(MessageResponse.class).parse(content);
 				return messageResponse;
 			} else {
-				System.out.println("Response was: " + EntityUtils.toString(response.getEntity()));
 				throw new WWException("Execution failed: " + response.getStatusLine().getReasonPhrase());
 			}
 		} catch (Exception e) {

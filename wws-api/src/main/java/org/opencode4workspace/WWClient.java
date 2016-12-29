@@ -9,6 +9,7 @@ import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Message;
+import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
@@ -18,6 +19,8 @@ import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
+import org.opencode4workspace.endpoints.AppMessage;
+import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
 
@@ -455,6 +458,21 @@ public class WWClient implements Serializable {
 	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
+	}
+	
+	/**
+	 * Easy helper method to post a Application Message to a Space
+	 * @param message
+	 *              Application Message (use AppMessageBuilder) to post
+	 * @param spaceId
+	 *              ID of the Space, where the message should be posted
+	 * @return MessageResponse
+	 * @throws WWException
+	 *              contains an error message, if the post was unsuccessful
+	 */
+	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
+		MessagePostEndpoint ep = new MessagePostEndpoint(this);
+		return ep.postMessage(message, spaceId);
 	}
 
 }

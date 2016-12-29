@@ -9,6 +9,7 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
@@ -16,10 +17,14 @@ import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
+import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
+import org.opencode4workspace.graphql.DataContainer;
+import org.opencode4workspace.graphql.ErrorContainer;
+import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -128,7 +133,7 @@ public class ITgraphQL {
 		assert (space.getMembers().size() > 0);
 	}
 
-	@Test(enabled = true)
+	@Test(enabled = false)
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName", "myAppName" })
 	public void testGetPeople(String appId, String appSecret, String profileId, String myDisplayName, String myAppName)
 			throws UnsupportedEncodingException, WWException {
@@ -192,10 +197,50 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-
+		
 		Message message = client.getMessageById(messageId);
 		assert (!"".equals(message.getContentType()));
 		assert (myDisplayName.equals(message.getCreatedBy().getDisplayName()));
 	}
+	
+	@Test(enabled=true)
+	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
+	public void personTestWithId(String appId, String appSecret, String personId, String myDisplayName) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		PersonGraphQLQuery queryObject = PersonGraphQLQuery.buildPersonQueryById(personId);
+		ep.setRequest(new GraphQLRequest(queryObject));
+		ep.executeRequest();
+		assert (null == ep.getResultContainer().getErrors());
+		DataContainer container = ep.getResultContainer().getData();
+		assert (myDisplayName.equals(container.getPerson().getDisplayName()));
+	}
 
+	@Test(enabled=true)
+	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
+	public void peopleTest(String appId, String appSecret, String personId, String myDisplayName) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ObjectDataSenderBuilder personNames = new ObjectDataSenderBuilder(Person.PEOPLE_QUERY_OBJECT_NAME, true);
+		personNames.addAttribute(BasicPaginationEnum.FIRST, 10)
+				.addField(PersonFields.DISPLAY_NAME)
+				.addField(PersonFields.EMAIL)
+				.addField(PersonFields.EXT_ID)
+				.addField(PersonFields.CREATED)
+				.addField(PersonFields.UPDATED)
+				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY))
+				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
+		ep.setRequest(new GraphQLRequest(personNames, "getProfileNames"));
+		ep.executeRequest();
+		GraphResultContainer results = ep.getResultContainer();
+		assert (null != results.getErrors());
+		ErrorContainer errors = results.getErrors().get(0);
+		assert "500 Internal Server Error".equals(errors.getMessage());
+		assert "people".equals(errors.getField().get("name"));
+		assert "PersonCollection".equals(errors.getField().get("type"));
+	}
 }

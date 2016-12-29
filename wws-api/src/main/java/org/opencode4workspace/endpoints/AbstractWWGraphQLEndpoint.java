@@ -193,7 +193,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 */
 	private HttpPost preparePost() {
 		HttpPost post = new HttpPost(WWDefinedEndpoints.GRAPHQL);
-		post.addHeader("jwt", getClient().getJWTToken());
+		post.addHeader("Authorization", "Bearer " + getClient().getJWTToken());
 		post.addHeader("content-type", ContentType.APPLICATION_JSON.toString());
 		return post;
 	}
