@@ -43,6 +43,8 @@ public class SuperclassExclusionStrategy implements ExclusionStrategy {
 	 * @param fieldName
 	 *            String, property in the super class to check for
 	 * @return boolean, whether the field being tested is in the superclass
+	 * 
+	 * @since 0.5.0
 	 */
 	private boolean isFieldInSuperclass(Class<?> subclass, String fieldName) {
 		Class<?> superclass = subclass.getSuperclass();
@@ -68,6 +70,8 @@ public class SuperclassExclusionStrategy implements ExclusionStrategy {
 	 * @param fieldName
 	 *            String, the property to retrieve
 	 * @return Field, corresponding to the property being retrieved
+	 * 
+	 * @since 0.5.0
 	 */
 	private Field getField(Class<?> theClass, String fieldName) {
 		try {

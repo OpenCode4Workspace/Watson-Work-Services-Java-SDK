@@ -4,3 +4,5 @@ wws-api/.classpath
 .settings/
 wws-api-integrationtests/.classpath
 wws-api-integrationtests/test-output/
+snapshots
+wws-api-assembly/target

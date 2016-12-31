@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.opencode4workspace.watson-work-services</groupId>
+		<artifactId>wws.parent</artifactId>
+		<version>0.5.0</version>
+	</parent>
+	<artifactId>wws-api-assembly</artifactId>
+	<packaging>pom</packaging>
+	<name>Assembly of WWS API</name>
+	<properties>
+		<kit.parentDir>${project.basedir}/../</kit.parentDir>
+		<kit.workingDir>${project.build.directory}</kit.workingDir>
+		<kit.finalAssemblyFolder>${kit.workingDir}/kit</kit.finalAssemblyFolder>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>maven-download-plugin</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<execution>
+						<id>download-sources</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>${kit.sourceCodeUrl}${kit.sourceBranch}</url>
+							<unpack>false</unpack>
+							<skipCache>true</skipCache>
+							<outputFileName>org.opencode4workspace.sources.zip</outputFileName>
+							<outputDirectory>${kit.workingDir}/sources/WWSAPI</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>removedownloadsAndResults</id>
+						<phase>clean</phase>
+						<configuration>
+							<target>
+								<delete dir="${kit.workingDir}/sources" />
+								<delete dir="${kit.parentDir}/${kit.result}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>toDistribution</id>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<copy todir="${kit.parentDir}/${kit.result}">
+									<fileset dir="${kit.finalAssemblyFolder}">
+									</fileset>
+								</copy>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptor>assembly.xml</descriptor>
+							<finalName>org.opencode4workspace-${kit.buildVersion}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<outputDirectory>${kit.finalAssemblyFolder}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

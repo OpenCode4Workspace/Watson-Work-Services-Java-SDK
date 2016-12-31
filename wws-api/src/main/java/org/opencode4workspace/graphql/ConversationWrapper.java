@@ -9,13 +9,13 @@ import org.opencode4workspace.bo.Message;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Serializable wrapper for a Conversation
+ *        Serializable wrapper for a Conversation. This is required to navigate down to the Messages - getMessages will skip the "items" child of the resulting JSON for the Conversation
  *
  */
 public class ConversationWrapper extends Conversation {
 
 	private static final long serialVersionUID = 1L;
-	private MessageContainer messages = new MessageContainer();
+	private MessagesContainer messages = new MessagesContainer();
 
 	/*
 	 * (non-Javadoc)
@@ -29,7 +29,12 @@ public class ConversationWrapper extends Conversation {
 		}
 		return messages.getItems();
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.bo.Conversation#setMessages(java.util.List)
+	 */
 	@Override
 	public void setMessages(List<Message> messagelist) {
 		if (messages != null) {

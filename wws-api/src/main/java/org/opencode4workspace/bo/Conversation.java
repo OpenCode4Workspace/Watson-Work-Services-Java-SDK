@@ -20,7 +20,7 @@ public class Conversation implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Conversation. See {@linkplain WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Conversation. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum ConversationFields implements WWFieldsAttributesInterface {
@@ -67,11 +67,11 @@ public class Conversation implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Conversation. See {@linkplain WWChildInterface}
+	 *        Enum for scalar properties of a Conversation. See {@link WWChildInterface}
 	 *
 	 */
 	public enum ConversationChildren implements WWChildInterface {
-		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
+		MESSAGES("messages", Object.class), CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -112,16 +112,19 @@ public class Conversation implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	public static final String CONVERSATION_QUERY_OBJECT_NAME = "conversation";
 	private String id;
 	private Date created;
 	private Date updated;
-	private Profile createdBy;
-	private Profile updatedBy;
+	private Person createdBy;
+	private Person updatedBy;
 	@GraphQLJsonPropertyHelper(jsonProperty = "message")
 	private List<Message> messageList;
 
 	/**
 	 * @return String, id of the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getId() {
 		return id;
@@ -130,6 +133,8 @@ public class Conversation implements Serializable {
 	/**
 	 * @param id
 	 *            String, id of the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -137,6 +142,8 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @return Date the Conversation was created
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getCreated() {
 		return created;
@@ -145,6 +152,8 @@ public class Conversation implements Serializable {
 	/**
 	 * @param created
 	 *            Date the Conversation was created
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setCreated(Date created) {
 		this.created = created;
@@ -152,6 +161,8 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @return Date the Conversation was last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getUpdated() {
 		return updated;
@@ -160,6 +171,8 @@ public class Conversation implements Serializable {
 	/**
 	 * @param updated
 	 *            Date the Conversation was last updated
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setUpdated(Date updated) {
 		this.updated = updated;
@@ -167,36 +180,46 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @return Person the Conversation was created by
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getCreatedBy() {
+	public Person getCreatedBy() {
 		return createdBy;
 	}
 
 	/**
 	 * @param createdBy
 	 *            Person the Conversation was created by
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setCreatedBy(Profile createdBy) {
+	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	/**
 	 * @return Person the Conversation was last updated by
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getUpdatedBy() {
+	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
 	/**
 	 * @param updatedBy
 	 *            Person the Conversation was last updated by
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setUpdatedBy(Profile updatedBy) {
+	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
 	/**
-	 * @return List of {@linkplain Message} objects corresponding to the messages in this Conversation
+	 * @return List of {@link Message} objects corresponding to the messages in this Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Message> getMessages() {
 		return messageList;
@@ -204,7 +227,7 @@ public class Conversation implements Serializable {
 
 	/**
 	 * @param messages
-	 *            List of {@linkplain Message} objects corresponding to the messages in this Conversation
+	 *            List of {@link Message} objects corresponding to the messages in this Conversation
 	 */
 	public void setMessages(List<Message> messages) {
 		this.messageList = messages;

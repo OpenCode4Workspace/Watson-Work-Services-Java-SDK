@@ -21,7 +21,7 @@ public class AuthenticationResult {
 	private final Date expireDate;
 
 	/**
-	 * Constructs AuthenticationResult from parameters. Typically called from {@linkplain #buildFromToken(AppToken)}
+	 * Constructs AuthenticationResult from parameters. Typically called from {@link #buildFromToken(AppToken)}
 	 * 
 	 * @param jwtToken
 	 *            String JWT token for future requests
@@ -91,6 +91,8 @@ public class AuthenticationResult {
 	 * Gets date when the authentication result was created
 	 * 
 	 * @return Date authentication result was created
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getCreated() {
 		return created;
@@ -144,7 +146,7 @@ public class AuthenticationResult {
 	 * Builds an AuthenticationResult object from the AppToken object constructed from JSON returned by the authentication process
 	 * 
 	 * @param appToken
-	 *            {@linkplain AppToken} object constructed from JSON returned by authentication process
+	 *            {@link AppToken} object constructed from JSON returned by authentication process
 	 * @return new AuthenticationResult object with contents extracted from AppToken
 	 * 
 	 * @since 0.5.0

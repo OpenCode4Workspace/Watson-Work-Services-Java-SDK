@@ -1,5 +1,5 @@
 ﻿Watson Work Services Java SDK
-Copyright 2016 Paul Withers, Christian Guedeman, WebGate Consulting AG
+Copyright 2016 Paul Withers, Christian Guedemann, WebGate Consulting AG
 
 This product includes software contributed to 
 OpenNTF Alliance (http://www.OpenNTF.org/)
@@ -7,20 +7,20 @@ OpenNTF Alliance (http://www.OpenNTF.org/)
 List of third party software used in this project:
 
 Runtime:
-	- Apache Commons Codec, Verison 1.10 (http://commons.apache.org/proper/commons-codec/) under Apache V2.0 (http://www.apache.org/licenses/)
+	- Apache Commons Codec, Version 1.10 (http://commons.apache.org/proper/commons-codec/) under Apache V2.0 (http://www.apache.org/licenses/)
 
- 	- Apache HTTP Client, Verison 4.5.2 (http://hc.apache.org/httpcomponents-client-ga/) under Apache V2.0 (http://www.apache.org/licenses/)
+ 	- Apache HTTP Client, Version 4.5.2 (http://hc.apache.org/httpcomponents-client-ga/) under Apache V2.0 (http://www.apache.org/licenses/)
 
 	- Apache HTTP Core, Version 4.4.4 (http://hc.apache.org/httpcomponents-core-ga/index.html) under Apache V2.0 (http://www.apache.org/licenses/)
 
-	- Apache Commons Logging, Verison 1.2 (http://commons.apache.org/proper/commons-logging/) under Apache V2.0 (http://www.apache.org/licenses/)
+	- Apache Commons Logging, Version 1.2 (http://commons.apache.org/proper/commons-logging/) under Apache V2.0 (http://www.apache.org/licenses/)
 
 	- Google GSON, Version 2.3.1 (https://github.com/google/gson) under Apache V2.0 (http://www.apache.org/licenses/)
 
 	
  Test & Development:
 
-	- Apache Commons IO, Verison 2.5 (http://commons.apache.org/proper/commons-io/) under Apache V2.0 (http://www.apache.org/licenses/)
+	- Apache Commons IO, Version 2.5 (http://commons.apache.org/proper/commons-io/) under Apache V2.0 (http://www.apache.org/licenses/)
 
  	- EasyMock, Version 3.4 (http://easymock.org/) under Apache V2.0 (http://www.apache.org/licenses/)
 

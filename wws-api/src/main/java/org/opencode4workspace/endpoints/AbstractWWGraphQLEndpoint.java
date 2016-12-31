@@ -16,9 +16,10 @@ import org.opencode4workspace.json.ResultParser;
 
 /**
  * @author Paul Withers
+ * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@linkplain #parseResultContainer()}
+ *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@link #parseResultContainer()}
  *        method needs to be overloaded.
  *
  */
@@ -27,10 +28,14 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	private final WWClient client;
 	private GraphQLRequest request;
 	private GraphResultContainer resultContainer;
+	private String resultContent;
+	private Boolean profileDump = false;
 
 	/**
 	 * @param client
 	 *            WWClient containing authentication details and token
+	 * 
+	 * @since 0.5.0
 	 */
 	public AbstractWWGraphQLEndpoint(WWClient client) {
 		this.client = client;
@@ -50,6 +55,8 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * Tests the token against its expireDate.
 	 * 
 	 * @return boolean, whether or not the token should be valid
+	 * 
+	 * @since 0.5.0
 	 */
 	private boolean isShouldBeValid() {
 		if (getClient().isValid()) {
@@ -115,10 +122,19 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		try {
 			StringEntity postPayload = new StringEntity(new RequestBuilder<GraphQLRequest>(GraphQLRequest.class).buildJson(request), "UTF-8");
 			post.setEntity(postPayload);
+			if (getProfileDump()) {
+				System.out.println("[WWS Profiler] Query is " + postPayload);
+			}
+			long start = System.nanoTime();
 			response = client.execute(post);
+			if (getProfileDump()) {
+				long elapsed = System.nanoTime() - start;
+				System.out.println("[WWS Profiler] Query took " + elapsed / 1000000 + "ms");
+			}
 			if (response.getStatusLine().getStatusCode() == 200) {
 				// TODO: Handle if we need to re-authenticate
 				String content = EntityUtils.toString(response.getEntity());
+				setResultContent(content);
 				setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content));
 			} else {
 				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
@@ -139,6 +155,24 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#getResultContent()
+	 */
+	public String getResultContent() {
+		return resultContent;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setResultContent(java.lang.String)
+	 */
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#parseResultContainer()
 	 */
 	@Override
@@ -154,12 +188,32 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * Prepares the HttpPost with relevant headers - JWT Token and Content-Type
 	 * 
 	 * @return HttpPost containing the relevant headers
+	 * 
+	 * @since 0.5.0
 	 */
 	private HttpPost preparePost() {
 		HttpPost post = new HttpPost(WWDefinedEndpoints.GRAPHQL);
-		post.addHeader("jwt", getClient().getJWTToken());
+		post.addHeader("Authorization", "Bearer " + getClient().getJWTToken());
 		post.addHeader("content-type", ContentType.APPLICATION_JSON.toString());
 		return post;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#getProfileDump()
+	 */
+	public Boolean getProfileDump() {
+		return profileDump;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setProfileDump(java.lang.Boolean)
+	 */
+	public void setProfileDump(Boolean profileDump) {
+		this.profileDump = profileDump;
 	}
 
 }

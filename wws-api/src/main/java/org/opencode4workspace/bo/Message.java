@@ -21,7 +21,7 @@ public class Message implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Message. See {@linkplain WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Message. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum MessageFields implements WWFieldsAttributesInterface {
@@ -69,11 +69,11 @@ public class Message implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Message. See {@linkplain WWChildInterface}
+	 *        Enum for scalar properties of a Message. See {@link WWChildInterface}
 	 *
 	 */
 	public enum MessageChildren implements WWChildInterface {
-		CREATED_BY("createdBy", Profile.class), UPDATED_BY("updatedBy", Profile.class);
+		CREATED_BY("createdBy", Person.class), UPDATED_BY("updatedBy", Person.class);
 
 		private String label;
 		private Class<?> childEnumClass;
@@ -113,18 +113,21 @@ public class Message implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	public static final String ONE_MESSAGE_QUERY_OBJECT_NAME = "message";
 	private String id;
 	// TODO: Make this an enum
 	private String contentType;
 	private String content;
 	private Date created;
 	private Date updated;
-	private Profile createdBy;
-	private Profile updatedBy;
+	private Person createdBy;
+	private Person updatedBy;
 	private List<String> annotations;
 
 	/**
 	 * @return String, id of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getId() {
 		return id;
@@ -133,6 +136,8 @@ public class Message implements Serializable {
 	/**
 	 * @param id
 	 *            String, id of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -140,6 +145,8 @@ public class Message implements Serializable {
 
 	/**
 	 * @return String, content type of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getContentType() {
 		return contentType;
@@ -148,6 +155,8 @@ public class Message implements Serializable {
 	/**
 	 * @param contentType
 	 *            String, content type of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
@@ -155,6 +164,8 @@ public class Message implements Serializable {
 
 	/**
 	 * @return String, content of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public String getContent() {
 		return content;
@@ -163,6 +174,8 @@ public class Message implements Serializable {
 	/**
 	 * @param content
 	 *            String, content of the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setContent(String content) {
 		this.content = content;
@@ -170,6 +183,8 @@ public class Message implements Serializable {
 
 	/**
 	 * @return Date the Message was written to the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getCreated() {
 		return created;
@@ -178,6 +193,8 @@ public class Message implements Serializable {
 	/**
 	 * @param created
 	 *            Date the Message was written to the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setCreated(Date created) {
 		this.created = created;
@@ -185,6 +202,8 @@ public class Message implements Serializable {
 
 	/**
 	 * @return Date the Message was last updated in the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public Date getUpdated() {
 		return updated;
@@ -193,6 +212,8 @@ public class Message implements Serializable {
 	/**
 	 * @param updated
 	 *            Date the Message was last updated in the Conversation
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setUpdated(Date updated) {
 		this.updated = updated;
@@ -200,36 +221,46 @@ public class Message implements Serializable {
 
 	/**
 	 * @return Person who created the Message
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getCreatedBy() {
+	public Person getCreatedBy() {
 		return createdBy;
 	}
 
 	/**
 	 * @param createdBy
 	 *            Person who created the Message
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setCreatedBy(Profile createdBy) {
+	public void setCreatedBy(Person createdBy) {
 		this.createdBy = createdBy;
 	}
 
 	/**
 	 * @return Person who last updated the Message
+	 * 
+	 * @since 0.5.0
 	 */
-	public Profile getUpdatedBy() {
+	public Person getUpdatedBy() {
 		return updatedBy;
 	}
 
 	/**
 	 * @param updatedBy
 	 *            Person who last updated the Message
+	 * 
+	 * @since 0.5.0
 	 */
-	public void setUpdatedBy(Profile updatedBy) {
+	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
 	/**
 	 * @return List of String annotations for the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<String> getAnnotations() {
 		return annotations;
@@ -238,13 +269,17 @@ public class Message implements Serializable {
 	/**
 	 * @param annotations
 	 *            List of String annotations for the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public void setAnnotations(List<String> annotations) {
 		this.annotations = annotations;
 	}
 
 	/**
-	 * @return List of basic {@linkplain Annotation} objects corresponding to the annotations for the Message
+	 * @return List of basic {@link Annotation} objects corresponding to the annotations for the Message
+	 * 
+	 * @since 0.5.0
 	 */
 	public List<Annotation> getGenericAnnotations() {
 		List<Annotation> annos = new ArrayList<Annotation>();

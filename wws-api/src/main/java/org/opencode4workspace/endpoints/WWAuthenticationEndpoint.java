@@ -69,7 +69,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 * Creates a Post request and adds required header details
 	 * 
 	 * @param basicAuth
-	 *            String, Authorization header constructed from {@linkplain WWClient#getAppCredentials()}
+	 *            String, Authorization header constructed from {@link WWClient#getAppCredentials()}
 	 * @return HttpPost containing endpoint for authentication and required headers
 	 * 
 	 * @since 0.5.0
