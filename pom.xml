@@ -22,6 +22,10 @@
 		<kit.result>snapshots</kit.result>
 		<kit.sourceCodeUrl>https://stash.openntf.org/plugins/servlet/archive/projects/WWAPI/repos/watson-work-services-java-sdk?at=refs%2Fheads%2F</kit.sourceCodeUrl>
 		<kit.sourceBranch>develop</kit.sourceBranch>
+		<sonar.language>java</sonar.language>
+		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 	</properties>
 	<profiles>
 		<profile>
@@ -79,6 +83,24 @@
 						<id>parse-version</id>
 						<goals>
 							<goal>parse-version</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5.201505241946</version>
+				<configuration>
+					<includes>
+						<include>org.opencode4workspace.*</include>
+					</includes>
+					<destFile>${project.basedir}/../target/jacoco.exec</destFile>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 				</executions>
