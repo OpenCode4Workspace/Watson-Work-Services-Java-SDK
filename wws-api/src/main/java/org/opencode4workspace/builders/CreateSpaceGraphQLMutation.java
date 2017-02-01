@@ -136,10 +136,10 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	}
 
 	/**
-	 * Creates a createSpace query with pre-populated ObjectDataSenderBuilder objects
+	 * Creates a createSpace query with pre-populated InputDataSenderBuilder objects
 	 * 
-	 * @param query
-	 *            ObjectDataSenderBuilder containing the query settings
+	 * @param input
+	 *            InputDataSenderBuilder containing the query space creation criteria
 	 * 
 	 * @since 0.6.0
 	 */
@@ -150,7 +150,9 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	/**
 	 * Creates a createSpace query with pre-populated InputDataSenderBuilder and ObjectDataSenderBuilder objects
 	 * 
-	 * @param query
+	 * @param input
+	 *            InputDataSenderBuilder containing the space creation criteria
+	 * @param returnObject
 	 *            ObjectDataSenderBuilder containing the query settings
 	 * 
 	 * @since 0.6.0

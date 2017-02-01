@@ -23,11 +23,11 @@ public interface IGraphQLMutation {
 	String getOperationName();
 
 	/**
-	 * @return ObjectDataSenderBuilder containing the query settings for the result of the mutation
+	 * @return IDataSenderBuilder containing the query settings for the result of the mutation
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder getReturnObject();
+	IDataSenderBuilder getReturnObject();
 
 	/**
 	 * @return InputDataSenderBuilder containing the details to update via the mutation
@@ -157,49 +157,49 @@ public interface IGraphQLMutation {
 	 * 
 	 * @param key
 	 *            String field to add to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
+	 * @return IDataSenderBuilder queryObject of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder addReturnField(String key);
+	IDataSenderBuilder addReturnField(String key);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addField(WWFieldsAttributesInterface)}
 	 * 
 	 * @param enumName
 	 *            WWFIeldAttributesInterface field to add to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
+	 * @return IDataSenderBuilder queryObject of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder addReturnField(WWFieldsAttributesInterface enumName);
+	IDataSenderBuilder addReturnField(WWFieldsAttributesInterface enumName);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeField(String)}
 	 * 
 	 * @param key
 	 *            String field to remove from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
+	 * @return IDataSenderBuilder queryObject of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder removeReturnField(String key);
+	IDataSenderBuilder removeReturnField(String key);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeField(WWFieldsAttributesInterface)}
 	 * 
 	 * @param enumName
 	 *            WWFieldsAttributesInterface field to remove from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder queryObject of this Query
+	 * @return IDataSenderBuilder queryObject of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder removeReturnField(WWFieldsAttributesInterface enumName);
+	IDataSenderBuilder removeReturnField(WWFieldsAttributesInterface enumName);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#getChildren()}
 	 * 
-	 * @return List of DataSenderBuilders corresponding to the children of the queryObject of this Query
+	 * @return List of IDataSenderBuilders corresponding to the children of the queryObject of this Query
 	 * 
 	 * @since 0.6.0
 	 */
@@ -210,33 +210,33 @@ public interface IGraphQLMutation {
 	 * 
 	 * @param children
 	 *            List of DataSenderBuilders corresponding to the children of the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
+	 * @return IDataSenderBuilder, the query object of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder setReturnChildren(List<IDataSenderBuilder> children);
+	IDataSenderBuilder setReturnChildren(List<IDataSenderBuilder> children);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#addChild(IDataSenderBuilder)}
 	 * 
 	 * @param child
 	 *            DataSenderBuilder for the child to be added to the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
+	 * @return IDataSenderBuilder, the query object of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder addReturnChild(IDataSenderBuilder child);
+	IDataSenderBuilder addReturnChild(IDataSenderBuilder child);
 
 	/**
 	 * Helper method, to give easy access to {@link ObjectDataSenderBuilder#removeChild(IDataSenderBuilder)}
 	 * 
 	 * @param child
 	 *            DataSenderBuilder for the child to be removed from the queryObject of this Query
-	 * @return ObjectDataSenderBuilder, the query object of this Query
+	 * @return IDataSenderBuilder, the query object of this Query
 	 * 
 	 * @since 0.6.0
 	 */
-	ObjectDataSenderBuilder removeReturnChild(IDataSenderBuilder child);
+	IDataSenderBuilder removeReturnChild(IDataSenderBuilder child);
 
 	/*
 	 * (non-Javadoc)

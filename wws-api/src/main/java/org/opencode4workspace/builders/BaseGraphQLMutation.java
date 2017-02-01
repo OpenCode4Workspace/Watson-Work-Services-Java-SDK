@@ -19,7 +19,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 
 	private static final long serialVersionUID = 1L;
 	private String operationName;
-	private ObjectDataSenderBuilder returnObject;
+	private IDataSenderBuilder returnObject;
 	private InputDataSenderBuilder inputObject;
 
 	/**
@@ -27,10 +27,12 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 * 
 	 * @param operationName
 	 *            String, operation name
+	 * @param inputObject
+	 *            InputDataSenderBuilder containing the input to pass to the mutation
 	 * @param returnObject
-	 *            ObjectDataSenderBuilder containing the query settings
+	 *            IDataSenderBuilder containing the query settings
 	 */
-	public BaseGraphQLMutation(String operationName, InputDataSenderBuilder inputObject, ObjectDataSenderBuilder returnObject) {
+	public BaseGraphQLMutation(String operationName, InputDataSenderBuilder inputObject, IDataSenderBuilder returnObject) {
 		this.operationName = operationName;
 		this.returnObject = returnObject;
 		this.inputObject = inputObject;
@@ -52,7 +54,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 * @see org.opencode4workspace.builders.IGraphQLMutation#getReturnObject()
 	 */
 	@Override
-	public ObjectDataSenderBuilder getReturnObject() {
+	public IDataSenderBuilder getReturnObject() {
 		return returnObject;
 	}
 
@@ -143,7 +145,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public String getReturnObjectName() {
-		return returnObject.getObjectName();
+		return ((ObjectDataSenderBuilder) returnObject).getObjectName();
 	}
 
 	/*
@@ -153,7 +155,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public void setReturnObjectName(String objectName) {
-		returnObject.setObjectName(objectName);
+		((ObjectDataSenderBuilder) returnObject).setObjectName(objectName);
 	}
 
 	/*
@@ -163,7 +165,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public List<String> getReturnFieldsList() {
-		return returnObject.getFieldsList();
+		return ((ObjectDataSenderBuilder) returnObject).getFieldsList();
 	}
 
 	/*
@@ -173,7 +175,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public void setReturnFieldsList(List<String> fieldsList) {
-		returnObject.setFieldsList(fieldsList);
+		((ObjectDataSenderBuilder) returnObject).setFieldsList(fieldsList);
 	}
 
 	/*
@@ -183,7 +185,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder addReturnField(String field) {
-		return returnObject.addField(field);
+		return ((ObjectDataSenderBuilder) returnObject).addField(field);
 	}
 
 	/*
@@ -193,7 +195,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder addReturnField(WWFieldsAttributesInterface field) {
-		return returnObject.addField(field);
+		return ((ObjectDataSenderBuilder) returnObject).addField(field);
 	}
 
 	/*
@@ -203,7 +205,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder removeReturnField(String field) {
-		return returnObject.removeField(field);
+		return ((ObjectDataSenderBuilder) returnObject).removeField(field);
 	}
 
 	/*
@@ -213,7 +215,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder removeReturnField(WWFieldsAttributesInterface field) {
-		return returnObject.removeField(field);
+		return ((ObjectDataSenderBuilder) returnObject).removeField(field);
 	}
 
 	/*
@@ -223,7 +225,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public List<IDataSenderBuilder> getReturnChildren() {
-		return returnObject.getChildren();
+		return ((ObjectDataSenderBuilder) returnObject).getChildren();
 	}
 
 	/*
@@ -233,7 +235,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder setReturnChildren(List<IDataSenderBuilder> children) {
-		return returnObject.setChildren(children);
+		return ((ObjectDataSenderBuilder) returnObject).setChildren(children);
 	}
 
 	/*
@@ -243,7 +245,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder addReturnChild(IDataSenderBuilder child) {
-		return returnObject.addChild(child);
+		return ((ObjectDataSenderBuilder) returnObject).addChild(child);
 	}
 
 	/*
@@ -253,7 +255,7 @@ public class BaseGraphQLMutation implements Serializable, IGraphQLMutation {
 	 */
 	@Override
 	public ObjectDataSenderBuilder removeReturnChild(IDataSenderBuilder child) {
-		return returnObject.removeChild(child);
+		return ((ObjectDataSenderBuilder) returnObject).removeChild(child);
 	}
 
 	/*
