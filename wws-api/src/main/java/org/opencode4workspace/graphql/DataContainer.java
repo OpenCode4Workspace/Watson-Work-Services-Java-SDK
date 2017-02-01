@@ -24,10 +24,12 @@ public class DataContainer implements Serializable {
 	private SpaceWrapper space;
 	private MembersContainer people;
 	private Message message;
+	private DeleteSpaceContainer deleteSpace;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -39,8 +41,23 @@ public class DataContainer implements Serializable {
 	}
 
 	/**
+	 * @return boolean, whether or not deleteSpace call was successful
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public boolean getDeletionSuccessful() throws WWException {
+		if (null == deleteSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return deleteSpace.getSuccessful();
+	}
+
+	/**
 	 * @return Person object for current user
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -54,6 +71,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return Person object for a given user
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -67,6 +85,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return ConversationWrapper for a given conversation
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -90,6 +109,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return SpaceWrapper for a given Workspace
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -103,6 +123,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return MemberItemContainer for people resulting from a query
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -116,6 +137,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return Message resulting from a query
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */

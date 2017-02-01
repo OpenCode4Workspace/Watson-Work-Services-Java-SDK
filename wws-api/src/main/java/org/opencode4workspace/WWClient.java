@@ -241,6 +241,22 @@ public class WWClient implements Serializable {
 	}
 
 	/**
+	 * Easy helper method to delete a Space
+	 * 
+	 * @param id
+	 *            String id for the Space
+	 * @return boolean, whether or not the deletion was successful
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public boolean deleteSpace(String id) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.deleteSpace(id);
+	}
+
+	/**
 	 * Easy helper method to get a Space by a Space id
 	 * 
 	 * @param spaceId
