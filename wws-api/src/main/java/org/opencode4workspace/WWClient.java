@@ -219,6 +219,25 @@ public class WWClient implements Serializable {
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpacesWithQuery(query);
+
+	}
+
+	/**
+	 * Easy helper method to create a Space with a title and list of Members
+	 * 
+	 * @param title
+	 *            String title for the Space
+	 * @param members
+	 *            List of member IDs to be granted access to the Space
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpace(String title, List<String> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpace(title, members);
 	}
 
 	/**
@@ -459,16 +478,17 @@ public class WWClient implements Serializable {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
 	}
-	
+
 	/**
 	 * Easy helper method to post a Application Message to a Space
+	 * 
 	 * @param message
-	 *              Application Message (use AppMessageBuilder) to post
+	 *            Application Message (use AppMessageBuilder) to post
 	 * @param spaceId
-	 *              ID of the Space, where the message should be posted
+	 *            ID of the Space, where the message should be posted
 	 * @return MessageResponse
 	 * @throws WWException
-	 *              contains an error message, if the post was unsuccessful
+	 *             contains an error message, if the post was unsuccessful
 	 */
 	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);

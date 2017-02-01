@@ -9,6 +9,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 import org.opencode4workspace.json.RequestBuilder;
@@ -19,8 +20,8 @@ import org.opencode4workspace.json.ResultParser;
  * @author Christian Guedemann
  * @since 0.5.0
  * 
- *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@link #parseResultContainer()}
- *        method needs to be overloaded.
+ *        Abstract default implementation of IWWGraphQLEndpoint interface. In any overloaded object, a result needs constructing and passing into the object. The {@link #parseResultContainer()} method
+ *        needs to be overloaded.
  *
  */
 public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
@@ -136,6 +137,12 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 				String content = EntityUtils.toString(response.getEntity());
 				setResultContent(content);
 				setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content));
+				if (null != getResultContainer().getErrors()) {
+					ErrorContainer error = getResultContainer().getErrors().get(0);
+					if ("403 Forbidden".equals(error.getMessage())) {
+						throw new WWException("The operation was disallowed: " + error.getField().get("name"));
+					}
+				}
 			} else {
 				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
 			}

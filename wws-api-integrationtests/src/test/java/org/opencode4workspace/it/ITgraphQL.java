@@ -197,15 +197,16 @@ public class ITgraphQL {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		
+
 		Message message = client.getMessageById(messageId);
 		assert (!"".equals(message.getContentType()));
 		assert (myDisplayName.equals(message.getCreatedBy().getDisplayName()));
 	}
-	
-	@Test(enabled=true)
+
+	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
-	public void personTestWithId(String appId, String appSecret, String personId, String myDisplayName) throws WWException, UnsupportedEncodingException {
+	public void personTestWithId(String appId, String appSecret, String personId, String myDisplayName)
+			throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
@@ -219,9 +220,9 @@ public class ITgraphQL {
 		assert (myDisplayName.equals(container.getPerson().getDisplayName()));
 	}
 
-	@Test(enabled=true)
+	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
-	public void peopleTest(String appId, String appSecret, String personId, String myDisplayName) throws WWException, UnsupportedEncodingException {
+	public void peopleTest(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
@@ -242,5 +243,25 @@ public class ITgraphQL {
 		assert "500 Internal Server Error".equals(errors.getMessage());
 		assert "people".equals(errors.getField().get("name"));
 		assert "PersonCollection".equals(errors.getField().get("type"));
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret" })
+	public void createSpace(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		ArrayList<String> members = new ArrayList<String>();
+		members.add("8bf6c84f-961c-43df-836a-85748766912f");
+		members.add("5d1bf268-c363-4eea-baec-e2dbeaa2fb72");
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		try {
+			// This is forbidden for App access
+			Space space = ep.createSpace("Hello World", members);
+		} catch (Exception e) {
+			GraphResultContainer results = ep.getResultContainer();
+			assert (null != results.getErrors());
+			ErrorContainer errors = results.getErrors().get(0);
+			assert "403 Forbidden".equals(errors.getMessage());
+		}
 	}
 }
