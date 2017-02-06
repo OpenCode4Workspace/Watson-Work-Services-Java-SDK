@@ -100,7 +100,7 @@ public class SpaceCreateGraphQLMutation extends BaseGraphQLMutation {
 	 * @param members
 	 * @return CreateSpaceGraphQLMutation, the current object
 	 * @throws WWException
-	 *             if title is missing
+	 *             if title or members are missing
 	 * 
 	 * @since 0.6.0
 	 */
