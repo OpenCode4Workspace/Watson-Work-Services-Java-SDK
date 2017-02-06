@@ -27,7 +27,28 @@ public interface IGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	IDataSenderBuilder getReturnObject();
+	IDataSenderBuilder getFirstReturnObject();
+
+	/**
+	 * @return List of all IDataSenderBuilder objects
+	 * 
+	 * @since 0.6.0
+	 */
+	List<IDataSenderBuilder> getReturnObjects();
+
+	/**
+	 * @param returnObject
+	 *            IDataSenderBuilder to add
+	 * @return IGraphQLMutation current object
+	 */
+	IGraphQLMutation addReturnObject(IDataSenderBuilder returnObject);
+
+	/**
+	 * @param returnObject
+	 *            IDataSenderBuilder to remove
+	 * @return IGraphQLMutation current object
+	 */
+	IGraphQLMutation removeReturnObject(IDataSenderBuilder returnObject);
 
 	/**
 	 * @return InputDataSenderBuilder containing the details to update via the mutation

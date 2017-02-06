@@ -117,6 +117,8 @@ public class InputDataSenderBuilder implements Serializable, IDataSenderBuilder 
 				convertMapValue(s, innerObj);
 			}
 			s.append("]");
+		} else if (obj.getClass().isEnum()) {
+			s.append(obj.toString());
 		} else {
 			s.append(obj);
 		}
