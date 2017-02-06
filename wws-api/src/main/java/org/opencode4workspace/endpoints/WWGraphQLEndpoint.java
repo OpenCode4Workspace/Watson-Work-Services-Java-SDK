@@ -9,8 +9,8 @@ import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
-import org.opencode4workspace.builders.CreateSpaceGraphQLMutation;
-import org.opencode4workspace.builders.DeleteSpaceGraphQLMutation;
+import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
+import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
@@ -80,7 +80,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public Space createSpace(String title, List<String> members) throws WWException {
-		CreateSpaceGraphQLMutation mutationObject = CreateSpaceGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle(title, members);
+		SpaceCreateGraphQLMutation mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle(title, members);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return (Space) getResultContainer().getData().getSpace();
@@ -98,7 +98,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public boolean deleteSpace(String id) throws WWException {
-		DeleteSpaceGraphQLMutation mutationObject = DeleteSpaceGraphQLMutation.buildDeleteSpaceMutationString(id);
+		SpaceDeleteGraphQLMutation mutationObject = SpaceDeleteGraphQLMutation.buildDeleteSpaceMutationString(id);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getDeletionSuccessful();

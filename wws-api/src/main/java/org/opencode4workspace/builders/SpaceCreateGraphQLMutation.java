@@ -14,7 +14,7 @@ import org.opencode4workspace.bo.WWFieldsAttributesInterface;
  *        Object for creating a CreateSpace GraphQL mutation
  *
  */
-public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
+public class SpaceCreateGraphQLMutation extends BaseGraphQLMutation {
 	private static final String METHOD = "createSpace";
 	private static final long serialVersionUID = 1L;
 
@@ -82,14 +82,14 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static CreateSpaceGraphQLMutation buildCreateSpaceMutationWithSpaceTitle(String title) throws WWException {
+	public static SpaceCreateGraphQLMutation buildCreateSpaceMutationWithSpaceTitle(String title) throws WWException {
 		if ("".equals(title)) {
 			throw new WWException("title is mandatory");
 		}
 		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.CREATE_SPACE_MUTATION_NAME);
 		spaceInput.addField(CreateSpaceFields.TITLE, title);
 		ObjectDataSenderBuilder returnObject = createBasicSpaceReturnObject();
-		return new CreateSpaceGraphQLMutation(spaceInput, returnObject);
+		return new SpaceCreateGraphQLMutation(spaceInput, returnObject);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static CreateSpaceGraphQLMutation buildCreateSpaceMutationWithSpaceTitle(String title, List<String> members) throws WWException {
+	public static SpaceCreateGraphQLMutation buildCreateSpaceMutationWithSpaceTitle(String title, List<String> members) throws WWException {
 		if ("".equals(title)) {
 			throw new WWException("title is mandatory");
 		}
@@ -112,7 +112,7 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 		spaceInput.addField(CreateSpaceFields.TITLE, title);
 		spaceInput.addField(CreateSpaceFields.MEMBERS, members);
 		ObjectDataSenderBuilder returnObject = createBasicSpaceReturnObject();
-		return new CreateSpaceGraphQLMutation(spaceInput, returnObject);
+		return new SpaceCreateGraphQLMutation(spaceInput, returnObject);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public CreateSpaceGraphQLMutation() {
+	public SpaceCreateGraphQLMutation() {
 		super(METHOD, new InputDataSenderBuilder(), new ObjectDataSenderBuilder());
 	}
 
@@ -143,7 +143,7 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public CreateSpaceGraphQLMutation(InputDataSenderBuilder input) {
+	public SpaceCreateGraphQLMutation(InputDataSenderBuilder input) {
 		super(METHOD, input, new ObjectDataSenderBuilder());
 	}
 
@@ -157,7 +157,7 @@ public class CreateSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public CreateSpaceGraphQLMutation(InputDataSenderBuilder input, ObjectDataSenderBuilder returnObject) {
+	public SpaceCreateGraphQLMutation(InputDataSenderBuilder input, ObjectDataSenderBuilder returnObject) {
 		super(METHOD, input, returnObject);
 	}
 

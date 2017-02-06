@@ -4,7 +4,7 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
-public class DeleteSpaceGraphQLMutation extends BaseGraphQLMutation {
+public class SpaceDeleteGraphQLMutation extends BaseGraphQLMutation {
 	private static final String METHOD = "deleteSpace";
 	private static final long serialVersionUID = 1L;
 
@@ -71,14 +71,14 @@ public class DeleteSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static DeleteSpaceGraphQLMutation buildDeleteSpaceMutationString(String id) throws WWException {
+	public static SpaceDeleteGraphQLMutation buildDeleteSpaceMutationString(String id) throws WWException {
 		if ("".equals(id)) {
 			throw new WWException("id is mandatory");
 		}
 		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.DELETE_SPACE_MUTATION_NAME);
 		spaceInput.addField(DeleteSpaceFields.ID, id);
 		ScalarDataSenderBuilder returnObject = new ScalarDataSenderBuilder("successful");
-		return new DeleteSpaceGraphQLMutation(spaceInput, returnObject);
+		return new SpaceDeleteGraphQLMutation(spaceInput, returnObject);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class DeleteSpaceGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	private DeleteSpaceGraphQLMutation(InputDataSenderBuilder inputObject, IDataSenderBuilder returnObject) {
+	private SpaceDeleteGraphQLMutation(InputDataSenderBuilder inputObject, IDataSenderBuilder returnObject) {
 		super(METHOD, inputObject, returnObject);
 	}
 
