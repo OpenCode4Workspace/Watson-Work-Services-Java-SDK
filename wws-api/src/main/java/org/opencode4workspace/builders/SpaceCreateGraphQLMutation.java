@@ -104,7 +104,7 @@ public class SpaceCreateGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static SpaceCreateGraphQLMutation buildCreateSpaceMutationWithSpaceTitle(String title, List<String> members) throws WWException {
+	public static SpaceCreateGraphQLMutation buildCreateSpaceMutationWithSpaceTitleAndMembers(String title, List<String> members) throws WWException {
 		if ("".equals(title)) {
 			throw new WWException("title is mandatory");
 		}
