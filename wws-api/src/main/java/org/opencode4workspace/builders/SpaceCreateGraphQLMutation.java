@@ -108,6 +108,13 @@ public class SpaceCreateGraphQLMutation extends BaseGraphQLMutation {
 		if ("".equals(title)) {
 			throw new WWException("title is mandatory");
 		}
+		if (null == members) {
+			throw new WWException("Members are expected for this method");
+		} else {
+			if (members.isEmpty()) {
+				throw new WWException("Members are expected for this method");
+			}
+		}
 		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.CREATE_SPACE_MUTATION_NAME);
 		spaceInput.addField(CreateSpaceFields.TITLE, title);
 		spaceInput.addField(CreateSpaceFields.MEMBERS, members);
