@@ -9,12 +9,12 @@ import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
-import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
-import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
+import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
@@ -80,7 +80,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public Space createSpace(String title, List<String> members) throws WWException {
-		SpaceCreateGraphQLMutation mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle(title, members);
+		SpaceCreateGraphQLMutation mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title, members);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return (Space) getResultContainer().getData().getSpace();

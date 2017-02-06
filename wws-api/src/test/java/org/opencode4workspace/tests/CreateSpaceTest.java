@@ -16,7 +16,7 @@ public class CreateSpaceTest {
 	public void checkCreateSpaceOutput() throws WWException, UnsupportedEncodingException {
 		ArrayList<String> members = new ArrayList<String>();
 		members.add("8bf6c84f-961c-43df-836a-85748766912f");
-		SpaceCreateGraphQLMutation mutation = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle("Hello app", members);
+		SpaceCreateGraphQLMutation mutation = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers("Hello app", members);
 		assertEquals(CREATE_SPACE_MUTATION, mutation.returnQuery());
 
 	}
