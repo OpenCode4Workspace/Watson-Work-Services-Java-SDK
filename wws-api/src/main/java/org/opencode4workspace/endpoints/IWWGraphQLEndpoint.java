@@ -1,6 +1,6 @@
 package org.opencode4workspace.endpoints;
 
-import org.opencode4workspace.WWClient;
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.GraphQLRequest;
@@ -19,7 +19,7 @@ public interface IWWGraphQLEndpoint {
 	 * 
 	 * @since 0.5.0
 	 */
-	WWClient getClient();
+	IWWClient getClient();
 
 	/**
 	 * @return GraphQLRequest, request details to be passed to the endpoint

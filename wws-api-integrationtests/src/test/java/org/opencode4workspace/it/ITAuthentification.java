@@ -2,6 +2,7 @@ package org.opencode4workspace.it;
 
 import java.io.UnsupportedEncodingException;
 
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
@@ -14,7 +15,7 @@ public class ITAuthentification {
 	@Test
 	@Parameters({ "appId", "appSecret" })
 	public void testLoginAsApplication(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
-		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -25,7 +26,7 @@ public class ITAuthentification {
 	@Parameters({ "appId", "appSecret", "userToken" })
 	public void testLoginAsUser(String appId, String appSecret, String userToken) throws UnsupportedEncodingException, WWException {
 		System.out.println("UserToken: "+ userToken);
-		WWClient client = WWClient.buildClientUserAccess(userToken,appId, appSecret, new WWAuthenticationEndpoint(), "https://webgate.biz");
+		IWWClient client = WWClient.buildClientUserAccess(userToken,appId, appSecret, new WWAuthenticationEndpoint(), "https://webgate.biz");
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();

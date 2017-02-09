@@ -7,7 +7,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.opencode4workspace.WWClient;
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.json.RequestBuilder;
@@ -27,7 +27,7 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @param client
 	 *            WWClient containing authentication details and token
 	 */
-	public MessagePostEndpoint(WWClient client) {
+	public MessagePostEndpoint(IWWClient client) {
 		super(client);
 	}
 

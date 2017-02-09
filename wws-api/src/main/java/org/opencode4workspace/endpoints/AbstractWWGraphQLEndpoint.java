@@ -7,7 +7,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.opencode4workspace.WWClient;
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
@@ -26,7 +26,7 @@ import org.opencode4workspace.json.ResultParser;
  */
 public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 
-	private final WWClient client;
+	private final IWWClient client;
 	private GraphQLRequest request;
 	private GraphResultContainer resultContainer;
 	private String resultContent;
@@ -38,7 +38,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * 
 	 * @since 0.5.0
 	 */
-	public AbstractWWGraphQLEndpoint(WWClient client) {
+	public AbstractWWGraphQLEndpoint(IWWClient client) {
 		this.client = client;
 	}
 
@@ -48,7 +48,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#getClient()
 	 */
 	@Override
-	public WWClient getClient() {
+	public IWWClient getClient() {
 		return client;
 	}
 

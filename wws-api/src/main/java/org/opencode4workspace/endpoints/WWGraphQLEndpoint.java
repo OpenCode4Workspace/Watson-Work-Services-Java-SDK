@@ -2,7 +2,7 @@ package org.opencode4workspace.endpoints;
 
 import java.util.List;
 
-import org.opencode4workspace.WWClient;
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Message;
@@ -31,7 +31,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 
-	public WWGraphQLEndpoint(WWClient client) {
+	public WWGraphQLEndpoint(IWWClient client) {
 		super(client);
 	}
 

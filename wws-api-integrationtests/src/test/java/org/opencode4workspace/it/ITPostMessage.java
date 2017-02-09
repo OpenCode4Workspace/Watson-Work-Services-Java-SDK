@@ -2,6 +2,7 @@ package org.opencode4workspace.it;
 
 import java.io.UnsupportedEncodingException;
 
+import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.MessageResponse;
@@ -16,7 +17,7 @@ public class ITPostMessage {
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "spaceId" })
 	public void postTestMessageToSpace(String appId, String appSecret, String spaceId) throws UnsupportedEncodingException, WWException {
-		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
