@@ -27,6 +27,7 @@ public class DataContainer implements Serializable {
 	private Message message;
 	private DeleteSpaceContainer deleteSpace;
 	private List<String> memberIdsChanged;
+	private CreateSpaceContainer createSpace;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -54,6 +55,13 @@ public class DataContainer implements Serializable {
 			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return deleteSpace.getSuccessful();
+	}
+
+	public SpaceWrapper getCreateSpace() throws WWException {
+		if (null == createSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return createSpace.getSpace();
 	}
 
 	/**
