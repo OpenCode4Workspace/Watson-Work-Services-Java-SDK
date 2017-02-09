@@ -111,6 +111,7 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 * @param title
 	 *            String title of the newly-created Space
 	 * @param members
+	 *            List of member IDs to add / remove as members
 	 * @param add
 	 *            boolean whether members should be added to the Space or removed
 	 * @return CreateSpaceGraphQLMutation, the current object
@@ -155,8 +156,9 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 * @param title
 	 *            String title of the newly-created Space
 	 * @param members
-	 * @param UpdateSpaceMemberOperation
-	 *            enum whether members should be added to the Space or removed
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            UpdateSpaceMemberOperation enum whether members should be added to the Space or removed
 	 * @return CreateSpaceGraphQLMutation, the current object
 	 * @throws WWException
 	 *             if title or members are missing
@@ -194,6 +196,7 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 * @param id
 	 *            String id for the Space to update
 	 * @param members
+	 *            List of member IDs to add / remove as members
 	 * @param add
 	 *            boolean whether members should be added to the Space or removed
 	 * @return CreateSpaceGraphQLMutation, the current object

@@ -256,6 +256,11 @@ public class WWClient implements Serializable {
 		return ep.deleteSpace(id);
 	}
 
+	public Space updateSpace(String id, String newTitle) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpace(id, newTitle);
+	}
+
 	/**
 	 * Easy helper method to get a Space by a Space id
 	 * 

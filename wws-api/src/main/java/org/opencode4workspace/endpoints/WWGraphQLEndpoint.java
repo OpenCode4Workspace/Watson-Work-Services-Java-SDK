@@ -17,6 +17,7 @@ import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.json.GraphQLRequest;
@@ -102,6 +103,26 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getDeletionSuccessful();
+	}
+
+	/**
+	 * Change the title of a Space
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param newTitle
+	 *            Strign new title for the space
+	 * @return Space updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space updateSpace(String id, String newTitle) throws WWException {
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeSpaceTitle(id, newTitle);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		return getResultContainer().getData().getSpace();
 	}
 
 	/**

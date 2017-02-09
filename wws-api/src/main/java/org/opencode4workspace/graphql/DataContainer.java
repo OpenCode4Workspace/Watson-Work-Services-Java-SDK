@@ -1,6 +1,7 @@
 package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Message;
@@ -25,6 +26,7 @@ public class DataContainer implements Serializable {
 	private MembersContainer people;
 	private Message message;
 	private DeleteSpaceContainer deleteSpace;
+	private List<String> memberIdsChanged;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -146,6 +148,15 @@ public class DataContainer implements Serializable {
 			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return message;
+	}
+
+	/**
+	 * @return List of member Ids changed when updating a Space
+	 * 
+	 * @since 0.6.0
+	 */
+	public List<String> getMemberIdsChanged() {
+		return memberIdsChanged;
 	}
 
 }

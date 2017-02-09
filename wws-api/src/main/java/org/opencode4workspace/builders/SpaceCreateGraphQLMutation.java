@@ -98,6 +98,7 @@ public class SpaceCreateGraphQLMutation extends BaseGraphQLMutation {
 	 * @param title
 	 *            String title of the newly-created Space
 	 * @param members
+	 *            List of member IDs to add as members
 	 * @return CreateSpaceGraphQLMutation, the current object
 	 * @throws WWException
 	 *             if title or members are missing

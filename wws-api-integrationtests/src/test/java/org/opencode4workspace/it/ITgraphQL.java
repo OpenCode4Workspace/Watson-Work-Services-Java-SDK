@@ -282,4 +282,21 @@ public class ITgraphQL {
 			assert "403 Forbidden".equals(errors.getMessage());
 		}
 	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret" })
+	public void updateSpace(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		try {
+			Space space = ep.updateSpace("589390cfe4b0f86a34bbf4ed", "Hello New World");
+			assert "Hello New World".equals(space.getTitle());
+		} catch (Exception e) {
+			GraphResultContainer results = ep.getResultContainer();
+			assert (null != results.getErrors());
+			ErrorContainer errors = results.getErrors().get(0);
+			assert "403 Forbidden".equals(errors.getMessage());
+		}
+	}
 }
