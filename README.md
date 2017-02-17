@@ -14,3 +14,10 @@ Report Issues here: [JIRA](https://jira.openntf.org/secure/RapidBoard.jspa?rapid
 
 ## Full Documentation ##
 See [OpenNTF Wiki](https://wiki.openntf.org/display/WWSJava/)
+
+## Release Notes ##
+### 0.6.0 ###
+Mutations have been added for the following GraphQL mutations:
+- createSpace
+- deleteSpace
+- updateSpace
