@@ -11,3 +11,13 @@ This project is intended to give a Java wrapper for Watson Work Services REST an
 
 ## Issues Tracking ##
 Report Issues here: [JIRA](https://jira.openntf.org/secure/RapidBoard.jspa?rapidView=22&projectKey=WWAPI&view=planning.nodetail "Report Issues") 
+
+## Full Documentation ##
+See [OpenNTF Wiki](https://wiki.openntf.org/display/WWSJava/)
+
+## Release Notes ##
+### 0.6.0 ###
+Mutations have been added for the following GraphQL mutations:
+- createSpace
+- deleteSpace
+- updateSpace

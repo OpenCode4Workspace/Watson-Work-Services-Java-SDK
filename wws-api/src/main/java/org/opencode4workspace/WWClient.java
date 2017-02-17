@@ -2,6 +2,7 @@ package org.opencode4workspace;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -16,13 +17,17 @@ import org.opencode4workspace.builders.ConversationGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
+import org.opencode4workspace.graphql.UpdateSpaceContainer;
 
 /**
  * @author Christian Guedemann
@@ -31,18 +36,7 @@ import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
  * 
  *        Watson Workspace Apache HTTP Client class Manages setting up an HTTP Client for both users and applications
  */
-public class WWClient implements Serializable {
-
-	/**
-	 * @author Christian Guedemann
-	 * @since 0.5.0
-	 * 
-	 *        Two types of authentication are supported - user-level and application-level User is for actions on behalf of a specific user Application is for actions taken on behalf of the
-	 *        application, without being associated with a user
-	 */
-	public enum ClientType {
-		USER, APPLICATON;
-	}
+public class WWClient implements Serializable, IWWClient {
 
 	private static final long serialVersionUID = 1L;
 	private ClientType clientType;
@@ -103,52 +97,43 @@ public class WWClient implements Serializable {
 		return client;
 	}
 
-	/**
-	 * Getter for ClientType, dependent upon the initialiser user
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return {@link ClientType#USER} or {@link ClientType#APPLICATON}
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#getClientType()
 	 */
+	@Override
 	public ClientType getClientType() {
 		return clientType;
 	}
 
-	/**
-	 * Converts appId and appSecret into required content for Authorization header
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return String, content for Authorization header
-	 * @throws UnsupportedEncodingException
-	 *             if the encoding option is not supported
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#getAppCredentials()
 	 */
+	@Override
 	public String getAppCredentials() throws UnsupportedEncodingException {
 		String base64 = Base64.encodeBase64String((appId + ":" + appSecret).getBytes("UTF-8"));
 		return "Basic " + base64;
 	}
 
-	/**
-	 * Whether or not authentication has successfully occurred. Call {@link #authenticate()} first
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return boolean, whether or not already authenticated
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#isAuthenticated()
 	 */
+	@Override
 	public boolean isAuthenticated() {
 		return authenticationResult != null;
 	}
 
-	/**
-	 * Attempt authentication of the WWClient
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @throws UnsupportedEncodingException
-	 *             Authorization header could not be constructed
-	 * @throws WWException
-	 *             Some other error occurred during authentication
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#authenticate()
 	 */
+	@Override
 	public void authenticate() throws UnsupportedEncodingException, WWException {
 		if (clientType == ClientType.APPLICATON) {
 			authenticationResult = endpoint.authenticateApplication(getAppCredentials());
@@ -157,36 +142,32 @@ public class WWClient implements Serializable {
 		}
 	}
 
-	/**
-	 * Gets JWT token for the user / application from the {@link AuthenticationResult}. The JWT token is an expiring token associated with the appId and appSecret. From the documentation: "This JWT
-	 * token is what you have to use in your App to pass to Watson Work Services on API calls so that you can use its services securely"
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return String, JWT token
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#getJWTToken()
 	 */
+	@Override
 	public String getJWTToken() {
 		return authenticationResult.getJwtToken();
 	}
 
-	/**
-	 * Gets the length of time until the token expires from the {@link AuthenticationResult}
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Object, a long that determines the time until expiry
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#getExpiresIn()
 	 */
+	@Override
 	public Object getExpiresIn() {
 		return authenticationResult.getExpires();
 	}
 
-	/**
-	 * Tests whether the {@link AuthenticationResult} is valid
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return boolean, whether or not valid
-	 * 
-	 * @since 0.5.0
+	 * @see org.opencode4workspace.IWWClient#isValid()
 	 */
+	@Override
 	public boolean isValid() {
 		return authenticationResult.isValid();
 	}
@@ -219,6 +200,149 @@ public class WWClient implements Serializable {
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpacesWithQuery(query);
+
+	}
+
+	/**
+	 * Easy helper method to create a Space with a title and list of Members
+	 * 
+	 * @param title
+	 *            String title for the Space
+	 * @param members
+	 *            List of member IDs to be granted access to the Space
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpace(String title, List<String> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpace(title, members);
+	}
+
+	/**
+	 * Easy helper method to create a Space with a title
+	 * 
+	 * @param title
+	 *            String title for the Space
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpace(String title) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpace(title, null);
+	}
+
+	/**
+	 * Easy helper method to create a Space with a SpaceCreateGraphQLMutation object
+	 * 
+	 * @param mutationObject
+	 *            SpaceCreateGraphQLMutation containing the details to create
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpaceWithQuery(SpaceCreateGraphQLMutation mutationObject) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpaceWithMutation(mutationObject);
+	}
+
+	/**
+	 * Easy helper method to delete a Space
+	 * 
+	 * @param id
+	 *            String id for the Space
+	 * @return boolean, whether or not the deletion was successful
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public boolean deleteSpace(String id) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.deleteSpace(id);
+	}
+
+	/**
+	 * Easy helper method for updating a Space Title returning Space object with updated Title
+	 * 
+	 * @param id
+	 *            String id of the Space to update
+	 * @param newTitle
+	 *            String new title for the space
+	 * @return Space updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceTitle(id, newTitle);
+	}
+
+	/**
+	 * Easy helper method for updating a Space Title / members / both returning an UpdateSpaceContainer with updated Space details / updated members / both
+	 * 
+	 * @param mutationObject
+	 *            SpaceUpdateGraphQLMutation containing the details to update
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceWithMutation(SpaceUpdateGraphQLMutation mutationObject) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceWithMutation(mutationObject);
+	}
+
+	/**
+	 * Easy helper method for updating a Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            boolean whether members should be added to the Space or removed
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceMembers(id, members, addOrRemove);
+	}
+
+	/**
+	 * Easy helper method for updationg a Space members and title, returning UpdateSpaceContainer with array of member IDs updated and Space object with updated title
+	 * 
+	 * @param id
+	 *            String id for the Space to update
+	 * @param title
+	 *            String title of the newly-created Space
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            UpdateSpaceMemberOperation enum whether members should be added to the Space or removed
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceMembersAndTitle(id, title, members, addOrRemove);
 	}
 
 	/**
@@ -459,16 +583,17 @@ public class WWClient implements Serializable {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
 	}
-	
+
 	/**
 	 * Easy helper method to post a Application Message to a Space
+	 * 
 	 * @param message
-	 *              Application Message (use AppMessageBuilder) to post
+	 *            Application Message (use AppMessageBuilder) to post
 	 * @param spaceId
-	 *              ID of the Space, where the message should be posted
+	 *            ID of the Space, where the message should be posted
 	 * @return MessageResponse
 	 * @throws WWException
-	 *              contains an error message, if the post was unsuccessful
+	 *             contains an error message, if the post was unsuccessful
 	 */
 	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);

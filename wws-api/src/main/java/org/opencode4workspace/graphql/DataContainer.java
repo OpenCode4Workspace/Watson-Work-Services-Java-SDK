@@ -24,10 +24,14 @@ public class DataContainer implements Serializable {
 	private SpaceWrapper space;
 	private MembersContainer people;
 	private Message message;
+	private CreateSpaceContainer createSpace;
+	private DeleteSpaceContainer deleteSpace;
+	private UpdateSpaceContainer updateSpace;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -39,8 +43,73 @@ public class DataContainer implements Serializable {
 	}
 
 	/**
+	 * @return boolean, whether or not deleteSpace call was successful
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public boolean getDeletionSuccessful() throws WWException {
+		if (null == deleteSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return deleteSpace.getSuccessful();
+	}
+
+	/**
+	 * @return SpaceWrapper corresponding to the newly created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public SpaceWrapper getCreateSpace() throws WWException {
+		if (null == createSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return createSpace.getSpace();
+	}
+
+	/**
+	 * @return UpdateSpaceContainer containing member Ids and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer getUpdateSpaceContainer() throws WWException {
+		if (null == updateSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return updateSpace;
+	}
+
+	/**
+	 * @return List of member Ids changed when updating a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public String[] getUpdateSpaceContainer_MemberIdsChanged() throws WWException {
+		return getUpdateSpaceContainer().getMemberIdsChanged();
+	}
+
+	/**
+	 * @return SpaceWrapper changed when updating a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public SpaceWrapper getUpdateSpaceContainer_SpaceWrapper() throws WWException {
+		return getUpdateSpaceContainer().getSpace();
+	}
+
+	/**
 	 * @return Person object for current user
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -54,6 +123,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return Person object for a given user
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -67,6 +137,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return ConversationWrapper for a given conversation
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -90,6 +161,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return SpaceWrapper for a given Workspace
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -103,6 +175,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return MemberItemContainer for people resulting from a query
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */
@@ -116,6 +189,7 @@ public class DataContainer implements Serializable {
 	/**
 	 * @return Message resulting from a query
 	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.5.0
 	 */

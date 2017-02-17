@@ -3,7 +3,9 @@ package org.opencode4workspace.json;
 import java.util.HashMap;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.builders.BaseGraphQLMutation;
 import org.opencode4workspace.builders.IGraphQLQuery;
+import org.opencode4workspace.builders.InputDataSenderBuilder;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 
 /**
@@ -69,6 +71,66 @@ public class GraphQLRequest {
 		try {
 			this.operationName = queryObject.getOperationName();
 			this.query = queryObject.returnQuery();
+			this.variables = variables;
+		} catch (Exception e) {
+			throw new WWException("Error creating request from query - " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Initialises the GraphQLRequest object from a BaseGraphQLMutation object. This will have the operation name and will not pass any variables to Watson Work Services
+	 * 
+	 * @param mutationObject
+	 *            BaseGraphQLMutation object containing {@link InputDataSenderBuilder} and {@link ObjectDataSenderBuilder} objects which will be parsed to return the full query
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 * 
+	 * @since 0.6.0
+	 */
+	public GraphQLRequest(BaseGraphQLMutation mutationObject) throws WWException {
+		this(mutationObject, new HashMap<String, String>());
+	}
+
+	/**
+	 * Initialises the GraphQLRequest object from a BaseGraphQLMutation object. This will have the operation name
+	 * 
+	 * @param mutationObject
+	 *            BaseGraphQLMutation object containing {@link InputDataSenderBuilder} and {@link ObjectDataSenderBuilder} objects which will be parsed to return the full query
+	 * @param variables
+	 *            HashMap of variables to pass with the query, where the key is the variable name and the value is the variable value
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 * 
+	 * @since 0.6.0
+	 */
+	public GraphQLRequest(BaseGraphQLMutation mutationObject, HashMap<String, String> variables) throws WWException {
+		try {
+			this.operationName = mutationObject.getOperationName();
+			this.query = mutationObject.returnQuery();
+			this.variables = variables;
+		} catch (Exception e) {
+			throw new WWException("Error creating request from query - " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Initialises the GraphQLRequest object from all properties
+	 * 
+	 * @param mutationObject
+	 *            BaseGraphQLMutation object containing {@link InputDataSenderBuilder} and {@link ObjectDataSenderBuilder} objects which will be parsed to return the full query
+	 * @param variables
+	 *            HashMap of variables to pass with the query, where the key is the variable name and the value is the variable value
+	 * @param operationName
+	 *            String, operation name for the query
+	 * @throws WWException
+	 *             error if encountered parsing the queryObject
+	 * 
+	 * @since 0.6.0
+	 */
+	public GraphQLRequest(BaseGraphQLMutation mutationObject, HashMap<String, String> variables, String operationName) throws WWException {
+		try {
+			this.operationName = operationName;
+			this.query = mutationObject.returnQuery();
 			this.variables = variables;
 		} catch (Exception e) {
 			throw new WWException("Error creating request from query - " + e.getMessage());

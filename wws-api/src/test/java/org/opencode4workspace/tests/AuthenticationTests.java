@@ -1,11 +1,16 @@
 package org.opencode4workspace.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
+import org.opencode4workspace.IWWClient;
+import org.opencode4workspace.IWWClient.ClientType;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
@@ -22,23 +27,23 @@ public class AuthenticationTests {
 	@Test
 	public void testBuildAuthenticationClient4User() {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		WWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
+		IWWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
 		assertNotNull(client);
-		assertEquals(WWClient.ClientType.USER, client.getClientType());
+		assertEquals(ClientType.USER, client.getClientType());
 	}
 
 	@Test
 	public void testBuildAuthenticationClient4Application() {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		WWClient client = WWClient.buildClientApplicationAccess("201830181", "appsecretekey", authenticationEndpoint);
+		IWWClient client = WWClient.buildClientApplicationAccess("201830181", "appsecretekey", authenticationEndpoint);
 		assertNotNull(client);
-		assertEquals(WWClient.ClientType.APPLICATON, client.getClientType());
+		assertEquals(ClientType.APPLICATON, client.getClientType());
 	}
 
 	@Test
 	public void testGeneareteBasicCredentials() throws UnsupportedEncodingException {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		WWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
+		IWWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
 		assertNotNull(client);
 		assertEquals(BASIC_MM_CRED, client.getAppCredentials());
 	}
@@ -48,7 +53,7 @@ public class AuthenticationTests {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
 		EasyMock.expect(authenticationEndpoint.authenticateApplication(BASIC_MM_CRED)).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", ""));
 		EasyMock.replay(authenticationEndpoint);
-		WWClient client = WWClient.buildClientApplicationAccess(MY_APP_ID, MY_APP_SECRET, authenticationEndpoint);
+		IWWClient client = WWClient.buildClientApplicationAccess(MY_APP_ID, MY_APP_SECRET, authenticationEndpoint);
 
 		assertNotNull(client);
 		assertFalse(client.isAuthenticated());
@@ -67,7 +72,7 @@ public class AuthenticationTests {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
 		EasyMock.expect(authenticationEndpoint.authorizeUser(BASIC_MM_CRED, USER_TOKEN, "http://localhost")).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", ""));
 		EasyMock.replay(authenticationEndpoint);
-		WWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
+		IWWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
 
 		assertNotNull(client);
 		assertFalse(client.isAuthenticated());
@@ -84,9 +89,9 @@ public class AuthenticationTests {
 	@Test
 	public void testCheckAuthentificationFailsException() throws WWException, UnsupportedEncodingException {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		EasyMock.expect(authenticationEndpoint.authorizeUser(BASIC_MM_CRED, USER_TOKEN,"http://localhost")).andStubThrow(new WWException("Authentification Failed"));
+		EasyMock.expect(authenticationEndpoint.authorizeUser(BASIC_MM_CRED, USER_TOKEN, "http://localhost")).andStubThrow(new WWException("Authentification Failed"));
 		EasyMock.replay(authenticationEndpoint);
-		WWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint,"http://localhost");
+		IWWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
 
 		assertNotNull(client);
 		assertFalse(client.isAuthenticated());

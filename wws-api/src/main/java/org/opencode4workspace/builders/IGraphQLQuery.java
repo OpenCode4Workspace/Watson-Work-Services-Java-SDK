@@ -6,6 +6,13 @@ import java.util.Map;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 
+/**
+ * @author Paul Withers
+ * @author Christian Guedemann
+ * @since 0.5.0
+ * 
+ *        Interface for BaseGraphQLQuery and concrete classes from that
+ */
 public interface IGraphQLQuery {
 
 	/**
