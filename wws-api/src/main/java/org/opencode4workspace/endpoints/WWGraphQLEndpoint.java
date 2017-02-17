@@ -84,7 +84,27 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public Space createSpace(String title, List<String> members) throws WWException {
-		SpaceCreateGraphQLMutation mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title, members);
+		SpaceCreateGraphQLMutation mutationObject;
+		if (null == members) {
+			mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle(title);
+		} else {
+			mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title, members);
+		}
+		return createSpaceWithMutation(mutationObject);
+	}
+
+	/**
+	 * Create a space with a SpaceCreateGraphQLMutation object
+	 * 
+	 * @param mutationObject
+	 *            SpaceCreateGraphQLMutation containing the details to create
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpaceWithMutation(SpaceCreateGraphQLMutation mutationObject) throws WWException {
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return (Space) getResultContainer().getData().getCreateSpace();
@@ -102,7 +122,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public boolean deleteSpace(String id) throws WWException {
-		SpaceDeleteGraphQLMutation mutationObject = SpaceDeleteGraphQLMutation.buildDeleteSpaceMutationString(id);
+		SpaceDeleteGraphQLMutation mutationObject = SpaceDeleteGraphQLMutation.buildDeleteSpaceMutation(id);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getDeletionSuccessful();
@@ -122,7 +142,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
-		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeSpaceTitle(id, newTitle);
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitle(id, newTitle);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getUpdateSpaceContainer_SpaceWrapper();
@@ -173,6 +193,21 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 */
 	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
 		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitleAndMembers(id, title, members, addOrRemove);
+		return updateSpaceWithMutation(mutationObject);
+	}
+
+	/**
+	 * Updates a Space with a query, returning a UpdateSpaceContainer containing an Array of members updated and Space object with the new title
+	 * 
+	 * @param mutationObject
+	 *            SpaceUpdateGraphQLMutation containing the details to update
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceWithMutation(SpaceUpdateGraphQLMutation mutationObject) throws WWException {
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getUpdateSpaceContainer();
@@ -191,9 +226,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 */
 	public Space getSpaceById(String spaceId) throws WWException {
 		SpaceGraphQLQuery queryObject = SpaceGraphQLQuery.buildSpaceGraphQueryWithSpaceId(spaceId);
-		setRequest(new GraphQLRequest(queryObject));
-		executeRequest();
-		return (Space) getResultContainer().getData().getSpace();
+		return getSpaceWithQuery(queryObject);
 	}
 
 	/**
@@ -326,9 +359,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 */
 	public Message getMessageById(String messageId) throws WWException {
 		MessageGraphQLQuery queryObject = MessageGraphQLQuery.buildMessageGraphQueryWithMessageId(messageId);
-		setRequest(new GraphQLRequest(queryObject));
-		executeRequest();
-		return (Message) getResultContainer().getData().getMessage();
+		return getMessageWithQuery(queryObject);
 	}
 
 	/**
@@ -396,10 +427,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	public List<Person> getPeople(List<String> ids) throws WWException {
 		PeopleGraphQLQuery query = new PeopleGraphQLQuery();
 		query.addAttribute(PeopleAttributes.ID, ids);
-		setRequest(new GraphQLRequest(query));
-		executeRequest();
-		DataContainer container = getResultContainer().getData();
-		return (List<Person>) container.getPeople();
+		return getPeopleWithQuery(query);
 	}
 
 	/**
@@ -416,10 +444,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	public List<Person> getPeopleByName(String name) throws WWException {
 		PeopleGraphQLQuery query = new PeopleGraphQLQuery();
 		query.addAttribute(PeopleAttributes.NAME, name);
-		setRequest(new GraphQLRequest(query));
-		executeRequest();
-		DataContainer container = getResultContainer().getData();
-		return (List<Person>) container.getPeople();
+		return getPeopleWithQuery(query);
 	}
 
 	/**

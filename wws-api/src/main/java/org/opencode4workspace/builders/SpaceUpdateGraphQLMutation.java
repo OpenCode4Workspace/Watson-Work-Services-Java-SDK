@@ -89,7 +89,7 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeSpaceTitle(String id, String title) throws WWException {
+	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeTitle(String id, String title) throws WWException {
 		if ("".equals(id)) {
 			throw new WWException("Space id is mandatory");
 		}

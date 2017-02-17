@@ -71,7 +71,7 @@ public class SpaceDeleteGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static SpaceDeleteGraphQLMutation buildDeleteSpaceMutationString(String id) throws WWException {
+	public static SpaceDeleteGraphQLMutation buildDeleteSpaceMutation(String id) throws WWException {
 		if ("".equals(id)) {
 			throw new WWException("id is mandatory");
 		}

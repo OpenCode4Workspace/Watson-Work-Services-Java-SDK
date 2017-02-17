@@ -17,8 +17,10 @@ import org.opencode4workspace.builders.ConversationGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
@@ -220,6 +222,38 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
+	 * Easy helper method to create a Space with a title
+	 * 
+	 * @param title
+	 *            String title for the Space
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpace(String title) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpace(title, null);
+	}
+
+	/**
+	 * Easy helper method to create a Space with a SpaceCreateGraphQLMutation object
+	 * 
+	 * @param mutationObject
+	 *            SpaceCreateGraphQLMutation containing the details to create
+	 * @return Space containing the ID of the newly-created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space createSpaceWithQuery(SpaceCreateGraphQLMutation mutationObject) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.createSpaceWithMutation(mutationObject);
+	}
+
+	/**
 	 * Easy helper method to delete a Space
 	 * 
 	 * @param id
@@ -251,6 +285,22 @@ public class WWClient implements Serializable, IWWClient {
 	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.updateSpaceTitle(id, newTitle);
+	}
+
+	/**
+	 * Easy helper method for updating a Space Title / members / both returning an UpdateSpaceContainer with updated Space details / updated members / both
+	 * 
+	 * @param mutationObject
+	 *            SpaceUpdateGraphQLMutation containing the details to update
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceWithMutation(SpaceUpdateGraphQLMutation mutationObject) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceWithMutation(mutationObject);
 	}
 
 	/**

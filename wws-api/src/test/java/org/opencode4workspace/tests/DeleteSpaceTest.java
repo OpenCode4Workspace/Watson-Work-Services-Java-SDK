@@ -13,7 +13,7 @@ public class DeleteSpaceTest {
 
 	@Test
 	public void deleteSpace() throws WWException {
-		SpaceDeleteGraphQLMutation mutation = SpaceDeleteGraphQLMutation.buildDeleteSpaceMutationString("58938f40e4b0f86a34bbf40f");
+		SpaceDeleteGraphQLMutation mutation = SpaceDeleteGraphQLMutation.buildDeleteSpaceMutation("58938f40e4b0f86a34bbf40f");
 		assertEquals(DELETE_SPACE_MUTATION, mutation.returnQuery());
 	}
 

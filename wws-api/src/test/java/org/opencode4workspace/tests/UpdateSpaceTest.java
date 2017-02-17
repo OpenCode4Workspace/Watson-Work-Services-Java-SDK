@@ -22,7 +22,7 @@ public class UpdateSpaceTest {
 
 	@Test
 	public void checkUpdateTitleOutput() throws WWException {
-		SpaceUpdateGraphQLMutation mutation = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeSpaceTitle("589390cfe4b0f86a34bbf4ed", "Hello New World");
+		SpaceUpdateGraphQLMutation mutation = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitle("589390cfe4b0f86a34bbf4ed", "Hello New World");
 		assertEquals(UPDATE_SPACE_TITLE, mutation.returnQuery());
 	}
 
