@@ -112,51 +112,6 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 *            String title of the newly-created Space
 	 * @param members
 	 *            List of member IDs to add / remove as members
-	 * @param add
-	 *            boolean whether members should be added to the Space or removed
-	 * @return CreateSpaceGraphQLMutation, the current object
-	 * @throws WWException
-	 *             if title or members are missing
-	 * 
-	 * @since 0.6.0
-	 */
-	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeTitleAndMembers(String id, String title, List<String> members, boolean add) throws WWException {
-		if ("".equals(id)) {
-			throw new WWException("Space id is mandatory");
-		}
-		if ("".equals(title)) {
-			throw new WWException("title is mandatory");
-		}
-		if (null == members) {
-			throw new WWException("Members are expected for this method");
-		} else {
-			if (members.isEmpty()) {
-				throw new WWException("Members are expected for this method");
-			}
-		}
-		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.UPDATE_SPACE_MUTATION_NAME);
-		spaceInput.addField(UpdateSpaceFields.ID, id);
-		spaceInput.addField(UpdateSpaceFields.TITLE, title);
-		spaceInput.addField(UpdateSpaceFields.MEMBERS, members);
-		if (add) {
-			spaceInput.addField(UpdateSpaceFields.MEMBER_OPERATION, UpdateSpaceMemberOperation.ADD);
-		} else {
-			spaceInput.addField(UpdateSpaceFields.MEMBER_OPERATION, UpdateSpaceMemberOperation.REMOVE);
-		}
-		ObjectDataSenderBuilder returnObject1 = createBasicSpaceReturnObject();
-		ScalarDataSenderBuilder returnObject2 = createBasicMemberIdsReturnObject();
-		return new SpaceUpdateGraphQLMutation(spaceInput, returnObject1, returnObject2);
-	}
-
-	/**
-	 * Easy method to create a basic CreateSpace mutation ObjectDataSenderBuilder for a new Space title and list of members
-	 * 
-	 * @param id
-	 *            String id for the Space to update
-	 * @param title
-	 *            String title of the newly-created Space
-	 * @param members
-	 *            List of member IDs to add / remove as members
 	 * @param addOrRemove
 	 *            UpdateSpaceMemberOperation enum whether members should be added to the Space or removed
 	 * @return CreateSpaceGraphQLMutation, the current object
@@ -165,8 +120,7 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.6.0
 	 */
-	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeTitleAndMembersEnum(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove)
-			throws WWException {
+	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeTitleAndMembers(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
 		if ("".equals(id)) {
 			throw new WWException("Space id is mandatory");
 		}
@@ -197,15 +151,15 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 	 *            String id for the Space to update
 	 * @param members
 	 *            List of member IDs to add / remove as members
-	 * @param add
-	 *            boolean whether members should be added to the Space or removed
+	 * @param addOrRemove
+	 *            UpdateSpaceMemberOperation whether members should be added to the Space or removed
 	 * @return CreateSpaceGraphQLMutation, the current object
 	 * @throws WWException
 	 *             if title or members are missing
 	 * 
 	 * @since 0.6.0
 	 */
-	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeMembers(String id, List<String> members, boolean add) throws WWException {
+	public static SpaceUpdateGraphQLMutation buildUpdateSpaceMutationChangeMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
 		if ("".equals(id)) {
 			throw new WWException("Space id is mandatory");
 		}
@@ -219,11 +173,7 @@ public class SpaceUpdateGraphQLMutation extends BaseGraphQLMutation {
 		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.UPDATE_SPACE_MUTATION_NAME);
 		spaceInput.addField(UpdateSpaceFields.ID, id);
 		spaceInput.addField(UpdateSpaceFields.MEMBERS, members);
-		if (add) {
-			spaceInput.addField(UpdateSpaceFields.MEMBER_OPERATION, UpdateSpaceMemberOperation.ADD);
-		} else {
-			spaceInput.addField(UpdateSpaceFields.MEMBER_OPERATION, UpdateSpaceMemberOperation.REMOVE);
-		}
+		spaceInput.addField(UpdateSpaceFields.MEMBER_OPERATION, addOrRemove);
 		IDataSenderBuilder returnObject = createBasicMemberIdsReturnObject();
 		return new SpaceUpdateGraphQLMutation(spaceInput, returnObject);
 	}

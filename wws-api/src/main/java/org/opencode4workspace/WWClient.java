@@ -2,6 +2,7 @@ package org.opencode4workspace;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -18,11 +19,13 @@ import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
+import org.opencode4workspace.graphql.UpdateSpaceContainer;
 
 /**
  * @author Christian Guedemann
@@ -232,9 +235,64 @@ public class WWClient implements Serializable, IWWClient {
 		return ep.deleteSpace(id);
 	}
 
-	public Space updateSpace(String id, String newTitle) throws WWException {
+	/**
+	 * Easy helper method for updating a Space Title returning Space object with updated Title
+	 * 
+	 * @param id
+	 *            String id of the Space to update
+	 * @param newTitle
+	 *            String new title for the space
+	 * @return Space updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.updateSpace(id, newTitle);
+		return ep.updateSpaceTitle(id, newTitle);
+	}
+
+	/**
+	 * Easy helper method for updating a Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            boolean whether members should be added to the Space or removed
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceMembers(id, members, addOrRemove);
+	}
+
+	/**
+	 * Easy helper method for updationg a Space members and title, returning UpdateSpaceContainer with array of member IDs updated and Space object with updated title
+	 * 
+	 * @param id
+	 *            String id for the Space to update
+	 * @param title
+	 *            String title of the newly-created Space
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            UpdateSpaceMemberOperation enum whether members should be added to the Space or removed
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.updateSpaceMembersAndTitle(id, title, members, addOrRemove);
 	}
 
 	/**

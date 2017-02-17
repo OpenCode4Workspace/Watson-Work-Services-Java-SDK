@@ -1,7 +1,6 @@
 package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Message;
@@ -25,9 +24,9 @@ public class DataContainer implements Serializable {
 	private SpaceWrapper space;
 	private MembersContainer people;
 	private Message message;
-	private DeleteSpaceContainer deleteSpace;
-	private List<String> memberIdsChanged;
 	private CreateSpaceContainer createSpace;
+	private DeleteSpaceContainer deleteSpace;
+	private UpdateSpaceContainer updateSpace;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -57,11 +56,54 @@ public class DataContainer implements Serializable {
 		return deleteSpace.getSuccessful();
 	}
 
+	/**
+	 * @return SpaceWrapper corresponding to the newly created Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
 	public SpaceWrapper getCreateSpace() throws WWException {
 		if (null == createSpace) {
 			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return createSpace.getSpace();
+	}
+
+	/**
+	 * @return UpdateSpaceContainer containing member Ids and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer getUpdateSpaceContainer() throws WWException {
+		if (null == updateSpace) {
+			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return updateSpace;
+	}
+
+	/**
+	 * @return List of member Ids changed when updating a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public String[] getUpdateSpaceContainer_MemberIdsChanged() throws WWException {
+		return getUpdateSpaceContainer().getMemberIdsChanged();
+	}
+
+	/**
+	 * @return SpaceWrapper changed when updating a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public SpaceWrapper getUpdateSpaceContainer_SpaceWrapper() throws WWException {
+		return getUpdateSpaceContainer().getSpace();
 	}
 
 	/**
@@ -156,15 +198,6 @@ public class DataContainer implements Serializable {
 			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return message;
-	}
-
-	/**
-	 * @return List of member Ids changed when updating a Space
-	 * 
-	 * @since 0.6.0
-	 */
-	public List<String> getMemberIdsChanged() {
-		return memberIdsChanged;
 	}
 
 }

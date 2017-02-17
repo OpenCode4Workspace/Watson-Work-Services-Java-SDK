@@ -2,7 +2,6 @@ package org.opencode4workspace.it;
 
 import java.io.UnsupportedEncodingException;
 
-import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.MessageResponse;
@@ -16,14 +15,18 @@ public class ITPostMessage {
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret", "spaceId" })
-	public void postTestMessageToSpace(String appId, String appSecret, String spaceId) throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+	public void postTestMessageToSpace(String appId, String appSecret, String spaceId)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
-		
+
 		AppMessageBuilder builder = new AppMessageBuilder();
-		builder.setActorAvatar("http://gravatar.com/cgu").setActorName("CGU").setActorUrl("http://openntf.org").setColor("#FF0000");
+		builder.setActorAvatar("http://gravatar.com/cgu")
+				.setActorName("CGU")
+				.setActorUrl("http://openntf.org")
+				.setColor("#FF0000");
 		builder.setMessage("Message from *build process* - Integration Testing").setMessageTitle("IT-Testing");
 		AppMessage message = builder.build();
 		MessageResponse response = client.postMessageToSpace(message, spaceId);

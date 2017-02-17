@@ -12,6 +12,7 @@ public class DeleteSpaceContainer {
 
 	/**
 	 * @return boolean, whether or not the deleteSpace request was successful
+	 * @since 0.6.0
 	 */
 	public boolean getSuccessful() {
 		return successful;

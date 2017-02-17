@@ -35,7 +35,7 @@ public class ITgraphQL {
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
 	public void testGetSpacesAsApp(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -48,7 +48,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret" })
 	public void testGetSpacesBasicAsApp(String appId, String appSecret)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -78,7 +78,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "myDisplayName" })
 	public void testGetMe(String appId, String appSecret, String myDisplayName)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -90,7 +90,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName" })
 	public void testGetPerson(String appId, String appSecret, String profileId, String myDisplayName)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -102,7 +102,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "conversationId" })
 	public void testGetConversationAsApp(String appId, String appSecret, String conversationId)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -115,7 +115,7 @@ public class ITgraphQL {
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
 	public void testGetSpaceMembers(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -138,7 +138,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName", "myAppName" })
 	public void testGetPeople(String appId, String appSecret, String profileId, String myDisplayName, String myAppName)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -158,7 +158,7 @@ public class ITgraphQL {
 	@Test(enabled = false)
 	@Parameters({ "appId", "appSecret" })
 	public void testGetPeopleFirstTen(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -180,7 +180,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "profileId", "myDisplayName", "myAppName" })
 	public void testGetPeopleByName(String appId, String appSecret, String profileId, String myDisplayName,
 			String myAppName) throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -194,7 +194,7 @@ public class ITgraphQL {
 	@Parameters({ "appId", "appSecret", "messageId", "myDisplayName" })
 	public void testGetMessage(String appId, String appSecret, String messageId, String myDisplayName)
 			throws UnsupportedEncodingException, WWException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
@@ -268,30 +268,12 @@ public class ITgraphQL {
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
-	public void deleteSpace(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
-		client.authenticate();
-		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		try {
-			// This is forbidden for App access
-			boolean result = ep.deleteSpace("589390cfe4b0f86a34bbf4ed");
-			assert (result == true);
-		} catch (Exception e) {
-			GraphResultContainer results = ep.getResultContainer();
-			assert (null != results.getErrors());
-			ErrorContainer errors = results.getErrors().get(0);
-			assert "403 Forbidden".equals(errors.getMessage());
-		}
-	}
-
-	@Test(enabled = true)
-	@Parameters({ "appId", "appSecret" })
 	public void updateSpace(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
-		IWWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
 		try {
-			Space space = ep.updateSpace("589390cfe4b0f86a34bbf4ed", "Hello New World");
+			Space space = ep.updateSpaceTitle("589390cfe4b0f86a34bbf4ed", "Hello New World");
 			assert "Hello New World".equals(space.getTitle());
 		} catch (Exception e) {
 			GraphResultContainer results = ep.getResultContainer();

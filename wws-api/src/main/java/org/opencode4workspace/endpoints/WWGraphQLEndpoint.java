@@ -1,5 +1,6 @@
 package org.opencode4workspace.endpoints;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencode4workspace.IWWClient;
@@ -18,8 +19,10 @@ import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
+import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.graphql.DataContainer;
+import org.opencode4workspace.graphql.UpdateSpaceContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 
 public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
@@ -84,7 +87,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		SpaceCreateGraphQLMutation mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title, members);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
-		return (Space) getResultContainer().getData().getSpace();
+		return (Space) getResultContainer().getData().getCreateSpace();
 	}
 
 	/**
@@ -106,23 +109,73 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Change the title of a Space
+	 * Change the title of a Space, returning Space object with updated title
 	 * 
 	 * @param id
 	 *            String id of the space to update
 	 * @param newTitle
-	 *            Strign new title for the space
+	 *            String new title for the space
 	 * @return Space updated
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
 	 * @since 0.6.0
 	 */
-	public Space updateSpace(String id, String newTitle) throws WWException {
+	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
 		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeSpaceTitle(id, newTitle);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
-		return getResultContainer().getData().getSpace();
+		return getResultContainer().getData().getUpdateSpaceContainer_SpaceWrapper();
+	}
+
+	/**
+	 * Update the members of a Space, returning List of members updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            boolean whether members should be added to the Space or removed
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeMembers(id, members, addOrRemove);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		ArrayList<String> membersReturned = new ArrayList<String>();
+		for (String member : getResultContainer().getData().getUpdateSpaceContainer_MemberIdsChanged()) {
+			membersReturned.add(member);
+		}
+		return membersReturned;
+	}
+
+	/**
+	 * Update the members of a Space and its title, returning a UpdateSpaceContainer containing an Array of members updated and Space object with the new title
+	 * 
+	 * @param id
+	 *            String id for the Space to update
+	 * @param title
+	 *            String title of the newly-created Space
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @param addOrRemove
+	 *            UpdateSpaceMemberOperation enum whether members should be added to the Space or removed
+	 * @return UpdateSpaceContainer containing Array of members updated and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.6.0
+	 */
+	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitleAndMembers(id, title, members, addOrRemove);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		return getResultContainer().getData().getUpdateSpaceContainer();
 	}
 
 	/**
