@@ -22,6 +22,7 @@ import org.opencode4workspace.json.ResultParser;
 public class MockClient implements IWWClient {
 	private static final long serialVersionUID = 1L;
 	private MockGraphQLEndpoint ep;
+	private String resultContent;
 
 	/**
 	 * Initialises a MockClient using a {@link MockGraphQLEndpoint} loading the relevant response
@@ -132,6 +133,16 @@ public class MockClient implements IWWClient {
 	@Override
 	public boolean isValid() {
 		return true;
+	}
+
+	@Override
+	public String getResultContent() {
+		return resultContent;
+	}
+
+	@Override
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
 	}
 
 }

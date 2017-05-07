@@ -174,6 +174,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setResultContent(java.lang.String)
 	 */
 	public void setResultContent(String resultContent) {
+		client.setResultContent(resultContent);
 		this.resultContent = resultContent;
 	}
 

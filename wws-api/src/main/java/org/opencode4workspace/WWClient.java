@@ -46,6 +46,7 @@ public class WWClient implements Serializable, IWWClient {
 	private AuthenticationEndpoint endpoint;
 	private AuthenticationResult authenticationResult;
 	private String redirectTo;
+	private String resultContent;
 
 	/**
 	 * Creates and returns a WWClient for a specific user
@@ -598,6 +599,20 @@ public class WWClient implements Serializable, IWWClient {
 	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);
 		return ep.postMessage(message, spaceId);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.IWWClient#getResultContent()
+	 */
+	public String getResultContent() {
+		return resultContent;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.IWWClient#setResultContent(java.lang.String)
+	 */
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
 	}
 
 }

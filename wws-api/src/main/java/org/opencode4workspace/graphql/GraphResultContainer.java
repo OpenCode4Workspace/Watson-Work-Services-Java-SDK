@@ -9,7 +9,7 @@ import org.opencode4workspace.WWException;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Serializable ontainer for the result of a Graph Query
+ *        Serializable container for the result of a Graph Query
  *
  */
 public class GraphResultContainer {

@@ -66,6 +66,15 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	}
 	
 	/**
+	 * Gets all query objects loaded into this query
+	 * 
+	 * @return List of ObjectDataSenderBuilders for each query
+	 */
+	public List<ObjectDataSenderBuilder> getQueryObjects() {
+		return queryObjects;
+	}
+	
+	/**
 	 * Add a query object to the list
 	 * 
 	 * @param queryObject ObjectDataSenderBuilder containing the query
