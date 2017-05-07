@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
@@ -30,7 +31,9 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 
 	private static final long serialVersionUID = 1L;
 	private String objectName;
+	private Class returnType;
 	private boolean hasItems;
+	private boolean hasAlias;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
 	private List<String> fieldsList = new ArrayList<String>();
 	private List<IDataSenderBuilder> children = new ArrayList<IDataSenderBuilder>();
@@ -127,7 +130,30 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 			fieldsList.add(f.getLabel());
 		}
 	}
-
+	
+	/**
+	 * When using an alias, we need to capture class to case return to
+	 * 
+	 * @param returnType Class of return object
+	 */
+	public void setReturnType(Class returnType) {
+		if (null == returnType) {
+			setHasAlias(false);
+		} else {
+			setHasAlias(true);
+		}
+		this.returnType = returnType;
+	}
+	
+	/**
+	 * Get class response needs casting to
+	 * 
+	 * @return
+	 */
+	public Class getReturnType() {
+		return returnType;
+	}
+	
 	/**
 	 * Extracts a field name from a class's property. If the {@link GraphQLJsonPropertyHelper} annotation is present, instead of using the class's property name, the annotation label will be used
 	 * instead. This is for e.g. "conversationContent" property, which maps to "conversation" field in GraphQL query, but cannot have that property name in this API.
@@ -165,8 +191,8 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	public String build(boolean pretty) {
 		boolean isFirst = true;
 		StringBuilder s = new StringBuilder();
-		// Add object name
-		s.append(objectName + " ");
+		// Add object name and type to case to, if set
+		s.append(getObjectForQuery() + " ");
 
 		// Add attributes, if exist
 		if (!attributesList.isEmpty()) {
@@ -293,6 +319,26 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	 */
 	public String getObjectName() {
 		return objectName;
+	}
+	
+	/**
+	 * If a return type has been defined, we need to return objectName:returnTypeForQuery e.g. space1:space. 
+	 * Otherwise, we just need objectName, e.g. space
+	 * 
+	 * @return String, prefix for the query
+	 */
+	public String getObjectForQuery() {
+		if (!isHasAlias()) {
+			return getObjectName();
+		} else {
+			String tmpCastName = getReturnType().getSimpleName();
+			if (tmpCastName.contains("Wrapper")) {
+				tmpCastName = tmpCastName.substring(0, tmpCastName.indexOf("Wrapper"));
+			} else if (tmpCastName.contains("Container")) {
+				tmpCastName = tmpCastName.substring(0, tmpCastName.indexOf("Container"));
+			}
+			return getObjectName() + ":" + tmpCastName.toLowerCase();
+		}
 	}
 
 	/**
@@ -587,6 +633,14 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	public ObjectDataSenderBuilder removePageInfo() {
 		pageInfo = null;
 		return this;
+	}
+
+	public boolean isHasAlias() {
+		return hasAlias;
+	}
+
+	public void setHasAlias(boolean hasAlias) {
+		this.hasAlias = hasAlias;
 	}
 
 }
