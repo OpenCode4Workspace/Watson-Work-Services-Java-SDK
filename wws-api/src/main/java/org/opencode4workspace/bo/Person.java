@@ -15,14 +15,63 @@ public class Person implements Serializable {
 
 	/**
 	 * @author Paul Withers
+	 * @since 0.7.0
+	 *
+	 */
+	public enum PresenceStatus implements WWFieldsAttributesInterface {
+		ONLINE("online", String.class), OFFLINE("offline", String.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private PresenceStatus(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#
+		 * getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+	}
+
+	/**
+	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See {@link WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Person. See
+	 *        {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum PersonFields implements WWFieldsAttributesInterface {
-		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME("displayName", String.class), EXT_ID("extId",
-				String.class), EMAIL_ADDRESSES("emailAddresses", String.class), CUSTOMER_ID("customerId", String.class), CREATED("created", Date.class), UPDATED("updated", Date.class);
+		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME(
+				"displayName", String.class), EXT_ID("extId", String.class), EMAIL_ADDRESSES("emailAddresses",
+						String.class), CUSTOMER_ID("customerId", String.class), CREATED("created",
+								Date.class), UPDATED("updated", Date.class), PRESENCE("presence", PresenceStatus.class);
 
 		private String label;
 		private Class<?> objectClassType;
@@ -53,7 +102,8 @@ public class Person implements Serializable {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#
+		 * getObjectClassType()
 		 */
 		@Override
 		public Class<?> getObjectClassType() {
@@ -65,7 +115,8 @@ public class Person implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See {@link WWChildInterface}
+	 *        Enum for scalar properties of a Person. See
+	 *        {@link WWChildInterface}
 	 *
 	 */
 	public enum PersonChildren implements WWChildInterface {
