@@ -15,6 +15,8 @@ import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.bo.WWQueryResponseObjectTypes;
+import org.opencode4workspace.builders.BaseGraphQLMultiQuery;
 import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
@@ -26,9 +28,16 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
 import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
+import org.opencode4workspace.graphql.SpaceWrapper;
 import org.opencode4workspace.json.GraphQLRequest;
+import org.opencode4workspace.json.ResultParser;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.testng.remote.strprotocol.BaseMessageSender;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class ITgraphQL {
 
@@ -281,5 +290,44 @@ public class ITgraphQL {
 			ErrorContainer errors = results.getErrors().get(0);
 			assert "403 Forbidden".equals(errors.getMessage());
 		}
+	}
+	
+	@Test(enabled = true)
+	@Parameters({"appId", "appSecret", "spaceId", "spaceName", "space2Id", "space2Name"})
+	public void getTwoSpace(String appId, String appSecret, String spaceId, String spaceName, String space2Id, String space2Name) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+		query.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query.setObjectName("space1");
+		query.addAttribute(SpaceFields.ID, spaceId);
+		query.addField(SpaceFields.TITLE);
+		query.addField(SpaceFields.DESCRIPTION);
+		query.addField(SpaceFields.ID);
+		query.addField(SpaceFields.CREATED);
+		query.addField(SpaceFields.UPDATED);
+		BaseGraphQLMultiQuery twoSpaceQuery = new BaseGraphQLMultiQuery("getTwoSpaces", query);
+		ObjectDataSenderBuilder query2 = new ObjectDataSenderBuilder();
+		query2.setObjectName("space2");
+		query2.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query2.addAttribute(SpaceFields.ID, space2Id);
+		query2.addField(SpaceFields.TITLE);
+		query2.addField(SpaceFields.DESCRIPTION);
+		query2.addField(SpaceFields.ID);
+		query2.addField(SpaceFields.CREATED);
+		query2.addField(SpaceFields.UPDATED);
+		twoSpaceQuery.addQueryObject(query2);
+		ep.setRequest(new GraphQLRequest(twoSpaceQuery));
+		ep.executeRequest();
+		
+		DataContainer data = ep.getResultContainer().getData();
+		assert (null != data);
+		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
+		assert(null != space1);
+		assert (spaceName.equals(space1.getTitle()));
+		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
+		assert(null != space2);
+		assert (space2Name.equals(space2.getTitle()));
 	}
 }

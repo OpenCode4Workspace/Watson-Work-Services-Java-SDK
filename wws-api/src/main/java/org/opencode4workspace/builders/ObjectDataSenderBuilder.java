@@ -16,6 +16,7 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
+import org.opencode4workspace.bo.WWQueryResponseObjectInterface;
 import org.opencode4workspace.graphql.builders.GraphQLJsonPropertyHelper;
 
 /**
@@ -31,7 +32,7 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 
 	private static final long serialVersionUID = 1L;
 	private String objectName;
-	private Class returnType;
+	private WWQueryResponseObjectInterface returnType;
 	private boolean hasItems;
 	private boolean hasAlias;
 	private Map<String, Object> attributesList = new HashMap<String, Object>();
@@ -136,7 +137,7 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	 * 
 	 * @param returnType Class of return object
 	 */
-	public void setReturnType(Class returnType) {
+	public void setReturnType(WWQueryResponseObjectInterface returnType) {
 		if (null == returnType) {
 			setHasAlias(false);
 		} else {
@@ -146,11 +147,11 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	}
 	
 	/**
-	 * Get class response needs casting to
+	 * Get enum containing class response needs casting to
 	 * 
 	 * @return
 	 */
-	public Class getReturnType() {
+	public WWQueryResponseObjectInterface getReturnType() {
 		return returnType;
 	}
 	
@@ -331,13 +332,7 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 		if (!isHasAlias()) {
 			return getObjectName();
 		} else {
-			String tmpCastName = getReturnType().getSimpleName();
-			if (tmpCastName.contains("Wrapper")) {
-				tmpCastName = tmpCastName.substring(0, tmpCastName.indexOf("Wrapper"));
-			} else if (tmpCastName.contains("Container")) {
-				tmpCastName = tmpCastName.substring(0, tmpCastName.indexOf("Container"));
-			}
-			return getObjectName() + ":" + tmpCastName.toLowerCase();
+			return getObjectName() + ":" + getReturnType().getQueryObjectType();
 		}
 	}
 
