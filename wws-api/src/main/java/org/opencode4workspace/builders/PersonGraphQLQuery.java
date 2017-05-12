@@ -88,17 +88,7 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Person.ONE_PERSON_QUERY_OBJECT_NAME);
 		query.addAttribute(PersonAttributes.ID, personId);
-		query.addField(PersonFields.ID);
-		query.addField(PersonFields.DISPLAY_NAME);
-		query.addField(PersonFields.EMAIL);
-		query.addField(PersonFields.PHOTO_URL);
-		query.addField(PersonFields.EXT_ID);
-		query.addField(PersonFields.EMAIL_ADDRESSES);
-		query.addField(PersonFields.CUSTOMER_ID);
-		query.addField(PersonFields.CREATED);
-		query.addField(PersonFields.UPDATED);
-		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
-		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
+		addPersonFieldsAndChildren(query);
 		return new PersonGraphQLQuery(METHOD_GET_PROFILE, query);
 	}
 
@@ -120,17 +110,7 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Person.ONE_PERSON_QUERY_OBJECT_NAME);
 		query.addAttribute(PersonAttributes.ID, email);
-		query.addField(PersonFields.ID);
-		query.addField(PersonFields.DISPLAY_NAME);
-		query.addField(PersonFields.EMAIL);
-		query.addField(PersonFields.PHOTO_URL);
-		query.addField(PersonFields.EXT_ID);
-		query.addField(PersonFields.EMAIL_ADDRESSES);
-		query.addField(PersonFields.CUSTOMER_ID);
-		query.addField(PersonFields.CREATED);
-		query.addField(PersonFields.UPDATED);
-		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
-		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
+		addPersonFieldsAndChildren(query);
 		return new PersonGraphQLQuery(METHOD_GET_PROFILE, query);
 	}
 
@@ -144,6 +124,16 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 	public static PersonGraphQLQuery buildMyProfileQuery() {
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Person.MY_PROFILE_QUERY_OBJECT_NAME);
+		addPersonFieldsAndChildren(query);
+		return new PersonGraphQLQuery(METHOD_GET_MYSELF, query);
+	}
+
+	/**
+	 * Adds all Person fields plus CreatedBy and UpdatedBy
+	 * 
+	 * @param ObjectDataSenderBuilder containing the query
+	 */
+	private static ObjectDataSenderBuilder addPersonFieldsAndChildren(ObjectDataSenderBuilder query) {
 		query.addField(PersonFields.ID);
 		query.addField(PersonFields.DISPLAY_NAME);
 		query.addField(PersonFields.EMAIL);
@@ -153,9 +143,10 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 		query.addField(PersonFields.CUSTOMER_ID);
 		query.addField(PersonFields.CREATED);
 		query.addField(PersonFields.UPDATED);
+		query.addField(PersonFields.PRESENCE);
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
-		return new PersonGraphQLQuery(METHOD_GET_MYSELF, query);
+		return query;
 	}
 
 	/**

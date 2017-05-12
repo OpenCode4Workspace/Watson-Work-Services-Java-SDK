@@ -174,6 +174,7 @@ public class Person implements Serializable {
 	private Person createdBy;
 	private Date updated;
 	private Person updatedBy;
+	private PresenceStatus presence;
 
 	/**
 	 * @return String, id of the Person
@@ -383,6 +384,24 @@ public class Person implements Serializable {
 	 */
 	public void setUpdatedBy(Person updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	/**
+	 * @return whether the person is online or offline
+	 * 
+	 * @since 0.7.0
+	 */
+	public PresenceStatus getPresence() {
+		return presence;
+	}
+
+	/**
+	 * @param presence whether the person is online or offline
+	 * 
+	 * @since 0.7.0
+	 */
+	public void setPresence(PresenceStatus presence) {
+		this.presence = presence;
 	}
 
 }

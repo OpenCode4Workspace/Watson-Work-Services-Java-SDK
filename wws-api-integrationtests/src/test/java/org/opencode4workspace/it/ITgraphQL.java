@@ -12,6 +12,7 @@ import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
+import org.opencode4workspace.bo.Person.PresenceStatus;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
@@ -78,6 +79,7 @@ public class ITgraphQL {
 		members.addField(PersonFields.PHOTO_URL);
 		members.addField(PersonFields.EMAIL);
 		members.addField(PersonFields.DISPLAY_NAME);
+		members.addField(PersonFields.PRESENCE);
 		spaces.addChild(members);
 		List<? extends Space> spacesResult = client.getSpacesWithQuery(new SpacesGraphQLQuery(spaces));
 		assert (spacesResult.size() > 0);
@@ -105,6 +107,7 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		Person person = client.getPersonById(profileId);
 		assert (myDisplayName.equals(person.getDisplayName()));
+		assert (PresenceStatus.OFFLINE.equals(person.getPresence()));
 	}
 
 	@Test(enabled = true)
