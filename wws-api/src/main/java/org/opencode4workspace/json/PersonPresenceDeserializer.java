@@ -11,11 +11,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 /**
- * Deserialiser to convert String token type to Enum
+ * Deserialiser to convert String PresenceStatus in Person to Enum
  * 
- * @author Christian Guedemann
+ * @author Paul Withers
  * 
- * @since 0.5.0
+ * @since 0.7.0
  *
  */
 public class PersonPresenceDeserializer implements JsonDeserializer<PresenceStatus> {
