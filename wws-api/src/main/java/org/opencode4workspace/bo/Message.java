@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.json.ResultParser;
 
 /**
@@ -287,7 +288,7 @@ public class Message implements Serializable {
 			ResultParser<Annotation> annoParser = new ResultParser<Annotation>(Annotation.class, "MILIS");
 			for (String anno : annotations) {
 				Annotation annoObject = annoParser.parse(anno);
-				if ("generic".equals(annoObject.getType())) {
+				if (AnnotationType.GENERIC.equals(annoObject.getType())) {
 					annos.add(annoObject);
 				}
 			}

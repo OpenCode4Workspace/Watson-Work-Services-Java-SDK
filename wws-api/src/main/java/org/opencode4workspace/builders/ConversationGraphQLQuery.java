@@ -1,6 +1,7 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
@@ -84,7 +85,7 @@ public class ConversationGraphQLQuery extends BaseGraphQLQuery {
 	 *        </ul>
 	 *
 	 */
-	public enum MessageAttributes implements WWFieldsAttributesInterface {
+	public enum ConversationMessageAttributes implements WWFieldsAttributesInterface {
 		OLDEST_TIMESTAMP("oldestTimestamp", Long.class), MOST_RECENT_TIMESTAMP("mostRecentTimestamp", Long.class), ANNOTATION_TYPE("annotationType", String.class);
 
 		private String label;
@@ -98,7 +99,7 @@ public class ConversationGraphQLQuery extends BaseGraphQLQuery {
 		 * @param objectClassType
 		 *            Class<?> Java data type expected for passing across
 		 */
-		private MessageAttributes(String label, Class<?> objectClassType) {
+		private ConversationMessageAttributes(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}

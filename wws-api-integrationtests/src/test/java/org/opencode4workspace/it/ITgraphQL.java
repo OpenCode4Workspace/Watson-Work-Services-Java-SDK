@@ -7,8 +7,12 @@ import java.util.List;
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Conversation.ConversationChildren;
+import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message;
+import org.opencode4workspace.bo.Message.MessageFields;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
@@ -19,6 +23,9 @@ import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.bo.WWQueryResponseObjectTypes;
 import org.opencode4workspace.builders.BaseGraphQLMultiQuery;
 import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
+import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.ConversationGraphQLQuery.ConversationAttributes;
+import org.opencode4workspace.builders.ConversationGraphQLQuery.ConversationMessageAttributes;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
@@ -107,7 +114,7 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		Person person = client.getPersonById(profileId);
 		assert (myDisplayName.equals(person.getDisplayName()));
-		assert (PresenceStatus.OFFLINE.equals(person.getPresence()));
+		assert (null != person.getPresence());
 	}
 
 	@Test(enabled = true)
@@ -120,6 +127,27 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 
 		Conversation conversation = client.getConversationById(conversationId);
+		assert (conversation != null);
+		assert (conversation.getMessages().size() > 0);
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "conversationId" })
+	public void testGetConversationGenericMessagesOnly(String appId, String appSecret, String conversationId)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true)
+				.addAttribute(ConversationMessageAttributes.ANNOTATION_TYPE, AnnotationType.GENERIC.getLabel())
+				.addField(MessageFields.CONTENT);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Conversation.CONVERSATION_QUERY_OBJECT_NAME)
+				.addAttribute(ConversationAttributes.ID, conversationId)
+				.addField(ConversationFields.ID)
+				.addChild(messages);
+		Conversation conversation = client.getConversationWithQuery(new ConversationGraphQLQuery(query));
 		assert (conversation != null);
 		assert (conversation.getMessages().size() > 0);
 	}

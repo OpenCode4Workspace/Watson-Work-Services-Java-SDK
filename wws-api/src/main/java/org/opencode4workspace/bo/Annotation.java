@@ -11,6 +11,59 @@ import java.util.Date;
  *        Serializable object corresponding to an annotation for a message
  */
 public class Annotation implements Serializable {
+	
+	/**
+	 * Enum for Annotation types
+	 * 
+	 * @author Paul Withers
+	 * @since 0.7.0
+	 *
+	 */
+	public enum AnnotationType implements WWFieldsAttributesInterface {
+		GENERIC("generic", String.class), MOMENT("conversation-moment", String.class), FOCUS("message-focus", String.class), NLP_ENTITY(
+				"mesage-nlp-entities", String.class), NLP_KEYWORD("message-nlp-keywords", String.class), NLP_DOCSENTIMENT(
+						"nlp-docSentiment", String.class), NLP_RELATION("message-nlp-relations", String.class), NLP_CONCEPT(
+								"message-nlp-concepts", String.class), NLP_TAXONOMY(
+										"message-nlp-taxonomy", String.class), NLP_DATE("message-nlp-dates", String.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private AnnotationType(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#
+		 * getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+		
+	}
 
 	private static final long serialVersionUID = 1L;
 	private Actor actor;
@@ -20,7 +73,7 @@ public class Annotation implements Serializable {
 	private String id;
 	private String text;
 	private String title;
-	private String type;
+	private AnnotationType type;
 	private int version;
 
 	/**
@@ -161,7 +214,7 @@ public class Annotation implements Serializable {
 	 * 
 	 * @since 0.5.0
 	 */
-	public String getType() {
+	public AnnotationType getType() {
 		return type;
 	}
 
@@ -171,7 +224,7 @@ public class Annotation implements Serializable {
 	 * 
 	 * @since 0.5.0
 	 */
-	public void setType(String type) {
+	public void setType(AnnotationType type) {
 		this.type = type;
 	}
 

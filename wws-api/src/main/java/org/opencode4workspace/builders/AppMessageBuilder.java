@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.opencode4workspace.bo.Actor;
 import org.opencode4workspace.bo.Annotation;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.endpoints.AppMessage;
 
 /**
@@ -112,7 +113,7 @@ public class AppMessageBuilder {
 		AppMessage message = new AppMessage();
 		message.setVersion(1);
 		Annotation annotation = new Annotation();
-		annotation.setType("generic");
+		annotation.setType(AnnotationType.GENERIC);
 		annotation.setVersion(1);
 		annotation.setColor(color);
 		annotation.setText(text);

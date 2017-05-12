@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.opencode4workspace.authentication.AppToken.TokenScope;
 import org.opencode4workspace.authentication.AppToken.TokenType;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.bo.Person.PresenceStatus;
 
 import com.google.gson.Gson;
@@ -40,6 +41,7 @@ public class ResultParser<T> {
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
 		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
+		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
 		this.gson = builder.create();
 	}
 
@@ -67,6 +69,7 @@ public class ResultParser<T> {
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
 		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
+		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
 		this.gson = builder.create();
 	}
 
