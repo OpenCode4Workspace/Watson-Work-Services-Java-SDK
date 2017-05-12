@@ -153,6 +153,28 @@ public class ITgraphQL {
 	}
 
 	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "conversationId", "oldestTimestamp", "mostRecentTimestamp" })
+	public void testGetConversationTimestampMessages(String appId, String appSecret, String conversationId, Long oldestTimestamp, Long mostRecentTimestamp)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true)
+				.addAttribute(ConversationMessageAttributes.OLDEST_TIMESTAMP, oldestTimestamp)
+				.addAttribute(ConversationMessageAttributes.MOST_RECENT_TIMESTAMP, mostRecentTimestamp)
+				.addField(MessageFields.CONTENT);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Conversation.CONVERSATION_QUERY_OBJECT_NAME)
+				.addAttribute(ConversationAttributes.ID, conversationId)
+				.addField(ConversationFields.ID)
+				.addChild(messages);
+		Conversation conversation = client.getConversationWithQuery(new ConversationGraphQLQuery(query));
+		assert (conversation != null);
+		assert (conversation.getMessages().size() > 0);
+	}
+
+	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
 	public void testGetSpaceMembers(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
