@@ -17,5 +17,6 @@ public class WWDefinedEndpoints {
 	public static final String AUTHENTICATION = "https://api.watsonwork.ibm.com/oauth/token";
 	public static final String GRAPHQL = "https://api.watsonwork.ibm.com/graphql";
 	public static final String V1_SPACE_ID = "https://api.watsonwork.ibm.com//v1/spaces/";
+	public static final String PHOTO = "https://api.watsonwork.ibm.com/photos";
 
 }

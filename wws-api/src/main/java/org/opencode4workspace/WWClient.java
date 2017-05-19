@@ -1,5 +1,6 @@
 package org.opencode4workspace;
 
+import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.PhotoResponse;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
@@ -27,6 +29,7 @@ import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMem
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
+import org.opencode4workspace.endpoints.PhotoPostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
 import org.opencode4workspace.graphql.GraphResultContainer;
@@ -603,6 +606,17 @@ public class WWClient implements Serializable, IWWClient {
 	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);
 		return ep.postMessage(message, spaceId);
+	}
+	
+	/**
+	 * @param photo File containing a jpeg to post. Should be less than 300Kb
+	 * @return PhotoResponse from Watson Workspace 
+	 * @throws WWException contains an error message, if the query was unsuccessful
+	 * @since 0.7.0
+	 */
+	public PhotoResponse postPhoto(File photo) throws WWException {
+		PhotoPostEndpoint ep = new PhotoPostEndpoint(this);
+		return ep.postPhoto(photo);
 	}
 
 	/**
