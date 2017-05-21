@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.FileResponse;
 import org.opencode4workspace.bo.WWQueryResponseObjectInterface;
 import org.opencode4workspace.builders.BaseGraphQLMutation;
 import org.opencode4workspace.graphql.DataContainer;
@@ -67,6 +68,17 @@ public class MockClient implements IWWClient {
 			aliasedChildren.put(alias, returnObj);
 		}
 		ep.getResultContainer().getData().setAliasedChildren(aliasedChildren);
+	}
+	
+	/**
+	 * Parses the response from posting a file to a space and returns a FileResponse 
+	 * 
+	 * @param response String response from posting a file
+	 * @return FileResponse parsed from parameter
+	 * @since 0.7.0
+	 */
+	public static FileResponse parseFileResponseOutcome(String response) {
+		return new ResultParser<FileResponse>(FileResponse.class).parse(response);
 	}
 
 	/**

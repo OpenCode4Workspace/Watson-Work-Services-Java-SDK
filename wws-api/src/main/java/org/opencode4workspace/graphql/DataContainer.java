@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.FileResponse;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 
