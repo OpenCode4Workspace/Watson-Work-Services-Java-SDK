@@ -32,7 +32,7 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * String posts the passed message to the passed Space
+	 * Posts the passed message to the passed Space
 	 * 
 	 * @param message
 	 *            AppMessage message to post

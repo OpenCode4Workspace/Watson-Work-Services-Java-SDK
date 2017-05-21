@@ -27,10 +27,22 @@ import org.opencode4workspace.json.ResultParser;
  */
 public class PhotoPostEndpoint extends AbstractWWGraphQLEndpoint {
 
+	/**
+	 * @param client WWClient containing authentication details and token
+	 */
 	public PhotoPostEndpoint(IWWClient client) {
 		super(client);
 	}
 	
+	/**
+	 * Posts a new photo for a user
+	 * 
+	 * @param photo jpeg File (must be less than 300Kb) for the user's new photo
+	 * @return PohotResponse if successful
+	 * @throws WWException containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public PhotoResponse postPhoto(File photo) throws WWException {
 		HttpPost post = preparePost();
 		CloseableHttpClient client = HttpClients.createDefault();
