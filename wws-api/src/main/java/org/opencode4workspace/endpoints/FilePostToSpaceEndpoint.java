@@ -40,13 +40,10 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
-			FileInputStream stream = new FileInputStream(file);
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			builder.addBinaryBody(
 				    "file",
-				    stream,
-				    ContentType.APPLICATION_OCTET_STREAM,
-				    file.getName()
+				    file
 				);
 			if (null != imageSize && !"".equals(imageSize)) {
 				builder.addTextBody("dim", imageSize);
