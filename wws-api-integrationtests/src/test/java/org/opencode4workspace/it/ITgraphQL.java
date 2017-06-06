@@ -383,4 +383,44 @@ public class ITgraphQL {
 		assert(null != space2);
 		assert (space2Name.equals(space2.getTitle()));
 	}
+	
+	@Test(enabled = true)
+	@Parameters({"appId", "appSecret", "spaceId", "spaceName", "space2Id", "space2Name"})
+	public void getTwoSpaceFromClient(String appId, String appSecret, String spaceId, String spaceName, String space2Id, String space2Name) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+		query.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query.setObjectName("space1");
+		query.addAttribute(SpaceFields.ID, spaceId);
+		query.addField(SpaceFields.TITLE);
+		query.addField(SpaceFields.DESCRIPTION);
+		query.addField(SpaceFields.ID);
+		query.addField(SpaceFields.CREATED);
+		query.addField(SpaceFields.UPDATED);
+		BaseGraphQLMultiQuery twoSpaceQuery = new BaseGraphQLMultiQuery("getTwoSpaces", query);
+		ObjectDataSenderBuilder query2 = new ObjectDataSenderBuilder();
+		query2.setObjectName("space2");
+		query2.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query2.addAttribute(SpaceFields.ID, space2Id);
+		query2.addField(SpaceFields.TITLE);
+		query2.addField(SpaceFields.DESCRIPTION);
+		query2.addField(SpaceFields.ID);
+		query2.addField(SpaceFields.CREATED);
+		query2.addField(SpaceFields.UPDATED);
+		twoSpaceQuery.addQueryObject(query2);
+		GraphResultContainer resultContainer = client.getCustomQuery(twoSpaceQuery);
+		
+		DataContainer data = resultContainer.getData();
+		assert (null != data);
+		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
+		assert(null != space1);
+		assert (spaceName.equals(space1.getTitle()));
+		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
+		assert(null != space2);
+		assert (space2Name.equals(space2.getTitle()));
+	}
+	
+	
 }
