@@ -3,6 +3,9 @@ package org.opencode4workspace.endpoints;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.codec.binary.StringUtils;
@@ -34,10 +37,34 @@ import org.opencode4workspace.json.ResultParser;
  */
 public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 
+	/**
+	 * @param client
+	 *            WWClient containing authentication details and token
+	 * 
+	 * @since 0.7.0
+	 */
 	public FilePostToSpaceEndpoint(IWWClient client) {
 		super(client);
 	}
-	
+
+	/**
+	 * Post a file to Watson Workspace. <b>NOTE:</b> imageSize is not currently
+	 * supported
+	 * 
+	 * @param file
+	 *            to post into the Workspace
+	 * @param spaceId
+	 *            String id of the space to post to
+	 * @param imageSize
+	 *            image size as height x width, e.g. 200x200. Only blank or null
+	 *            values are current supported
+	 * @return FileResponse object corresponding to the successful posting of
+	 *         the file
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public FileResponse postfile(File file, String spaceId, String imageSize) throws WWException {
 		HttpPost post = preparePost(spaceId);
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -45,12 +72,12 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 		try {
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-			builder.addBinaryBody(
-				    "file",
-				    file
-				);
+			builder.addBinaryBody("file", file);
 			if (null != imageSize && !"".equals(imageSize)) {
-				builder.addTextBody("dim", imageSize);
+				// builder.addTextBody("dim", imageSize); This doesn't work,
+				// can't get it to work
+				throw new WWException(
+						"Cannot post images with image size yet, unable to identofy correct Java code to avoiod Error 500. Please remove imageSize. Image will be posted as a downloadable attachment rather than as an inline image");
 			}
 
 			HttpEntity multipart = builder.build();
@@ -82,7 +109,8 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.7.0
 	 */
 	private HttpPost preparePost(String spaceId) {
-		HttpPost post = new HttpPost(WWDefinedEndpoints.V1_SPACE_ID + spaceId + "/files");
+		String url = WWDefinedEndpoints.V1_SPACE_ID + spaceId + "/files";
+		HttpPost post = new HttpPost(url);
 		post.addHeader("Authorization", "Bearer " + getClient().getJWTToken());
 		post.addHeader("Accept", ContentType.APPLICATION_JSON.toString());
 		return post;

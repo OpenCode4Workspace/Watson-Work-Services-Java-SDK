@@ -30,6 +30,8 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 *            String, operation name
 	 * @param queryObject
 	 *            ObjectDataSenderBuilder containing the query settings
+	 *            
+	 *            @since 0.7.0
 	 */
 	public BaseGraphQLMultiQuery(String operationName, ObjectDataSenderBuilder queryObject) {
 		super(operationName, queryObject);
@@ -43,6 +45,8 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 *            String, operation name
 	 * @param queryObjects
 	 *            List of ObjectDataSenderBuilder containing the query settings
+	 *            
+	 *            @since 0.7.0
 	 */
 	public BaseGraphQLMultiQuery(String operationName, List<ObjectDataSenderBuilder> queryObjects) {
 		super(operationName, queryObjects.get(0));
@@ -69,6 +73,8 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 * Gets all query objects loaded into this query
 	 * 
 	 * @return List of ObjectDataSenderBuilders for each query
+	 * 
+	 * @since 0.7.0
 	 */
 	public List<ObjectDataSenderBuilder> getQueryObjects() {
 		return queryObjects;
@@ -78,6 +84,9 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 * Add a query object to the list
 	 * 
 	 * @param queryObject ObjectDataSenderBuilder containing the query
+	 * @return BaseGraphQLMultiQuery, current object
+	 * 
+	 * @since 0.7.0
 	 */
 	public BaseGraphQLMultiQuery addQueryObject(ObjectDataSenderBuilder queryObject) {
 		queryObjects.add(queryObject);
@@ -88,6 +97,9 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 * Add a query object to the list
 	 * 
 	 * @param queryObject ObjectDataSenderBuilder containing the query
+	 * @return BaseGraphQLMultiQuery, current object
+	 * 
+	 * @since 0.7.0
 	 */
 	public BaseGraphQLMultiQuery removeQueryObject(ObjectDataSenderBuilder queryObject) {
 		queryObjects.remove(queryObject);
@@ -95,9 +107,12 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	}
 	
 	/**
-	 * Changes default query object to another element in the Array
+	 * Changes default query object to another element in the ArrayList
 	 * 
 	 * @param idx index of the array, or 0 if passed index exceeds bounds
+	 * @return ObjectDataSenderBuilder queryObject from the ArrayList switched to, or last if parameter exceeds bounds
+	 * 
+	 * @since 0.7.0
 	 */
 	public ObjectDataSenderBuilder switchQueryObjectIndex(int idx) {
 		if (idx > queryObjects.size()) {
@@ -112,6 +127,9 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 * Changes detauls query object to another query object. If it's not already in the List, it is added
 	 * 
 	 * @param queryObject ObjectDataSenderBuilder containing the query
+	 * @return ObjectDataSenderBuilder queryObject passed into the method
+	 * 
+	 * @since 0.7.0
 	 */
 	public ObjectDataSenderBuilder switchQueryObject(ObjectDataSenderBuilder queryObject) {
 		this.queryObject = queryObject;

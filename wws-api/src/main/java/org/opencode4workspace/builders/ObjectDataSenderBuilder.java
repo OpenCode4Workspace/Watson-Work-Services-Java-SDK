@@ -149,7 +149,7 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 	/**
 	 * Get enum containing class response needs casting to
 	 * 
-	 * @return
+	 * @return WWQueryResponseObjectInterface corresponding to the class the response needs casting to
 	 */
 	public WWQueryResponseObjectInterface getReturnType() {
 		return returnType;

@@ -22,7 +22,7 @@ public class ITPostFileToSpace {
 		assert client.isAuthenticated();
 		
 		File photo = new File(imagePath);
-		FileResponse response = client.postFileToSpace(photo, spaceId, "50x50");
+		FileResponse response = client.postFileToSpace(photo, spaceId);
 		assert (!"".equals(response.getName()));
 		assert (appId.equals(response.getCreatedBy()));
 	}
