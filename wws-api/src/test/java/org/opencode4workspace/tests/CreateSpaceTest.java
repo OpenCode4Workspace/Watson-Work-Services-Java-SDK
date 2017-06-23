@@ -23,6 +23,7 @@ public class CreateSpaceTest {
 		assertEquals(CREATE_SPACE_MUTATION, mutation.returnQuery());
 	}
 
+	@Test
 	public void checkCreateSpaceResponse() throws WWException {
 		MockClient client = new MockClient(CREATE_SPACE_RESPONSE);
 		SpaceWrapper space = client.getData().getCreateSpace();

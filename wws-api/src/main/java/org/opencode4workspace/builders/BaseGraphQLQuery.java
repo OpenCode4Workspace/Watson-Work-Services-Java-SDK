@@ -19,8 +19,8 @@ import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 public abstract class BaseGraphQLQuery implements Serializable, IGraphQLQuery {
 
 	private static final long serialVersionUID = 1L;
-	private final String operationName;
-	private final ObjectDataSenderBuilder queryObject;
+	protected final String operationName;
+	protected ObjectDataSenderBuilder queryObject;
 
 	/**
 	 * Constructor, passing in everything required to build the query

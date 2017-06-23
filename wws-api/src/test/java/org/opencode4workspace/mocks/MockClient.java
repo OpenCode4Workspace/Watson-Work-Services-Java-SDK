@@ -1,15 +1,23 @@
 package org.opencode4workspace.mocks;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.FileResponse;
+import org.opencode4workspace.bo.WWQueryResponseObjectInterface;
 import org.opencode4workspace.builders.BaseGraphQLMutation;
 import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.ResultParser;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * @author Paul Withers
@@ -22,6 +30,7 @@ import org.opencode4workspace.json.ResultParser;
 public class MockClient implements IWWClient {
 	private static final long serialVersionUID = 1L;
 	private MockGraphQLEndpoint ep;
+	private String resultContent;
 
 	/**
 	 * Initialises a MockClient using a {@link MockGraphQLEndpoint} loading the relevant response
@@ -33,6 +42,43 @@ public class MockClient implements IWWClient {
 		ep = new MockGraphQLEndpoint(this);
 		ep.setResultContent(response);
 		ep.setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(response));
+	}
+
+	/**
+	 * Initialises a MockClient using a {@link MockGraphQLEndpoint} loading the relevant response
+	 * 
+	 * @param response
+	 *            String response copied from the GraphiQL IDE after running te relevant query
+	 * @throws WWException Error in parsing response
+	 */
+	public MockClient(String response, Map<String, WWQueryResponseObjectInterface> aliases) throws WWException {
+		ep = new MockGraphQLEndpoint(this);
+		ep.setResultContent(response);
+		ep.setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(response));
+		Gson gson = new Gson();
+		JsonObject resultAsJson = gson.fromJson(getResultContent(), JsonObject.class);
+		JsonElement dataAsJson = resultAsJson.get("data").getAsJsonObject();
+		Map<String, Object> aliasedChildren = new HashMap<String, Object>();
+		for (String alias : aliases.keySet()) {
+			JsonElement obj = (JsonObject) dataAsJson.getAsJsonObject().get(alias);
+			Object returnObj = null;
+			if (null != obj) {
+				returnObj = aliases.get(alias).parse(obj.toString());
+			}
+			aliasedChildren.put(alias, returnObj);
+		}
+		ep.getResultContainer().getData().setAliasedChildren(aliasedChildren);
+	}
+	
+	/**
+	 * Parses the response from posting a file to a space and returns a FileResponse 
+	 * 
+	 * @param response String response from posting a file
+	 * @return FileResponse parsed from parameter
+	 * @since 0.7.0
+	 */
+	public static FileResponse parseFileResponseOutcome(String response) {
+		return new ResultParser<FileResponse>(FileResponse.class).parse(response);
 	}
 
 	/**
@@ -109,7 +155,6 @@ public class MockClient implements IWWClient {
 	 */
 	@Override
 	public String getJWTToken() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -120,7 +165,6 @@ public class MockClient implements IWWClient {
 	 */
 	@Override
 	public Object getExpiresIn() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -132,6 +176,16 @@ public class MockClient implements IWWClient {
 	@Override
 	public boolean isValid() {
 		return true;
+	}
+
+	@Override
+	public String getResultContent() {
+		return resultContent;
+	}
+
+	@Override
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
 	}
 
 }

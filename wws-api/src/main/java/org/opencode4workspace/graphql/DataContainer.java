@@ -1,8 +1,11 @@
 package org.opencode4workspace.graphql;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.FileResponse;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 
@@ -27,6 +30,7 @@ public class DataContainer implements Serializable {
 	private CreateSpaceContainer createSpace;
 	private DeleteSpaceContainer deleteSpace;
 	private UpdateSpaceContainer updateSpace;
+	private Map<String, Object> aliasedChildren;
 
 	/**
 	 * @return SpacesContainer containing Spaces available for the Application / User
@@ -198,6 +202,26 @@ public class DataContainer implements Serializable {
 			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return message;
+	}
+
+	/**
+	 * When passing aliases, this holds the return objects for those aliases, e.g.
+	 * "space1", (SpaceWrapper) space1
+	 * "space2", (SpaceWrapper) space2
+	 * 
+	 * @return Map of children, key is alias, value is return object
+	 */
+	public Map<String, Object> getAliasedChildren() {
+		return aliasedChildren;
+	}
+
+	/**
+	 * Setter for children for objects with aliases
+	 * 
+	 * @param children Map of children, key is alias, value is return object
+	 */
+	public void setAliasedChildren(Map<String, Object> children) {
+		this.aliasedChildren = children;
 	}
 
 }

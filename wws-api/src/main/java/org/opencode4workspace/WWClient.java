@@ -1,18 +1,23 @@
 package org.opencode4workspace;
 
+import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.FileResponse;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.bo.Person;
+import org.opencode4workspace.bo.PhotoResponse;
 import org.opencode4workspace.bo.Space;
+import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
@@ -24,10 +29,14 @@ import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
+import org.opencode4workspace.endpoints.FilePostToSpaceEndpoint;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
+import org.opencode4workspace.endpoints.PhotoPostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
+import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.graphql.UpdateSpaceContainer;
+import org.opencode4workspace.json.GraphQLRequest;
 
 /**
  * @author Christian Guedemann
@@ -46,6 +55,7 @@ public class WWClient implements Serializable, IWWClient {
 	private AuthenticationEndpoint endpoint;
 	private AuthenticationResult authenticationResult;
 	private String redirectTo;
+	private String resultContent;
 
 	/**
 	 * Creates and returns a WWClient for a specific user
@@ -598,6 +608,54 @@ public class WWClient implements Serializable, IWWClient {
 	public MessageResponse postMessageToSpace(AppMessage message, String spaceId) throws WWException {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);
 		return ep.postMessage(message, spaceId);
+	}
+	
+	public FileResponse postFileToSpace(File file, String spaceId) throws WWException {
+		return postFileToSpace(file, spaceId, null);
+	}
+	
+	public FileResponse postFileToSpace(File file, String spaceId, String imageSize) throws WWException {
+		FilePostToSpaceEndpoint ep = new FilePostToSpaceEndpoint(this);
+		return ep.postfile(file, spaceId, imageSize);
+	}
+	
+	/**
+	 * @param photo File containing a jpeg to post. Should be less than 300Kb
+	 * @return PhotoResponse from Watson Workspace 
+	 * @throws WWException contains an error message, if the query was unsuccessful
+	 * @since 0.7.0
+	 */
+	public PhotoResponse postPhoto(File photo) throws WWException {
+		PhotoPostEndpoint ep = new PhotoPostEndpoint(this);
+		return ep.postPhoto(photo);
+	}
+
+	/**
+	 * Perform a custom GraphQL query returning customised content for one or more fields. Return objects may also be cast to variables
+	 * 
+	 * @param query BaseGraphQLQuery custom query to run 
+	 * @return GraphResultContainer containing Data and Errors
+	 * @throws WWException contains an error message, if the query was unsuccessful
+	 */
+	public GraphResultContainer getCustomQuery(BaseGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		ep.setRequest(new GraphQLRequest(query));
+		ep.executeRequest();
+		return ep.getResultContainer();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.IWWClient#getResultContent()
+	 */
+	public String getResultContent() {
+		return resultContent;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.IWWClient#setResultContent(java.lang.String)
+	 */
+	public void setResultContent(String resultContent) {
+		this.resultContent = resultContent;
 	}
 
 }

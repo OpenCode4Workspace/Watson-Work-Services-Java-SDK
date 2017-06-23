@@ -1,6 +1,7 @@
 package org.opencode4workspace.builders;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
@@ -16,6 +17,7 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
  *        Object for creating a Conversation GraphQL query
  */
 public class ConversationGraphQLQuery extends BaseGraphQLQuery {
+	
 	/**
 	 * @author Paul Withers
 	 * @since 0.5.0
@@ -43,6 +45,61 @@ public class ConversationGraphQLQuery extends BaseGraphQLQuery {
 		 *            Class<?> Java data type expected for passing across
 		 */
 		private ConversationAttributes(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+
+	}
+	
+	/**
+	 * @author Paul Withers
+	 * @since 0.5.0
+	 * 
+	 *        <p>
+	 *        Enum for filtering a MessageList. See {@link WWFieldsAttributesInterface}.
+	 *        </p>
+	 *        <ul>
+	 *        <li>OLDEST_TIMESTAMP expects a Long for the time</li>
+	 *        <li>MOST_RECENT_TIMESTAMP expects a Long for the time</li>
+	 *        <li>ANNOTATION_TYPE expects a String for the type of annotation</li>
+	 *        </ul>
+	 *
+	 */
+	public enum ConversationMessageAttributes implements WWFieldsAttributesInterface {
+		OLDEST_TIMESTAMP("oldestTimestamp", Long.class), MOST_RECENT_TIMESTAMP("mostRecentTimestamp", Long.class), ANNOTATION_TYPE("annotationType", String.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private ConversationMessageAttributes(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}

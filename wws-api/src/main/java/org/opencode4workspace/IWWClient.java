@@ -85,5 +85,19 @@ public interface IWWClient {
 	 * @since 0.5.0
 	 */
 	boolean isValid();
+	
+	/**
+	 * Getter for resultContent from relevant endpoint
+	 * 
+	 * @return result content (data / errors) as JSON String
+	 */
+	String getResultContent();
+
+	/**
+	 * Setter for resultContent from relevant endpoint
+	 * 
+	 * @param resultContent result content (data / errors) as JSON String
+	 */
+	void setResultContent(String resultContent);
 
 }

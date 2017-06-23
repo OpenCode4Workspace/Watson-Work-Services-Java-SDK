@@ -1,5 +1,10 @@
 package org.opencode4workspace.endpoints;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -9,11 +14,16 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 import org.opencode4workspace.json.RequestBuilder;
 import org.opencode4workspace.json.ResultParser;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * @author Paul Withers
@@ -137,6 +147,22 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 				String content = EntityUtils.toString(response.getEntity());
 				setResultContent(content);
 				setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content));
+				if (null != getRequest().getReturnObjectTypes()) {
+					Gson gson = new Gson();
+					JsonObject resultAsJson = gson.fromJson(getResultContent(), JsonObject.class);
+					JsonElement dataAsJson = resultAsJson.get("data").getAsJsonObject();
+					Map<String, Object> aliasedChildren = new HashMap<String, Object>();
+					for (String alias : getRequest().getReturnObjectTypes().keySet()) {
+						JsonElement obj = (JsonObject) dataAsJson.getAsJsonObject().get(alias);
+						Object returnObj = null;
+						if (null != obj) {
+							returnObj = getRequest().getReturnObjectTypes().get(alias).parse(obj.toString());
+						}
+						aliasedChildren.put(alias, returnObj);
+					}
+					getResultContainer().getData().setAliasedChildren(aliasedChildren);
+				}
+				// TODO: Also allow access to children easily from WWClient
 				if (null != getResultContainer().getErrors()) {
 					ErrorContainer error = getResultContainer().getErrors().get(0);
 					if ("403 Forbidden".equals(error.getMessage())) {
@@ -174,6 +200,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * @see org.opencode4workspace.endpoints.IWWGraphQLEndpoint#setResultContent(java.lang.String)
 	 */
 	public void setResultContent(String resultContent) {
+		client.setResultContent(resultContent);
 		this.resultContent = resultContent;
 	}
 
@@ -221,6 +248,18 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 */
 	public void setProfileDump(Boolean profileDump) {
 		this.profileDump = profileDump;
+	}
+
+	public Map<String, Object> getAliasedChildren() {
+		try {
+			DataContainer data = getResultContainer().getData();
+			if (null != data) {
+				return data.getAliasedChildren();
+			}
+		} catch (WWException e) {
+			// TODO CHRISTIAN, is it okay to just assume this is null and suppress the error?
+		}
+		return null;
 	}
 
 }

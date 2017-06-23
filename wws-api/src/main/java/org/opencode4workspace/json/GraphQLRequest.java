@@ -1,8 +1,13 @@
 package org.opencode4workspace.json;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.WWQueryResponseObjectInterface;
+import org.opencode4workspace.bo.WWQueryResponseObjectTypes;
+import org.opencode4workspace.builders.BaseGraphQLMultiQuery;
 import org.opencode4workspace.builders.BaseGraphQLMutation;
 import org.opencode4workspace.builders.IGraphQLQuery;
 import org.opencode4workspace.builders.InputDataSenderBuilder;
@@ -21,6 +26,7 @@ public class GraphQLRequest {
 	private String query;
 	private HashMap<String, String> variables;
 	private String operationName;
+	private Map<String, WWQueryResponseObjectInterface> returnObjectTypes;
 
 	/**
 	 * Initialises the GraphQLRequest object from all properties
@@ -72,6 +78,15 @@ public class GraphQLRequest {
 			this.operationName = queryObject.getOperationName();
 			this.query = queryObject.returnQuery();
 			this.variables = variables;
+			// TODO: CHRISTIAN can this be coded shorter?
+			if (queryObject instanceof BaseGraphQLMultiQuery) {
+				Map<String, WWQueryResponseObjectInterface> tmpMap = new HashMap<String, WWQueryResponseObjectInterface>();
+				BaseGraphQLMultiQuery tmpQueryObj = (BaseGraphQLMultiQuery) queryObject;
+				for (ObjectDataSenderBuilder object : tmpQueryObj.getQueryObjects()) {
+					tmpMap.put(object.getObjectName(), object.getReturnType());
+				}
+				setReturnObjectTypes(tmpMap);
+			}
 		} catch (Exception e) {
 			throw new WWException("Error creating request from query - " + e.getMessage());
 		}
@@ -232,6 +247,34 @@ public class GraphQLRequest {
 	 */
 	public void setOperationName(String operationName) {
 		this.operationName = operationName;
+	}
+
+	/**
+	 * If the query includes aliases we need to parse them out. This list will hold the alias and the enum type
+	 * e.g. 
+	 * "space1", WWQueryResponseObjectTypes.SPACE
+	 * "space2", WWQueryResponseObjectTypes.SPACE
+	 * These are pulled if a {@link BaseGraphQLMultiQuery} is the type of {@link IGraphQLQuery} passed in
+	 * 
+	 * This means we know what to cast the return object to, in this case SpaceWrapper
+	 * 
+	 * @return alias name the user wants to cast the return object to, and enum holding details
+	 * 
+	 * @since 0.7.0
+	 */
+	public Map<String, WWQueryResponseObjectInterface> getReturnObjectTypes() {
+		return returnObjectTypes;
+	}
+
+	/**
+	 * Setter for returnObjectTypes
+	 * 
+	 * @param returnObjectTypes Map of alias name and enum holding details
+	 * 
+	 * @since 0.7.0
+	 */
+	public void setReturnObjectTypes(Map<String, WWQueryResponseObjectInterface> returnObjectTypes) {
+		this.returnObjectTypes = returnObjectTypes;
 	}
 
 }

@@ -7,15 +7,25 @@ import java.util.List;
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWClient;
 import org.opencode4workspace.WWException;
+import org.opencode4workspace.bo.Annotation.AnnotationType;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Conversation.ConversationChildren;
+import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message;
+import org.opencode4workspace.bo.Message.MessageFields;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Person.PersonChildren;
 import org.opencode4workspace.bo.Person.PersonFields;
+import org.opencode4workspace.bo.Person.PresenceStatus;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
+import org.opencode4workspace.bo.WWQueryResponseObjectTypes;
+import org.opencode4workspace.builders.BaseGraphQLMultiQuery;
 import org.opencode4workspace.builders.BasicCreatedByUpdatedByDataSenderBuilder;
+import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.ConversationGraphQLQuery.ConversationAttributes;
+import org.opencode4workspace.builders.ConversationGraphQLQuery.ConversationMessageAttributes;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
@@ -26,9 +36,16 @@ import org.opencode4workspace.graphql.BasicPaginationEnum;
 import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
+import org.opencode4workspace.graphql.SpaceWrapper;
 import org.opencode4workspace.json.GraphQLRequest;
+import org.opencode4workspace.json.ResultParser;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.testng.remote.strprotocol.BaseMessageSender;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class ITgraphQL {
 
@@ -69,6 +86,7 @@ public class ITgraphQL {
 		members.addField(PersonFields.PHOTO_URL);
 		members.addField(PersonFields.EMAIL);
 		members.addField(PersonFields.DISPLAY_NAME);
+		members.addField(PersonFields.PRESENCE);
 		spaces.addChild(members);
 		List<? extends Space> spacesResult = client.getSpacesWithQuery(new SpacesGraphQLQuery(spaces));
 		assert (spacesResult.size() > 0);
@@ -96,6 +114,7 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 		Person person = client.getPersonById(profileId);
 		assert (myDisplayName.equals(person.getDisplayName()));
+		assert (null != person.getPresence());
 	}
 
 	@Test(enabled = true)
@@ -108,6 +127,49 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 
 		Conversation conversation = client.getConversationById(conversationId);
+		assert (conversation != null);
+		assert (conversation.getMessages().size() > 0);
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "conversationId" })
+	public void testGetConversationGenericMessagesOnly(String appId, String appSecret, String conversationId)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true)
+				.addAttribute(ConversationMessageAttributes.ANNOTATION_TYPE, AnnotationType.GENERIC.getLabel())
+				.addField(MessageFields.CONTENT);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Conversation.CONVERSATION_QUERY_OBJECT_NAME)
+				.addAttribute(ConversationAttributes.ID, conversationId)
+				.addField(ConversationFields.ID)
+				.addChild(messages);
+		Conversation conversation = client.getConversationWithQuery(new ConversationGraphQLQuery(query));
+		assert (conversation != null);
+		assert (conversation.getMessages().size() > 0);
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret", "conversationId", "oldestTimestamp", "mostRecentTimestamp" })
+	public void testGetConversationTimestampMessages(String appId, String appSecret, String conversationId, Long oldestTimestamp, Long mostRecentTimestamp)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		ObjectDataSenderBuilder messages = new ObjectDataSenderBuilder(ConversationChildren.MESSAGES.getLabel(), true)
+				.addAttribute(ConversationMessageAttributes.OLDEST_TIMESTAMP, oldestTimestamp)
+				.addAttribute(ConversationMessageAttributes.MOST_RECENT_TIMESTAMP, mostRecentTimestamp)
+				.addField(MessageFields.CONTENT);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder(Conversation.CONVERSATION_QUERY_OBJECT_NAME)
+				.addAttribute(ConversationAttributes.ID, conversationId)
+				.addField(ConversationFields.ID)
+				.addChild(messages);
+		Conversation conversation = client.getConversationWithQuery(new ConversationGraphQLQuery(query));
 		assert (conversation != null);
 		assert (conversation.getMessages().size() > 0);
 	}
@@ -282,4 +344,83 @@ public class ITgraphQL {
 			assert "403 Forbidden".equals(errors.getMessage());
 		}
 	}
+	
+	@Test(enabled = true)
+	@Parameters({"appId", "appSecret", "spaceId", "spaceName", "space2Id", "space2Name"})
+	public void getTwoSpace(String appId, String appSecret, String spaceId, String spaceName, String space2Id, String space2Name) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+		query.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query.setObjectName("space1");
+		query.addAttribute(SpaceFields.ID, spaceId);
+		query.addField(SpaceFields.TITLE);
+		query.addField(SpaceFields.DESCRIPTION);
+		query.addField(SpaceFields.ID);
+		query.addField(SpaceFields.CREATED);
+		query.addField(SpaceFields.UPDATED);
+		BaseGraphQLMultiQuery twoSpaceQuery = new BaseGraphQLMultiQuery("getTwoSpaces", query);
+		ObjectDataSenderBuilder query2 = new ObjectDataSenderBuilder();
+		query2.setObjectName("space2");
+		query2.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query2.addAttribute(SpaceFields.ID, space2Id);
+		query2.addField(SpaceFields.TITLE);
+		query2.addField(SpaceFields.DESCRIPTION);
+		query2.addField(SpaceFields.ID);
+		query2.addField(SpaceFields.CREATED);
+		query2.addField(SpaceFields.UPDATED);
+		twoSpaceQuery.addQueryObject(query2);
+		ep.setRequest(new GraphQLRequest(twoSpaceQuery));
+		ep.executeRequest();
+		
+		DataContainer data = ep.getResultContainer().getData();
+		assert (null != data);
+		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
+		assert(null != space1);
+		assert (spaceName.equals(space1.getTitle()));
+		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
+		assert(null != space2);
+		assert (space2Name.equals(space2.getTitle()));
+	}
+	
+	@Test(enabled = true)
+	@Parameters({"appId", "appSecret", "spaceId", "spaceName", "space2Id", "space2Name"})
+	public void getTwoSpaceFromClient(String appId, String appSecret, String spaceId, String spaceName, String space2Id, String space2Name) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
+		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
+		query.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query.setObjectName("space1");
+		query.addAttribute(SpaceFields.ID, spaceId);
+		query.addField(SpaceFields.TITLE);
+		query.addField(SpaceFields.DESCRIPTION);
+		query.addField(SpaceFields.ID);
+		query.addField(SpaceFields.CREATED);
+		query.addField(SpaceFields.UPDATED);
+		BaseGraphQLMultiQuery twoSpaceQuery = new BaseGraphQLMultiQuery("getTwoSpaces", query);
+		ObjectDataSenderBuilder query2 = new ObjectDataSenderBuilder();
+		query2.setObjectName("space2");
+		query2.setReturnType(WWQueryResponseObjectTypes.SPACE);
+		query2.addAttribute(SpaceFields.ID, space2Id);
+		query2.addField(SpaceFields.TITLE);
+		query2.addField(SpaceFields.DESCRIPTION);
+		query2.addField(SpaceFields.ID);
+		query2.addField(SpaceFields.CREATED);
+		query2.addField(SpaceFields.UPDATED);
+		twoSpaceQuery.addQueryObject(query2);
+		GraphResultContainer resultContainer = client.getCustomQuery(twoSpaceQuery);
+		
+		DataContainer data = resultContainer.getData();
+		assert (null != data);
+		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
+		assert(null != space1);
+		assert (spaceName.equals(space1.getTitle()));
+		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
+		assert(null != space2);
+		assert (space2Name.equals(space2.getTitle()));
+	}
+	
+	
 }
