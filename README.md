@@ -16,6 +16,11 @@ Report Issues here: [JIRA](https://jira.openntf.org/secure/RapidBoard.jspa?rapid
 See [OpenNTF Wiki](https://wiki.openntf.org/display/WWSJava/)
 
 ## Release Notes ##
+### 0.7.0 ###
+WWAPI-12 Ability to pass multiple query objects in a single request, supporting aliases
+WWAPI-10 Support for Photo REST endpoint
+WWAPI-13 Support for Files endpoint
+
 ### 0.6.0 ###
 Mutations have been added for the following GraphQL mutations:
 - createSpace
