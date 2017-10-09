@@ -25,6 +25,9 @@ public class ITPostFileToSpace {
 		FileResponse response = client.postFileToSpace(photo, spaceId);
 		assert (!"".equals(response.getName()));
 		assert (appId.equals(response.getCreatedBy()));
+		response = client.postFileToSpace(photo, spaceId, "200x200");
+		assert (!"".equals(response.getName()));
+		assert (appId.equals(response.getCreatedBy()));
 	}
 
 }
