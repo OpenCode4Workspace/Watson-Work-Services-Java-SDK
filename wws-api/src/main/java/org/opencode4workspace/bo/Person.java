@@ -275,7 +275,9 @@ public class Person implements Serializable {
 	 * @return String email addresses of the Person
 	 * 
 	 * @since 0.5.0
+	 * @deprecated Use email property instead
 	 */
+	@Deprecated
 	public String getEmailAddresses() {
 		return emailAddresses;
 	}
@@ -286,7 +288,9 @@ public class Person implements Serializable {
 	 *            String email addresses of the Person
 	 * 
 	 * @since 0.5.0
+	 * @deprecated Use email property instead
 	 */
+	@Deprecated
 	public void setEmailAddresses(String emailAddresses) {
 		this.emailAddresses = emailAddresses;
 	}
