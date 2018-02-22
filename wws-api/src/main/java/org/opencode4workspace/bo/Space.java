@@ -125,7 +125,7 @@ public class Space implements Serializable {
 	private Date updated;
 	private Person updatedBy;
 	private List<Person> memberList;
-	private String membersUpdated;
+	private Date membersUpdated;
 	@GraphQLJsonPropertyHelper(jsonProperty = "conversation")
 	private Conversation conversationContent;
 
@@ -282,21 +282,21 @@ public class Space implements Serializable {
 	}
 
 	/**
-	 * @return String JSON date of when members were last updated
+	 * @return Date when members were last updated. Changed in 0.8.0 to Date (was incorrect)
 	 * 
 	 * @since 0.5.0
 	 */
-	public String getMembersUpdated() {
+	public Date getMembersUpdated() {
 		return membersUpdated;
 	}
 
 	/**
 	 * @param membersUpdated
-	 *            String JSON date of when members were last updated
+	 *            Date of when members were last updated. Changed in 0.8.0 to Date (was incorrect)
 	 * 
 	 * @since 0.5.0
 	 */
-	public void setMembersUpdated(String membersUpdated) {
+	public void setMembersUpdated(Date membersUpdated) {
 		this.membersUpdated = membersUpdated;
 	}
 
