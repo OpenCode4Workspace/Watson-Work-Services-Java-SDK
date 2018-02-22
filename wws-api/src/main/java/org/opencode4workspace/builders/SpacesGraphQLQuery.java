@@ -1,11 +1,14 @@
 package org.opencode4workspace.builders;
 
+import java.util.Date;
+
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
 import org.opencode4workspace.bo.Conversation.ConversationFields;
 import org.opencode4workspace.bo.Message.MessageFields;
 import org.opencode4workspace.bo.Person.PersonFields;
 import org.opencode4workspace.bo.Space;
+import org.opencode4workspace.bo.WWFieldsAttributesInterface;
 import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
@@ -21,6 +24,55 @@ public class SpacesGraphQLQuery extends BaseGraphQLQuery {
 
 	private static final String METHOD = "getSpaces";
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * @author Paul Withers
+	 * @since 0.8.0
+	 * 
+	 *        <p>
+	 *        Enum for filtering a Spaces query (in addition to PageInfo options). See {@link WWFieldsAttributesInterface}.
+	 *        </p>
+	 *        <ul>
+	 *        <li>UPDATED_SINCE expects a Date after which Spaces should have been updated</li>
+	 *        </ul>
+	 *
+	 */
+	public enum SpacesAttributes implements WWFieldsAttributesInterface {
+		UPDATED_SINCE("updatedSince", Date.class);
+
+		private String label;
+		private Class<?> objectClassType;
+		
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private SpacesAttributes(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/* (non-Javadoc)
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+		
+	}
 
 	/**
 	 * Easy method to create a basic Spaces query ObjectDataSenderBuilder

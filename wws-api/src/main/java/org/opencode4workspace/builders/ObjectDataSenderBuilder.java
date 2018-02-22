@@ -291,7 +291,7 @@ public class ObjectDataSenderBuilder implements IDataSenderBuilder, Serializable
 			Date dt = (Date) obj;
 			TimeZone tz = TimeZone.getDefault();
 			df.setTimeZone(tz);
-			s.append(df.format(dt));
+			s.append("\"" + df.format(dt) + "\"");
 		} else if (obj instanceof String) {
 			s.append("\"");
 			s.append(obj);
