@@ -417,7 +417,7 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * @param ibmUniqueIDString
+	 * @param ibmUniqueID String
 	 *            Unique internal record identifier assigned when a user first obtains an IBMid (registered users only)
 	 * 
 	 * @since 0.8.0
