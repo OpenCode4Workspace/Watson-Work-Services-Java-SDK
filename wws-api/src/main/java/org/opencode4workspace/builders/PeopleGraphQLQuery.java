@@ -21,7 +21,7 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * @since 0.5.0
 	 * 
 	 *        <p>
-	 *        Enum for filtering a . See {@link WWFieldsAttributesInterface}.
+	 *        Enum for filtering a PeopleQuery. See {@link WWFieldsAttributesInterface}.
 	 *        </p>
 	 *        <ul>
 	 *        <li>ID expects a list of IDs for people</li>
