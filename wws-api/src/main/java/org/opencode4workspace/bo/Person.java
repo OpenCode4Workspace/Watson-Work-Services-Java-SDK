@@ -50,8 +50,7 @@ public class Person implements Serializable {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#
-		 * getObjectClassType()
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface# getObjectClassType()
 		 */
 		@Override
 		public Class<?> getObjectClassType() {
@@ -63,15 +62,14 @@ public class Person implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See
-	 *        {@link WWFieldsAttributesInterface}
+	 *        Enum for scalar properties of a Person. See {@link WWFieldsAttributesInterface}
 	 *
 	 */
 	public enum PersonFields implements WWFieldsAttributesInterface {
 		ID("id", String.class), PHOTO_URL("photoUrl", String.class), EMAIL("email", String.class), DISPLAY_NAME(
-				"displayName", String.class), EXT_ID("extId", String.class), EMAIL_ADDRESSES("emailAddresses",
-						String.class), CUSTOMER_ID("customerId", String.class), CREATED("created",
-								Date.class), UPDATED("updated", Date.class), PRESENCE("presence", PresenceStatus.class);
+				"displayName", String.class), EXT_ID("extId", String.class), CUSTOMER_ID("customerId",
+						String.class), CREATED("created", Date.class), UPDATED("updated", Date.class), PRESENCE(
+								"presence", PresenceStatus.class), IBM_UNIQUE_ID("ibmUniqueID", String.class);
 
 		private String label;
 		private Class<?> objectClassType;
@@ -102,8 +100,7 @@ public class Person implements Serializable {
 		/*
 		 * (non-Javadoc)
 		 * 
-		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#
-		 * getObjectClassType()
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface# getObjectClassType()
 		 */
 		@Override
 		public Class<?> getObjectClassType() {
@@ -115,8 +112,7 @@ public class Person implements Serializable {
 	 * @author Paul Withers
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scalar properties of a Person. See
-	 *        {@link WWChildInterface}
+	 *        Enum for scalar properties of a Person. See {@link WWChildInterface}
 	 *
 	 */
 	public enum PersonChildren implements WWChildInterface {
@@ -174,6 +170,7 @@ public class Person implements Serializable {
 	private Person createdBy;
 	private Date updated;
 	private Person updatedBy;
+	private String ibmUniqueID;
 	private PresenceStatus presence;
 
 	/**
@@ -400,12 +397,33 @@ public class Person implements Serializable {
 	}
 
 	/**
-	 * @param presence whether the person is online or offline
+	 * @param presence
+	 *            whether the person is online or offline
 	 * 
 	 * @since 0.7.0
 	 */
 	public void setPresence(PresenceStatus presence) {
 		this.presence = presence;
+	}
+
+	/**
+	 * @return String Unique internal record identifier assigned when a user first obtains an IBMid (registered users
+	 *         only)
+	 * 
+	 * @since 0.8.0
+	 */
+	public String getIbmUniqueID() {
+		return ibmUniqueID;
+	}
+
+	/**
+	 * @param ibmUniqueIDString
+	 *            Unique internal record identifier assigned when a user first obtains an IBMid (registered users only)
+	 * 
+	 * @since 0.8.0
+	 */
+	public void setIbmUniqueID(String ibmUniqueID) {
+		this.ibmUniqueID = ibmUniqueID;
 	}
 
 }
