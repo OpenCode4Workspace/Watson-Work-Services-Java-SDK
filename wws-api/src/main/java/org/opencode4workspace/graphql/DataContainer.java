@@ -27,6 +27,7 @@ public class DataContainer implements Serializable {
 	private SpaceWrapper space;
 	private MembersContainer people;
 	private Message message;
+	private MentionedContainer mentioned;
 	private CreateSpaceContainer createSpace;
 	private DeleteSpaceContainer deleteSpace;
 	private UpdateSpaceContainer updateSpace;
@@ -199,14 +200,28 @@ public class DataContainer implements Serializable {
 	 */
 	public Message getMessage() throws WWException {
 		if (null == message) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return message;
 	}
 
 	/**
-	 * When passing aliases, this holds the return objects for those aliases, e.g.
-	 * "space1", (SpaceWrapper) space1
+	 * @return MentionedContainer resulting from a query
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public MentionedContainer getMentioned() throws WWException {
+		if (null == mentioned) {
+			throw new WWException("No data returned from query. Please check the query you are passing");
+		}
+		return mentioned;
+	}
+
+	/**
+	 * When passing aliases, this holds the return objects for those aliases, e.g. "space1", (SpaceWrapper) space1
 	 * "space2", (SpaceWrapper) space2
 	 * 
 	 * @return Map of children, key is alias, value is return object
