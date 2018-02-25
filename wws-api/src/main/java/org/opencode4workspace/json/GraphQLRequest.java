@@ -78,18 +78,28 @@ public class GraphQLRequest {
 			this.operationName = queryObject.getOperationName();
 			this.query = queryObject.returnQuery();
 			this.variables = variables;
-			// TODO: CHRISTIAN can this be coded shorter?
 			if (queryObject instanceof BaseGraphQLMultiQuery) {
-				Map<String, WWQueryResponseObjectInterface> tmpMap = new HashMap<String, WWQueryResponseObjectInterface>();
-				BaseGraphQLMultiQuery tmpQueryObj = (BaseGraphQLMultiQuery) queryObject;
-				for (ObjectDataSenderBuilder object : tmpQueryObj.getQueryObjects()) {
-					tmpMap.put(object.getObjectName(), object.getReturnType());
+				for (ObjectDataSenderBuilder object : ((BaseGraphQLMultiQuery) queryObject).getQueryObjects()) {
+					addReturnObjectType(object);
 				}
-				setReturnObjectTypes(tmpMap);
 			}
 		} catch (Exception e) {
 			throw new WWException("Error creating request from query - " + e.getMessage());
 		}
+	}
+	
+	/**
+	 * Add a return type to the Map
+	 * 
+	 * @param singleQueryObject a single {@link ObjectDataSenderBuilder} from which to get return type and object name
+	 * 
+	 * @since 0.8.0
+	 */
+	public void addReturnObjectType(ObjectDataSenderBuilder singleQueryObject) {
+		if (null == getReturnObjectTypes()) {
+			setReturnObjectTypes(new HashMap<String, WWQueryResponseObjectInterface>());
+		}
+		getReturnObjectTypes().put(singleQueryObject.getObjectName(), singleQueryObject.getReturnType());
 	}
 
 	/**
