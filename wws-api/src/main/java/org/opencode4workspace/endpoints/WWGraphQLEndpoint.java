@@ -6,10 +6,12 @@ import java.util.List;
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Mentioned;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MentionedGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
@@ -463,5 +465,38 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
 		return (List<Person>) container.getPeople();
+	}
+	
+	/**
+	 * Get Mentioned query with first 10 mentions
+	 * 
+	 * @return List of first 10 Mentioned objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 *             
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned() throws WWException {
+		setRequest(new GraphQLRequest(new MentionedGraphQLQuery()));
+		executeRequest();
+		DataContainer container = getResultContainer().getData();
+		return (List<Mentioned>) container.getMentioned();
+	}
+	
+	/**
+	 * Get Mentioned query with passed query
+	 * 
+	 * @param query MentionedgraphQLQuery with relevant parameters
+	 * @return List of first 10 Mentioned objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 *             
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned(MentionedGraphQLQuery query) throws WWException {
+		setRequest(new GraphQLRequest(query));
+		executeRequest();
+		DataContainer container = getResultContainer().getData();
+		return (List<Mentioned>) container.getMentioned();
 	}
 }

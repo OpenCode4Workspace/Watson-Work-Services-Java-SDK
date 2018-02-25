@@ -12,6 +12,7 @@ import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.FileResponse;
+import org.opencode4workspace.bo.Mentioned;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.bo.Person;
@@ -19,6 +20,7 @@ import org.opencode4workspace.bo.PhotoResponse;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MentionedGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
@@ -592,6 +594,35 @@ public class WWClient implements Serializable, IWWClient {
 	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
+	}
+	
+	/**
+	 * Easy helper method to get first 10 mentions for current user
+	 * 
+	 * @return List<Mentioned> of mentions
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned() throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentioned();
+	}
+	
+	/**
+	 * Easy helper method to get mentions for current user
+	 * 
+	 * @param query MentionedGraphQLQuery containing query parameters
+	 * @return List<Mentioned> of mentions
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentionedWithQuery(MentionedGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentioned(query);
 	}
 
 	/**
