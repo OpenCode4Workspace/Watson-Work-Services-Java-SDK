@@ -18,6 +18,7 @@ public class AuthenticationResult {
 	private final String displayName;
 	private final String userId;
 	private final String jtiId;
+	// TODO: Using a Date may cause problems with DST, when committing to Java 8 use LocalDateTime
 	private final Date expireDate;
 
 	/**
