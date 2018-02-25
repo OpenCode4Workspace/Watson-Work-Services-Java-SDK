@@ -50,7 +50,7 @@ public class BaseGraphQLMultiQuery extends BaseGraphQLQuery {
 	 */
 	public BaseGraphQLMultiQuery(String operationName, List<ObjectDataSenderBuilder> queryObjects) {
 		super(operationName, queryObjects.get(0));
-		queryObjects.addAll(queryObjects);
+		this.queryObjects.addAll(queryObjects);
 	}
 
 	/* (non-Javadoc)
