@@ -50,7 +50,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
 				return AuthenticationResult.buildFromToken(appToken);
 			} else {
-				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
+				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}
 		} catch (Exception e) {
 			throw new WWException(e);
@@ -102,9 +102,10 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
 				PeopleToken peopleToken = new ResultParser<PeopleToken>(PeopleToken.class).parse(content);
+				// TODO: This needs to add in the refresh token as well, otherwise we can't refresh
 				return AuthenticationResult.buildFromToken(peopleToken);
 			} else {
-				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase());
+				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}
 		} catch (Exception e) {
 			throw new WWException(e);
