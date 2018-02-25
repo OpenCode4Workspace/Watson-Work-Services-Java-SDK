@@ -65,6 +65,7 @@ public class Mentioned implements Serializable {
 	private Space space;
 	private Message message;
 	private Person person;
+	public static final String MENTIONED_QUERY_OBJECT_NAME = "mentioned";
 
 	/**
 	 * @return Date the Message the user was Mentioned in was last updated
