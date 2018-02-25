@@ -31,6 +31,7 @@ public class DataContainer implements Serializable {
 	private CreateSpaceContainer createSpace;
 	private DeleteSpaceContainer deleteSpace;
 	private UpdateSpaceContainer updateSpace;
+	private RemoveSpaceMembersContainer removeSpaceMembers;
 	private Map<String, Object> aliasedChildren;
 
 	/**
@@ -91,6 +92,43 @@ public class DataContainer implements Serializable {
 					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return updateSpace;
+	}
+
+	/**
+	 * @return List of member Ids changed when removing from a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public String[] getRemoveSpaceMembersContainer_MemberIdsChanged() throws WWException {
+		return getRemoveSpaceMembersContainer().getMemberIdsChanged();
+	}
+
+	/**
+	 * @return SpaceWrapper changed when removing members from a Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public SpaceWrapper getRemoveSpaceMembersContainer_SpaceWrapper() throws WWException {
+		return getRemoveSpaceMembersContainer().getSpace();
+	}
+
+	/**
+	 * @return RemoveSpaceMembersContainer containing member Ids and Space
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public RemoveSpaceMembersContainer getRemoveSpaceMembersContainer() throws WWException {
+		if (null == removeSpaceMembers) {
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+		}
+		return removeSpaceMembers;
 	}
 
 	/**

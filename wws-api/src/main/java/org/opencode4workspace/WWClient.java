@@ -336,7 +336,7 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
-	 * Easy helper method for updationg a Space members and title, returning UpdateSpaceContainer with array of member IDs updated and Space object with updated title
+	 * Easy helper method for updating a Space members and title, returning UpdateSpaceContainer with array of member IDs updated and Space object with updated title
 	 * 
 	 * @param id
 	 *            String id for the Space to update
@@ -355,6 +355,24 @@ public class WWClient implements Serializable, IWWClient {
 	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.updateSpaceMembersAndTitle(id, title, members, addOrRemove);
+	}
+
+	/**
+	 * Easy helper method for updating a Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to remove as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> removeSpaceMembers(String id, List<String> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.removeSpaceMembers(id, members);
 	}
 
 	/**

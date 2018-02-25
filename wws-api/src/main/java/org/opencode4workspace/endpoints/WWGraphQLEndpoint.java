@@ -20,6 +20,7 @@ import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersRemoveGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
@@ -213,6 +214,30 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getUpdateSpaceContainer();
+	}
+
+	/**
+	 * Remove members of a Space, returning List of members updated and the 
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to remove as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> removeSpaceMembers(String id, List<String> members) throws WWException {
+		SpaceMembersRemoveGraphQLMutation mutationObject = SpaceMembersRemoveGraphQLMutation.buildRemoveSpaceMembersMutationChange(id, members);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		ArrayList<String> membersReturned = new ArrayList<String>();
+		for (String member : getResultContainer().getData().getRemoveSpaceMembersContainer_MemberIdsChanged()) {
+			membersReturned.add(member);
+		}
+		return membersReturned;
 	}
 
 	/**
