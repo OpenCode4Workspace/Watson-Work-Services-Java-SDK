@@ -42,7 +42,8 @@ public class DataContainer implements Serializable {
 	 */
 	public SpacesContainer getSpaces() throws WWException {
 		if (null == spaces) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return spaces;
 	}
@@ -56,7 +57,8 @@ public class DataContainer implements Serializable {
 	 */
 	public boolean getDeletionSuccessful() throws WWException {
 		if (null == deleteSpace) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return deleteSpace.getSuccessful();
 	}
@@ -70,7 +72,8 @@ public class DataContainer implements Serializable {
 	 */
 	public SpaceWrapper getCreateSpace() throws WWException {
 		if (null == createSpace) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return createSpace.getSpace();
 	}
@@ -84,7 +87,8 @@ public class DataContainer implements Serializable {
 	 */
 	public UpdateSpaceContainer getUpdateSpaceContainer() throws WWException {
 		if (null == updateSpace) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return updateSpace;
 	}
@@ -120,7 +124,8 @@ public class DataContainer implements Serializable {
 	 */
 	public Person getMe() throws WWException {
 		if (null == me) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return me;
 	}
@@ -134,7 +139,8 @@ public class DataContainer implements Serializable {
 	 */
 	public Person getPerson() throws WWException {
 		if (null == person) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return person;
 	}
@@ -148,7 +154,8 @@ public class DataContainer implements Serializable {
 	 */
 	public ConversationWrapper getConversation() throws WWException {
 		if (null == conversation) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return conversation;
 	}
@@ -172,7 +179,8 @@ public class DataContainer implements Serializable {
 	 */
 	public SpaceWrapper getSpace() throws WWException {
 		if (null == space) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return space;
 	}
@@ -186,7 +194,8 @@ public class DataContainer implements Serializable {
 	 */
 	public MembersContainer getPeople() throws WWException {
 		if (null == people) {
-			throw new WWException("No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
+			throw new WWException(
+					"No data returned from query. Please check the query you are passing and check for errors returned (.getErrors() instead of .getResult())");
 		}
 		return people;
 	}
@@ -233,7 +242,8 @@ public class DataContainer implements Serializable {
 	/**
 	 * Setter for children for objects with aliases
 	 * 
-	 * @param children Map of children, key is alias, value is return object
+	 * @param children
+	 *            Map of children, key is alias, value is return object
 	 */
 	public void setAliasedChildren(Map<String, Object> children) {
 		this.aliasedChildren = children;
