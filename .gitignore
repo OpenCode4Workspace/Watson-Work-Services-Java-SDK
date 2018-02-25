@@ -6,3 +6,4 @@ wws-api-integrationtests/.classpath
 wws-api-integrationtests/test-output/
 snapshots
 wws-api-assembly/target
+wws-api\src\test\java\org\opencode4workspace\tests\GetMe.java
