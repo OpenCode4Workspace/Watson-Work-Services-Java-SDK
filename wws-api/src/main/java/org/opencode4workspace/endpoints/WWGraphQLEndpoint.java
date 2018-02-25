@@ -477,16 +477,16 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.8.0
 	 */
 	public List<Mentioned> getMentioned() throws WWException {
-		setRequest(new GraphQLRequest(new MentionedGraphQLQuery()));
+		setRequest(new GraphQLRequest(MentionedGraphQLQuery.buildFullMentionedGraphQuery()));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
-		return (List<Mentioned>) container.getMentioned();
+		return (List<Mentioned>) container.getMentioned().getItems();
 	}
 	
 	/**
 	 * Get Mentioned query with passed query
 	 * 
-	 * @param query MentionedgraphQLQuery with relevant parameters
+	 * @param query MentionedGraphQLQuery with relevant parameters
 	 * @return List of first 10 Mentioned objects
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful

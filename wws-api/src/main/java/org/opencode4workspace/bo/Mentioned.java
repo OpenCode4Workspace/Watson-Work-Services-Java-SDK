@@ -20,8 +20,7 @@ public class Mentioned implements Serializable {
 	 *
 	 */
 	public enum MentionedFields implements WWFieldsAttributesInterface {
-		UPDATED("updated", Date.class), UPDATED_BY("updatedBy", String.class), SPACE("space",
-				Space.class), MESSAGE("message", Message.class), PERSON("person", Person.class);
+		UPDATED("updated", Long.class), UPDATED_BY("updatedBy", String.class);
 
 		private String label;
 		private Class<?> objectClassType;
@@ -60,7 +59,54 @@ public class Mentioned implements Serializable {
 		}
 	}
 
-	private Date updated;
+	/**
+	 * @author Paul Withers
+	 * @since 0.8.0
+	 * 
+	 *        Enum for scalar properties of a Mentioned. See {@link WWFieldsAttributesInterface}
+	 *
+	 */
+	public enum MentionedChildren implements WWFieldsAttributesInterface {
+		SPACE("space", Space.class), MESSAGE("message", Message.class), PERSON("person", Person.class);
+
+		private String label;
+		private Class<?> objectClassType;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param label
+		 *            String, WWS variable
+		 * @param objectClassType
+		 *            Class<?> Java data type expected for passing across
+		 */
+		private MentionedChildren(String label, Class<?> objectClassType) {
+			this.label = label;
+			this.objectClassType = objectClassType;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getLabel()
+		 */
+		@Override
+		public String getLabel() {
+			return label;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.opencode4workspace.bo.WWFieldsAttributesInterface#getObjectClassType()
+		 */
+		@Override
+		public Class<?> getObjectClassType() {
+			return objectClassType;
+		}
+	}
+
+	private Long updated;
 	private String updatedBy;
 	private Space space;
 	private Message message;
@@ -71,7 +117,7 @@ public class Mentioned implements Serializable {
 	 * @return Date the Message the user was Mentioned in was last updated
 	 * @since 0.8.0
 	 */
-	public Date getUpdated() {
+	public Long getUpdated() {
 		return updated;
 	}
 
@@ -80,7 +126,7 @@ public class Mentioned implements Serializable {
 	 *            the Message the user was Mentioned in was last updated
 	 * @since 0.8.0
 	 */
-	public void setUpdated(Date updated) {
+	public void setUpdated(Long updated) {
 		this.updated = updated;
 	}
 
