@@ -32,6 +32,7 @@ public class FieldDataSenderTest {
 	private static final String GET_SPACES_BIGGER_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated updatedBy {id displayName photoUrl email} createdBy {id displayName photoUrl email} members (first: 100) {items {id photoUrl email displayName}}}}}";
 	private static final String GET_SPACES_FULL_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated updatedBy {id displayName photoUrl email} createdBy {id displayName photoUrl email} members (first: 100) {items {id photoUrl email displayName}} conversation {id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email} messages (first: 20) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {contentType content id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}}}}}";
 	private static final String GET_SPACES_SINCE_QUERY = "query getSpaces {spaces (updatedSince: \"2018-02-20T00:00:00.000+0000\") {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
+	private static final String GET_SPACES_SINCE_QUERY_US = "query getSpaces {spaces (updatedSince: \"2018-02-20T00:00:00.000-0500\") {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
 	
 	@Test
 	public void testGetPageInfoFields() {
@@ -79,7 +80,7 @@ public class FieldDataSenderTest {
 		spaces.addField(SpaceFields.MEMBERS_UPDATED);
 		SpacesGraphQLQuery query = new SpacesGraphQLQuery(spaces);
 		GraphQLRequest request = new GraphQLRequest(query);
-		assertEquals(GET_SPACES_SINCE_QUERY, request.getQuery());
+		assertTrue(GET_SPACES_SINCE_QUERY.equals(request.getQuery()) || GET_SPACES_SINCE_QUERY_US.equals(request.getQuery()));
 	}
 
 	@Test
