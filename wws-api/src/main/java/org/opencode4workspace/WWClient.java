@@ -363,7 +363,7 @@ public class WWClient implements Serializable, IWWClient {
 	 * @param id
 	 *            String id of the space to update
 	 * @param members
-	 *            List of member IDs to remove as members
+	 *            List of String member IDs to remove as members
 	 * @return ArrayList of member IDs updated
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
@@ -617,7 +617,7 @@ public class WWClient implements Serializable, IWWClient {
 	/**
 	 * Easy helper method to get first 10 mentions for current user
 	 * 
-	 * @return List<Mentioned> of mentions
+	 * @return List of mentions
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
@@ -632,7 +632,7 @@ public class WWClient implements Serializable, IWWClient {
 	 * Easy helper method to get mentions for current user
 	 * 
 	 * @param query MentionedGraphQLQuery containing query parameters
-	 * @return List<Mentioned> of mentions
+	 * @return List of mentions
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
