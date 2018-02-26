@@ -118,6 +118,7 @@ public class Space implements Serializable {
 	public static final String UPDATE_SPACE_MUTATION_NAME = "updateSpace";
 	public static final String DELETE_SPACE_MUTATION_NAME = "deleteSpace";
 	public static final String REMOVE_SPACE_MEMBERS_MUTATION_NAME = "removeSpaceMembers";
+	public static final String ADD_SPACE_MEMBERS_MUTATION_NAME = "addSpaceMembers";
 	private String id;
 	private String description;
 	private String title;

@@ -11,11 +11,11 @@ import java.util.List;
  * DataSenderBuilder for adding a member to a Space
  *
  */
-public class AddSpaceMemberDataSenderBuilder implements Serializable, IDataSenderBuilder {
+public class SpaceMembersAddDataSenderBuilder implements Serializable, IDataSenderBuilder {
 	private static final long serialVersionUID = 1L;
 	private List<SpaceMemberObject> members;
 	
-	public class SpaceMemberObject implements Serializable {
+	public static class SpaceMemberObject implements Serializable {
 		private static final long serialVersionUID = 1L;
 		private String id;
 		private String permissions;
@@ -43,12 +43,12 @@ public class AddSpaceMemberDataSenderBuilder implements Serializable, IDataSende
 		
 	}
 	
-	public AddSpaceMemberDataSenderBuilder(SpaceMemberObject member) {
-		members = new ArrayList<AddSpaceMemberDataSenderBuilder.SpaceMemberObject>();
+	public SpaceMembersAddDataSenderBuilder(SpaceMemberObject member) {
+		members = new ArrayList<SpaceMembersAddDataSenderBuilder.SpaceMemberObject>();
 		members.add(member);
 	}
 	
-	public AddSpaceMemberDataSenderBuilder(List<SpaceMemberObject> members) {
+	public SpaceMembersAddDataSenderBuilder(List<SpaceMemberObject> members) {
 		this.members = members;
 	}
 
@@ -91,14 +91,14 @@ public class AddSpaceMemberDataSenderBuilder implements Serializable, IDataSende
 			if (pretty) {
 				s.append("\n\r");
 			}
-			s.append("id: ");
-			s.append(member.getId());
+			s.append("\"id\": ");
+			s.append("\"" + member.getId() + "\"");
 			s.append(",");
 			if (pretty) {
 				s.append("\n\r");
 			}
-			s.append("permissions:");
-			s.append(member.getPermissions());
+			s.append(" \"permissions\": ");
+			s.append("\"" + member.getPermissions() + "\"");
 			s.append("}");
 		}
 		

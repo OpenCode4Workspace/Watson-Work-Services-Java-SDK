@@ -26,6 +26,7 @@ import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersAddDataSenderBuilder.SpaceMemberObject;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
@@ -358,7 +359,25 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
-	 * Easy helper method for updating a Space members returning List of member IDs updated
+	 * Easy helper method for adding Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of String member IDs to add as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> addSpaceMembers(String id, List<SpaceMemberObject> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.addSpaceMembers(id, members);
+	}
+
+	/**
+	 * Easy helper method for removing Space members returning List of member IDs updated
 	 * 
 	 * @param id
 	 *            String id of the space to update

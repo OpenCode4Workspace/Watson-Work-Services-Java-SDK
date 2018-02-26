@@ -6,6 +6,7 @@ import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
+import org.opencode4workspace.builders.SpaceMembersAddDataSenderBuilder.SpaceMemberObject;
 
 /**
  * @author Paul Withers
@@ -14,8 +15,8 @@ import org.opencode4workspace.bo.WWFieldsAttributesInterface;
  *        Object for creating a removeSpaceMembers GraphQL mutation
  *
  */
-public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
-	private static final String METHOD = "removeSpaceMembers";
+public class SpaceMembersAddGraphQLMutation extends BaseGraphQLMutation {
+	private static final String METHOD = "addSpaceMembers";
 	public static final String MEMBER_IDS_CHANGED_FIELD = "memberIdsChanged";
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +25,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * @since 0.8.0
 	 * 
 	 *        <p>
-	 *        Enum for input parameters for removeSpaceMembers mutation. See {@link WWFieldsAttributesInterface}.
+	 *        Enum for input parameters for addSpaceMembers mutation. See {@link WWFieldsAttributesInterface}.
 	 *        </p>
 	 *        <ul>
 	 *        <li>TITLE expects a String title for the Space</li>
@@ -32,8 +33,8 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 *        </ul>
 	 *
 	 */
-	public enum RemoveSpaceMembersField implements WWFieldsAttributesInterface {
-		SPACE_ID("spaceId", String.class), MEMBERS("members", List.class);
+	public enum AddSpaceMembersField implements WWFieldsAttributesInterface {
+		SPACE_ID("spaceId", String.class);
 
 		private String label;
 		private Class<?> objectClassType;
@@ -46,7 +47,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 		 * @param objectClassType
 		 *            Class<?> Java data type expected for passing across
 		 */
-		private RemoveSpaceMembersField(String label, Class<?> objectClassType) {
+		private AddSpaceMembersField(String label, Class<?> objectClassType) {
 			this.label = label;
 			this.objectClassType = objectClassType;
 		}
@@ -78,25 +79,26 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * @param spaceId
 	 *            String id for the Space to update
 	 * @param members
-	 *            List of String member IDs to remove from the Space
+	 *            List of SpaceMemberObject member IDs to remove from the Space
 	 * @return SpaceMembersRemoveGraphQLMutation, the current object
 	 * @throws WWException
 	 *             if is or members is missing
 	 * 
 	 * @since 0.8.0
 	 */
-	public static SpaceMembersRemoveGraphQLMutation buildRemoveSpaceMembersMutationChange(String spaceId, List<String> members) throws WWException {
+	public static SpaceMembersAddGraphQLMutation buildAddSpaceMembersMutationChange(String spaceId, List<SpaceMemberObject> members) throws WWException {
 		if ("".equals(spaceId)) {
 			throw new WWException("Space id is mandatory");
 		}
 		if (null == members || members.isEmpty()) {
 			throw new WWException("members to update are mandatory");
 		}
-		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.REMOVE_SPACE_MEMBERS_MUTATION_NAME);
-		spaceInput.addField(RemoveSpaceMembersField.SPACE_ID, spaceId);
-		spaceInput.addField(RemoveSpaceMembersField.MEMBERS, members);
+		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.ADD_SPACE_MEMBERS_MUTATION_NAME);
+		spaceInput.addField(AddSpaceMembersField.SPACE_ID, spaceId);
+		SpaceMembersAddDataSenderBuilder membersObj = new SpaceMembersAddDataSenderBuilder(members);
+		spaceInput.addChild(membersObj);
 		ScalarDataSenderBuilder returnObject = createBasicMemberIdsReturnObject();
-		return new SpaceMembersRemoveGraphQLMutation(spaceInput, returnObject);
+		return new SpaceMembersAddGraphQLMutation(spaceInput, returnObject);
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.8.0
 	 */
-	public SpaceMembersRemoveGraphQLMutation() {
+	public SpaceMembersAddGraphQLMutation() {
 		super(METHOD, new InputDataSenderBuilder(), new ObjectDataSenderBuilder());
 	}
 
@@ -126,7 +128,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.8.0
 	 */
-	public SpaceMembersRemoveGraphQLMutation(InputDataSenderBuilder input) {
+	public SpaceMembersAddGraphQLMutation(InputDataSenderBuilder input) {
 		super(METHOD, input, new ObjectDataSenderBuilder());
 	}
 
@@ -140,7 +142,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.8.0
 	 */
-	public SpaceMembersRemoveGraphQLMutation(InputDataSenderBuilder input, IDataSenderBuilder returnObject) {
+	public SpaceMembersAddGraphQLMutation(InputDataSenderBuilder input, IDataSenderBuilder returnObject) {
 		super(METHOD, input, returnObject);
 	}
 
@@ -154,7 +156,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * 
 	 * @since 0.8.0
 	 */
-	public SpaceMembersRemoveGraphQLMutation(InputDataSenderBuilder input, IDataSenderBuilder... returnObject) {
+	public SpaceMembersAddGraphQLMutation(InputDataSenderBuilder input, IDataSenderBuilder... returnObject) {
 		super(METHOD, input, returnObject);
 	}
 
