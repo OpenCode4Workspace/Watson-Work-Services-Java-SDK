@@ -78,7 +78,7 @@ public class SpaceMembersRemoveGraphQLMutation extends BaseGraphQLMutation {
 	 * @param spaceId
 	 *            String id for the Space to update
 	 * @param members
-	 *            List<String> of member IDs to remove from the Space
+	 *            List of String member IDs to remove from the Space
 	 * @return SpaceMembersRemoveGraphQLMutation, the current object
 	 * @throws WWException
 	 *             if is or members is missing

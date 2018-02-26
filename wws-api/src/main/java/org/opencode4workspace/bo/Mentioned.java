@@ -122,8 +122,8 @@ public class Mentioned implements Serializable {
 	}
 
 	/**
-	 * @param Date
-	 *            the Message the user was Mentioned in was last updated
+	 * @param updated
+	 *            Long, the Message the user was Mentioned in was last updated
 	 * @since 0.8.0
 	 */
 	public void setUpdated(Long updated) {
