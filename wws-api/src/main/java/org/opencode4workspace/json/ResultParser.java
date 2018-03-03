@@ -39,7 +39,7 @@ public class ResultParser<T> {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSZ");
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
-		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
+		builder.registerTypeAdapter(TokenScope[].class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
 		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
 		this.gson = builder.create();
@@ -67,7 +67,7 @@ public class ResultParser<T> {
 			builder.setDateFormat(dateFormat);
 		}
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
-		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
+		builder.registerTypeAdapter(TokenScope[].class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
 		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
 		this.gson = builder.create();
