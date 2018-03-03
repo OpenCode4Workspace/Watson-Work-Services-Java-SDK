@@ -50,6 +50,9 @@ public class MessagePostEndpoint extends AbstractWWGraphQLEndpoint {
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
+			if (!isShouldBeValid()) {
+				getClient().authenticate();
+			}
 			StringEntity postPayload = new StringEntity(new RequestBuilder<AppMessage>(AppMessage.class).buildJson(message), "UTF-8");
 			post.setEntity(postPayload);
 			response = client.execute(post);

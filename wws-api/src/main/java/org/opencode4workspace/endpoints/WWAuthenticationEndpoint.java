@@ -1,6 +1,7 @@
 package org.opencode4workspace.endpoints;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -28,6 +29,15 @@ import org.opencode4workspace.json.ResultParser;
  *
  */
 public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.authentication.AuthenticationEndpoint#authenticateApplication(java.lang.String)
+	 */
+	@Override
+	public AuthenticationResult authenticateApplication(String basicAuthApp) throws WWException {
+		AppToken appToken = authenticateApplicationGetToken(basicAuthApp);
+		return AuthenticationResult.buildFromToken(appToken);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -35,7 +45,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint# authenticateApplication(java.lang.String)
 	 */
 	@Override
-	public AuthenticationResult authenticateApplication(String basicAuth) throws WWException {
+	public AppToken authenticateApplicationGetToken(String basicAuth) throws WWException {
 		CloseableHttpClient client = HttpClients.createDefault();
 		List<NameValuePair> params = new ArrayList<NameValuePair>(1);
 		HttpPost post = preparePost(basicAuth);
@@ -48,7 +58,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
 				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
-				return AuthenticationResult.buildFromToken(appToken);
+				return appToken;
 			} else {
 				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}
@@ -80,6 +90,14 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 		post.addHeader("content-type", ContentType.APPLICATION_FORM_URLENCODED.toString());
 		return post;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.authentication.AuthenticationEndpoint#authorizeUser(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public AuthenticationResult authorizeUser(String basicAuthApp, String userToken, String url) throws WWException {
+		PeopleToken peopleToken = authorizeUserGetToken(basicAuthApp, userToken, url);
+		return AuthenticationResult.buildFromToken(peopleToken);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -87,7 +105,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint#authorizeUser (java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public AuthenticationResult authorizeUser(String basicAuthApp, String userToken, String url) throws WWException {
+	public PeopleToken authorizeUserGetToken(String basicAuthApp, String userToken, String url) throws WWException {
 		CloseableHttpClient client = HttpClients.createDefault();
 		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
 		HttpPost post = preparePost(basicAuthApp);
@@ -102,8 +120,60 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
 				PeopleToken peopleToken = new ResultParser<PeopleToken>(PeopleToken.class).parse(content);
-				// TODO: This needs to add in the refresh token as well, otherwise we can't refresh
-				return AuthenticationResult.buildFromToken(peopleToken);
+				peopleToken.setCreatedDate(new Date());
+				return peopleToken;
+			} else {
+				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
+			}
+		} catch (Exception e) {
+			throw new WWException(e);
+		} finally {
+			if (response != null) {
+				try {
+					response.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				client.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.authentication.AuthenticationEndpoint#authorizeUserRefreshToken(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public AuthenticationResult authorizeUserRefreshToken(String basicAuthApp, String refreshToken, String scope) throws WWException {
+		PeopleToken peopleToken = authorizeUserRefreshTokenGetToken(basicAuthApp, refreshToken, scope);
+		return AuthenticationResult.buildFromToken(peopleToken);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint#authorizeUser (java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public PeopleToken authorizeUserRefreshTokenGetToken(String basicAuthApp, String refreshToken, String scope) throws WWException {
+		CloseableHttpClient client = HttpClients.createDefault();
+		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+		HttpPost post = preparePost(basicAuthApp);
+		params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+		params.add(new BasicNameValuePair("refresh_token", refreshToken));
+		params.add(new BasicNameValuePair("scope", scope));
+		CloseableHttpResponse response = null;
+		try {
+
+			post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+			response = client.execute(post);
+			if (response.getStatusLine().getStatusCode() == 200) {
+				String content = EntityUtils.toString(response.getEntity());
+				PeopleToken peopleToken = new ResultParser<PeopleToken>(PeopleToken.class).parse(content);
+				peopleToken.setCreatedDate(new Date());
+				return peopleToken;
 			} else {
 				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}

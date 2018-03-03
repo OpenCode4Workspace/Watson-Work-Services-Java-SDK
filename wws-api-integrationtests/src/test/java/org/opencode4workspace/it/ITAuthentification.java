@@ -19,6 +19,8 @@ public class ITAuthentification {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
+		System.out.println(client.getExpiresIn());
+		assert "".equals(client.getUserRefreshToken());
 	}
 
 	

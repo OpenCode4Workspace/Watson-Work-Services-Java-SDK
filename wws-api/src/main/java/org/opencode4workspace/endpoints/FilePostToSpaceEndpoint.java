@@ -75,6 +75,9 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
+			if (!isShouldBeValid()) {
+				getClient().authenticate();
+			}
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 			builder.setContentType(ContentType.MULTIPART_FORM_DATA);

@@ -1,6 +1,7 @@
 package org.opencode4workspace;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import org.opencode4workspace.authentication.AuthenticationResult;
 
@@ -67,6 +68,15 @@ public interface IWWClient {
 	 * @since 0.5.0
 	 */
 	String getJWTToken();
+	
+	/**
+	 * Gets the refreshtoken for a user authentication from the {@link AuthenticationResult}
+	 * 
+	 * @return String, refresh token. A blank string for an application authentication
+	 * 
+	 * @since 0.8.0
+	 */
+	String getUserRefreshToken();
 
 	/**
 	 * Gets the length of time until the token expires from the {@link AuthenticationResult}
@@ -76,6 +86,15 @@ public interface IWWClient {
 	 * @since 0.5.0
 	 */
 	Object getExpiresIn();
+	
+	/**
+	 * Gets the time the token expires from the {@link AuthenticationResult}
+	 * 
+	 * @return Date, the time the token expires
+	 * 
+	 * @since 0.8.0
+	 */
+	Date getExpireDate();
 
 	/**
 	 * Tests whether the {@link AuthenticationResult} is valid
