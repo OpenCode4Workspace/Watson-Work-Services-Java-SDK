@@ -63,7 +63,7 @@ public interface AuthenticationEndpoint {
 	 *            String, user token to pass
 	 * @param redirectTo
 	 *            String, URL to redirect to if successful
-	 * @return {@link PeoplToken} response
+	 * @return {@link PeopleToken} response
 	 * @throws WWException
 	 *             error details
 	 * 

@@ -6,15 +6,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.opencode4workspace.authentication.AppToken;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
 import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.FileResponse;
+import org.opencode4workspace.bo.Focus;
 import org.opencode4workspace.bo.Mentioned;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.MessageResponse;
@@ -36,6 +35,7 @@ import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMem
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
 import org.opencode4workspace.endpoints.FilePostToSpaceEndpoint;
+import org.opencode4workspace.endpoints.FocusPostEndpoint;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.PhotoPostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
@@ -126,7 +126,7 @@ public class WWClient implements Serializable, IWWClient {
 	 *            String, the secret for the application the code is being run from
 	 * @param token
 	 *            {@link PeopleToken} containing access details
-	 * @return @return WWClient, a Watson Workspace Client contructed with the passed params
+	 * @return WWClient, a Watson Workspace Client contructed with the passed params
 	 * 
 	 * @since 0.5.0
 	 */
@@ -772,6 +772,21 @@ public class WWClient implements Serializable, IWWClient {
 		ep.setRequest(new GraphQLRequest(query));
 		ep.executeRequest();
 		return ep.getResultContainer();
+	}
+	
+	/**
+	 * Post text for Watson Workspace to analyse for Focuses
+	 * 
+	 * @param text String text for Watson Work Services to analyse
+	 * @return List of Focus objects based on analysis
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 *             
+	 * @since 0.8.0
+	 */
+	public List<Focus> postTextForFocusAnalysis(String text) throws WWException {
+		FocusPostEndpoint ep = new FocusPostEndpoint(this);
+		return ep.postMessage(text);
 	}
 
 	/*

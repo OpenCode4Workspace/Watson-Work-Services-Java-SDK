@@ -37,6 +37,8 @@ public class AuthenticationResult {
 	 * @param jtiId
 	 *            String, JTI id
 	 * @param refreshToken String user's refresh token
+	 * @param scopeAsString String return value for scopes for the user's access
+	 * @param created Date the UserToken was initially created
 	 * 
 	 * @since 0.5.0
 	 */
