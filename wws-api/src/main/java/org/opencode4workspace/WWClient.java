@@ -40,7 +40,11 @@ import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.PhotoPostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
+import org.opencode4workspace.graphql.ConversationWrapper;
 import org.opencode4workspace.graphql.GraphResultContainer;
+import org.opencode4workspace.graphql.MembersContainer;
+import org.opencode4workspace.graphql.MentionedContainer;
+import org.opencode4workspace.graphql.SpacesContainer;
 import org.opencode4workspace.graphql.UpdateSpaceContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 
@@ -265,7 +269,22 @@ public class WWClient implements Serializable, IWWClient {
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpacesWithQuery(query);
+	}
 
+	/**
+	 * Easy helper method to get SpacesContainer with a query
+	 * 
+	 * @param query
+	 *            SpacesGraphQLQuery containing query parameters
+	 * @return SpacesContainer including PageInfo and Spaces items
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public SpacesContainer getSpacesContainerWithQuery(SpacesGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpacesContainerWithQuery(query);
 	}
 
 	/**
@@ -516,6 +535,23 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
+	 * 
+	 * Easy helper method to get a ConversationWrapper and its details with a query, including access to PageInfo object
+	 * 
+	 * @param query
+	 *            ConversationGraphQLQuery containing query parameters
+	 * @return ConversationWrapper object which also has access to PageInfo object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public ConversationWrapper getConversationWrapperWithQuery(ConversationGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getConversationWrapperWithQuery(query);
+	}
+
+	/**
 	 * Easy helper method to get a Message and its details by id
 	 * 
 	 * @param messageId
@@ -678,7 +714,7 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @param query
 	 *            PeopleGraphQLQuery containing query parameters
-	 * @return List of Person objects for the name passed
+	 * @return List of Person objects for the query passed
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
@@ -687,6 +723,22 @@ public class WWClient implements Serializable, IWWClient {
 	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
+	}
+
+	/**
+	 * Easy helper method to get Person objects with a query
+	 * 
+	 * @param query
+	 *            PeopleGraphQLQuery containing query parameters
+	 * @return MembersContainer containing PageInfo and Person objects for the querypassed
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public MembersContainer getPeopleContainerWithQuery(PeopleGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getPeopleContainerWithQuery(query);
 	}
 
 	/**
@@ -720,6 +772,23 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
+	 * Easy helper method to get mentions and PageInfo object for current user
+	 * 
+	 * @param query
+	 *            MentionedGraphQLQuery containing query parameters
+	 * @return MentionedContainer including PageInfo object and items
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public MentionedContainer getMentionedContainerWithQuery(MentionedGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentionedContainerWithQuery(query);
+	}
+
+
+	/**
 	 * Easy helper method to post a Application Message to a Space
 	 * 
 	 * @param message
@@ -735,10 +804,41 @@ public class WWClient implements Serializable, IWWClient {
 		return ep.postMessage(message, spaceId);
 	}
 
+	/**
+	 * Post a file to Watson Workspace
+	 * 
+	 * @param file
+	 *            to post into the Workspace
+	 * @param spaceId
+	 *            String id of the space to post to
+	 * @return FileResponse object corresponding to the successful posting of
+	 *         the file
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public FileResponse postFileToSpace(File file, String spaceId) throws WWException {
 		return postFileToSpace(file, spaceId, null);
 	}
 
+	/**
+	 * Post an image file to Watson Workspace
+	 * 
+	 * @param file
+	 *            to post into the Workspace
+	 * @param spaceId
+	 *            String id of the space to post to
+	 * @param imageSize
+	 *            image size as height x width, e.g. 200x200. Only blank or null
+	 *            values are current supported
+	 * @return FileResponse object corresponding to the successful posting of
+	 *         the file
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public FileResponse postFileToSpace(File file, String spaceId, String imageSize) throws WWException {
 		FilePostToSpaceEndpoint ep = new FilePostToSpaceEndpoint(this);
 		return ep.postfile(file, spaceId, imageSize);
@@ -766,6 +866,8 @@ public class WWClient implements Serializable, IWWClient {
 	 * @return GraphResultContainer containing Data and Errors
 	 * @throws WWException
 	 *             contains an error message, if the query was unsuccessful
+	 *             
+	 * @since 0.7.0
 	 */
 	public GraphResultContainer getCustomQuery(BaseGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);

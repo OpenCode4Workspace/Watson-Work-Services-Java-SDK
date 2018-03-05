@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencode4workspace.bo.Mentioned;
+import org.opencode4workspace.bo.PageInfo;
 
 /**
  * @author Paul Withers
@@ -16,6 +17,7 @@ import org.opencode4workspace.bo.Mentioned;
 public class MentionedContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Mentioned> items = new ArrayList<Mentioned>();
+	private PageInfo pageInfo;
 
 	/**
 	 * @return List of Mentioned items
@@ -24,6 +26,15 @@ public class MentionedContainer implements Serializable {
 	 */
 	public List<Mentioned> getItems() {
 		return items;
+	}
+	
+	/**
+	 * @return PageInfo for the current query
+	 * 
+	 * @since 0.8.0
+	 */
+	public PageInfo getPageInfo() {
+		return pageInfo;
 	}
 
 }

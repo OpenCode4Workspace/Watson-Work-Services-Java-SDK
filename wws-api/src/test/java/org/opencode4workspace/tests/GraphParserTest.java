@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Annotation;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.graphql.ConversationWrapper;
 import org.opencode4workspace.graphql.DataContainer;
@@ -40,6 +41,9 @@ public class GraphParserTest {
 		assertTrue(conv instanceof ConversationWrapper);
 		assertEquals(3, conv.getMessages().size());
 		assertEquals(5, conv.getMessages().get(2).getAnnotations().size());
+		PageInfo pageInfo = spacesContainer.getPageInfo();
+		assertTrue(pageInfo.isHasNextPage());
+		assertEquals("TGlzdDow", pageInfo.getStartCursor());
 	}
 
 	private String grabContentFromFile(String fileName) throws IOException {

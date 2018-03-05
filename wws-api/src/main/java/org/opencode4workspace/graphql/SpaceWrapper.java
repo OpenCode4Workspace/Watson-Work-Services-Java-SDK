@@ -34,6 +34,15 @@ public class SpaceWrapper extends Space {
 		}
 		return members.getItems();
 	}
+	
+	/**
+	 * @return MembersContainer, allowing access to PageInfo object
+	 * 
+	 * @since 0.8.0
+	 */
+	public MembersContainer getMembersContainer() {
+		return members;
+	}
 
 	/*
 	 * (non-Javadoc)

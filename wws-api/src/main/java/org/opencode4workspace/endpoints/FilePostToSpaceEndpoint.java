@@ -53,8 +53,7 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Post a file to Watson Workspace. <b>NOTE:</b> imageSize is not currently
-	 * supported
+	 * Post a file to Watson Workspace
 	 * 
 	 * @param file
 	 *            to post into the Workspace

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.Message;
+import org.opencode4workspace.graphql.MessagesContainer;
 
 /**
  * @author Christian Guedemann
@@ -40,5 +41,14 @@ public class ConversationWrapper extends Conversation {
 		if (messages != null) {
 			messages.setItems(messagelist);
 		}
+	}
+	
+	/**
+	 * @return MessageContainer containing PageInfo and Messages items
+	 * 
+	 * @since 0.8.0
+	 */
+	public MessagesContainer getMessagesContainer() {
+		return messages;
 	}
 }
