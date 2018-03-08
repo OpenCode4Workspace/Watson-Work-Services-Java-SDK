@@ -13,11 +13,14 @@ import java.util.Date;
 public class AuthenticationResult {
 
 	private final String jwtToken;
+	private final String userRefreshToken;
 	private final int expires;
 	private final Date created;
 	private final String displayName;
 	private final String userId;
 	private final String jtiId;
+	private final String scopeAsString;
+	// TODO: Using a Date may cause problems with DST, when committing to Java 8 use LocalDateTime
 	private final Date expireDate;
 
 	/**
@@ -33,18 +36,27 @@ public class AuthenticationResult {
 	 *            String, user id
 	 * @param jtiId
 	 *            String, JTI id
+	 * @param refreshToken String user's refresh token
+	 * @param scopeAsString String return value for scopes for the user's access
+	 * @param created Date the UserToken was initially created
 	 * 
 	 * @since 0.5.0
 	 */
-	public AuthenticationResult(String jwtToken, int expires, String displayName, String userId, String jtiId) {
+	public AuthenticationResult(String jwtToken, int expires, String displayName, String userId, String jtiId, String refreshToken, String scopeAsString, Date created) {
 		super();
 		this.jwtToken = jwtToken;
 		this.expires = expires;
 		this.displayName = displayName;
 		this.userId = userId;
 		this.jtiId = jtiId;
-		this.created = new Date();
-		expireDate = buildExpireDate(created, this.expires);
+		this.userRefreshToken = refreshToken;
+		if (null != created) {
+			this.created = created;
+		} else {
+			this.created = new Date();
+		}
+		this.scopeAsString = scopeAsString;
+		this.expireDate = buildExpireDate(created, this.expires);
 	}
 
 	/**
@@ -85,6 +97,17 @@ public class AuthenticationResult {
 	 */
 	public int getExpires() {
 		return expires;
+	}
+
+	/**
+	 * Gets the time the token will expire
+	 * 
+	 * @return Date, expiry date
+	 * 
+	 * @since 0.5.0
+	 */
+	public Date getExpireDate() {
+		return expireDate;
 	}
 
 	/**
@@ -132,6 +155,28 @@ public class AuthenticationResult {
 	}
 
 	/**
+	 * Gets refresh token for a user. There is no refresh token for a PersonToken
+	 * 
+	 * @return String, refresh token or blank for AppToken
+	 * 
+	 * @since 0.8.0
+	 */
+	public String getUserRefreshToken() {
+		return userRefreshToken;
+	}
+	
+	/**
+	 * Get the scope for a user / application
+	 * 
+	 * @return String scope as String
+	 * 
+	 * @since 0.8.0
+	 */
+	public String getScopeAsString() {
+		return scopeAsString;
+	}
+
+	/**
 	 * Test JDT token expiry time against current time and return whether or not it's still valid. If not, we need to authenticate again
 	 * 
 	 * @return boolean, whether or not valid
@@ -152,7 +197,12 @@ public class AuthenticationResult {
 	 * @since 0.5.0
 	 */
 	public static AuthenticationResult buildFromToken(AppToken appToken) {
-		return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), "", appToken.getId(), appToken.getJti());
+		if (appToken instanceof PeopleToken) {
+			return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), ((PeopleToken) appToken).getDisplayName(), appToken.getId(), appToken.getJti(), ((PeopleToken) appToken).getRefresh_Token(), appToken.getScopeAsString(), ((PeopleToken) appToken).getCreatedDate());
+		} else {
+			return new AuthenticationResult(appToken.getAccess_Token(), appToken.getExpires_In(), "", appToken.getId(), appToken.getJti(), "", appToken.getScopeAsString(), null);
+		}
+		
 	}
 
 }

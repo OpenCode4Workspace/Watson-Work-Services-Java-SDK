@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.opencode4workspace.authentication.AuthenticationEndpoint;
 import org.opencode4workspace.authentication.AuthenticationResult;
+import org.opencode4workspace.authentication.PeopleToken;
 import org.opencode4workspace.bo.Conversation;
 import org.opencode4workspace.bo.FileResponse;
+import org.opencode4workspace.bo.Focus;
+import org.opencode4workspace.bo.Mentioned;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.MessageResponse;
 import org.opencode4workspace.bo.Person;
@@ -19,22 +22,29 @@ import org.opencode4workspace.bo.PhotoResponse;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MentionedGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersAddDataSenderBuilder.SpaceMemberObject;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.AppMessage;
 import org.opencode4workspace.endpoints.FilePostToSpaceEndpoint;
+import org.opencode4workspace.endpoints.FocusPostEndpoint;
 import org.opencode4workspace.endpoints.MessagePostEndpoint;
 import org.opencode4workspace.endpoints.PhotoPostEndpoint;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
+import org.opencode4workspace.graphql.ConversationWrapper;
 import org.opencode4workspace.graphql.GraphResultContainer;
+import org.opencode4workspace.graphql.MembersContainer;
+import org.opencode4workspace.graphql.MentionedContainer;
+import org.opencode4workspace.graphql.SpacesContainer;
 import org.opencode4workspace.graphql.UpdateSpaceContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 
@@ -74,7 +84,8 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @since 0.5.0
 	 */
-	public static WWClient buildClientUserAccess(String userToken, String appId, String appSecret, AuthenticationEndpoint authenticationEndpoint, String redirectTo) {
+	public static WWClient buildClientUserAccess(String userToken, String appId, String appSecret,
+			AuthenticationEndpoint authenticationEndpoint, String redirectTo) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.USER;
 		client.userToken = userToken;
@@ -86,7 +97,8 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
-	 * Creates an application-level WWClient, not associated with a specific user
+	 * Creates an application-level WWClient, not associated with a specific user. There is no benefit serializing an
+	 * AppToken, so there is no corresponding method for loading with an AppToken
 	 * 
 	 * @param appId
 	 *            String, the ID for the application the code is being run from
@@ -98,12 +110,37 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @since 0.5.0
 	 */
-	public static WWClient buildClientApplicationAccess(String appId, String appSecret, AuthenticationEndpoint authenticationEndpoint) {
+	public static WWClient buildClientApplicationAccess(String appId, String appSecret,
+			AuthenticationEndpoint authenticationEndpoint) {
 		WWClient client = new WWClient();
 		client.clientType = ClientType.APPLICATON;
 		client.appId = appId;
 		client.appSecret = appSecret;
 		client.endpoint = authenticationEndpoint;
+		return client;
+	}
+
+	/**
+	 * Creates and returns a WWClient for a specific user. This allows you to pass a serialized user token including the
+	 * refreshToken
+	 * 
+	 * @param appId
+	 *            String, the ID for the application the code is being run from
+	 * @param appSecret
+	 *            String, the secret for the application the code is being run from
+	 * @param token
+	 *            {@link PeopleToken} containing access details
+	 * @return WWClient, a Watson Workspace Client contructed with the passed params
+	 * 
+	 * @since 0.5.0
+	 */
+	public static WWClient buildClientUserAccessFromToken(String appId, String appSecret, PeopleToken token) {
+		WWClient client = new WWClient();
+		client.clientType = ClientType.USER;
+		client.appId = appId;
+		client.appSecret = appSecret;
+		client.endpoint = new WWAuthenticationEndpoint();
+		client.authenticationResult = AuthenticationResult.buildFromToken(token);
 		return client;
 	}
 
@@ -148,7 +185,11 @@ public class WWClient implements Serializable, IWWClient {
 		if (clientType == ClientType.APPLICATON) {
 			authenticationResult = endpoint.authenticateApplication(getAppCredentials());
 		} else {
-			authenticationResult = endpoint.authorizeUser(getAppCredentials(), userToken, redirectTo);
+			if (null != authenticationResult.getUserRefreshToken() && !"".equals(authenticationResult.getUserRefreshToken())) {
+				authenticationResult = endpoint.authorizeUserRefreshToken(getAppCredentials(), authenticationResult.getUserRefreshToken(), authenticationResult.getScopeAsString());
+			} else {
+				authenticationResult = endpoint.authorizeUser(getAppCredentials(), userToken, redirectTo);
+			}
 		}
 	}
 
@@ -165,11 +206,29 @@ public class WWClient implements Serializable, IWWClient {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see org.opencode4workspace.IWWClient#getUserRefreshToken()
+	 */
+	public String getUserRefreshToken() {
+		return authenticationResult.getUserRefreshToken();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opencode4workspace.IWWClient#getExpiresIn()
 	 */
 	@Override
 	public Object getExpiresIn() {
 		return authenticationResult.getExpires();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.opencode4workspace.IWWClient#getExpireDate()
+	 */
+	public Date getExpireDate() {
+		return authenticationResult.getExpireDate();
 	}
 
 	/*
@@ -210,7 +269,22 @@ public class WWClient implements Serializable, IWWClient {
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getSpacesWithQuery(query);
+	}
 
+	/**
+	 * Easy helper method to get SpacesContainer with a query
+	 * 
+	 * @param query
+	 *            SpacesGraphQLQuery containing query parameters
+	 * @return SpacesContainer including PageInfo and Spaces items
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public SpacesContainer getSpacesContainerWithQuery(SpacesGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getSpacesContainerWithQuery(query);
 	}
 
 	/**
@@ -298,7 +372,8 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
-	 * Easy helper method for updating a Space Title / members / both returning an UpdateSpaceContainer with updated Space details / updated members / both
+	 * Easy helper method for updating a Space Title / members / both returning an UpdateSpaceContainer with updated
+	 * Space details / updated members / both
 	 * 
 	 * @param mutationObject
 	 *            SpaceUpdateGraphQLMutation containing the details to update
@@ -328,13 +403,15 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @since 0.6.0
 	 */
-	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove)
+			throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.updateSpaceMembers(id, members, addOrRemove);
 	}
 
 	/**
-	 * Easy helper method for updationg a Space members and title, returning UpdateSpaceContainer with array of member IDs updated and Space object with updated title
+	 * Easy helper method for updating a Space members and title, returning UpdateSpaceContainer with array of member
+	 * IDs updated and Space object with updated title
 	 * 
 	 * @param id
 	 *            String id for the Space to update
@@ -350,9 +427,46 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @since 0.6.0
 	 */
-	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
+	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members,
+			UpdateSpaceMemberOperation addOrRemove) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.updateSpaceMembersAndTitle(id, title, members, addOrRemove);
+	}
+
+	/**
+	 * Easy helper method for adding Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of String member IDs to add as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> addSpaceMembers(String id, List<SpaceMemberObject> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.addSpaceMembers(id, members);
+	}
+
+	/**
+	 * Easy helper method for removing Space members returning List of member IDs updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of String member IDs to remove as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> removeSpaceMembers(String id, List<String> members) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.removeSpaceMembers(id, members);
 	}
 
 	/**
@@ -418,6 +532,23 @@ public class WWClient implements Serializable, IWWClient {
 	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getConversationWithQuery(query);
+	}
+
+	/**
+	 * 
+	 * Easy helper method to get a ConversationWrapper and its details with a query, including access to PageInfo object
+	 * 
+	 * @param query
+	 *            ConversationGraphQLQuery containing query parameters
+	 * @return ConversationWrapper object which also has access to PageInfo object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public ConversationWrapper getConversationWrapperWithQuery(ConversationGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getConversationWrapperWithQuery(query);
 	}
 
 	/**
@@ -583,7 +714,7 @@ public class WWClient implements Serializable, IWWClient {
 	 * 
 	 * @param query
 	 *            PeopleGraphQLQuery containing query parameters
-	 * @return List of Person objects for the name passed
+	 * @return List of Person objects for the query passed
 	 * @throws WWException
 	 *             containing an error message, if the request was unsuccessful
 	 * 
@@ -593,6 +724,69 @@ public class WWClient implements Serializable, IWWClient {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
 		return ep.getPeopleWithQuery(query);
 	}
+
+	/**
+	 * Easy helper method to get Person objects with a query
+	 * 
+	 * @param query
+	 *            PeopleGraphQLQuery containing query parameters
+	 * @return MembersContainer containing PageInfo and Person objects for the querypassed
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.5.0
+	 */
+	public MembersContainer getPeopleContainerWithQuery(PeopleGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getPeopleContainerWithQuery(query);
+	}
+
+	/**
+	 * Easy helper method to get first 10 mentions for current user
+	 * 
+	 * @return List of mentions
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned() throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentioned();
+	}
+
+	/**
+	 * Easy helper method to get mentions for current user
+	 * 
+	 * @param query
+	 *            MentionedGraphQLQuery containing query parameters
+	 * @return List of mentions
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentionedWithQuery(MentionedGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentioned(query);
+	}
+
+	/**
+	 * Easy helper method to get mentions and PageInfo object for current user
+	 * 
+	 * @param query
+	 *            MentionedGraphQLQuery containing query parameters
+	 * @return MentionedContainer including PageInfo object and items
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public MentionedContainer getMentionedContainerWithQuery(MentionedGraphQLQuery query) throws WWException {
+		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
+		return ep.getMentionedContainerWithQuery(query);
+	}
+
 
 	/**
 	 * Easy helper method to post a Application Message to a Space
@@ -609,20 +803,53 @@ public class WWClient implements Serializable, IWWClient {
 		MessagePostEndpoint ep = new MessagePostEndpoint(this);
 		return ep.postMessage(message, spaceId);
 	}
-	
+
+	/**
+	 * Post a file to Watson Workspace
+	 * 
+	 * @param file
+	 *            to post into the Workspace
+	 * @param spaceId
+	 *            String id of the space to post to
+	 * @return FileResponse object corresponding to the successful posting of
+	 *         the file
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public FileResponse postFileToSpace(File file, String spaceId) throws WWException {
 		return postFileToSpace(file, spaceId, null);
 	}
-	
+
+	/**
+	 * Post an image file to Watson Workspace
+	 * 
+	 * @param file
+	 *            to post into the Workspace
+	 * @param spaceId
+	 *            String id of the space to post to
+	 * @param imageSize
+	 *            image size as height x width, e.g. 200x200. Only blank or null
+	 *            values are current supported
+	 * @return FileResponse object corresponding to the successful posting of
+	 *         the file
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.7.0
+	 */
 	public FileResponse postFileToSpace(File file, String spaceId, String imageSize) throws WWException {
 		FilePostToSpaceEndpoint ep = new FilePostToSpaceEndpoint(this);
 		return ep.postfile(file, spaceId, imageSize);
 	}
-	
+
 	/**
-	 * @param photo File containing a jpeg to post. Should be less than 300Kb
-	 * @return PhotoResponse from Watson Workspace 
-	 * @throws WWException contains an error message, if the query was unsuccessful
+	 * @param photo
+	 *            File containing a jpeg to post. Should be less than 300Kb
+	 * @return PhotoResponse from Watson Workspace
+	 * @throws WWException
+	 *             contains an error message, if the query was unsuccessful
 	 * @since 0.7.0
 	 */
 	public PhotoResponse postPhoto(File photo) throws WWException {
@@ -631,11 +858,16 @@ public class WWClient implements Serializable, IWWClient {
 	}
 
 	/**
-	 * Perform a custom GraphQL query returning customised content for one or more fields. Return objects may also be cast to variables
+	 * Perform a custom GraphQL query returning customised content for one or more fields. Return objects may also be
+	 * cast to variables
 	 * 
-	 * @param query BaseGraphQLQuery custom query to run 
+	 * @param query
+	 *            BaseGraphQLQuery custom query to run
 	 * @return GraphResultContainer containing Data and Errors
-	 * @throws WWException contains an error message, if the query was unsuccessful
+	 * @throws WWException
+	 *             contains an error message, if the query was unsuccessful
+	 *             
+	 * @since 0.7.0
 	 */
 	public GraphResultContainer getCustomQuery(BaseGraphQLQuery query) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
@@ -644,14 +876,33 @@ public class WWClient implements Serializable, IWWClient {
 		return ep.getResultContainer();
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Post text for Watson Workspace to analyse for Focuses
+	 * 
+	 * @param text String text for Watson Work Services to analyse
+	 * @return List of Focus objects based on analysis
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 *             
+	 * @since 0.8.0
+	 */
+	public List<Focus> postTextForFocusAnalysis(String text) throws WWException {
+		FocusPostEndpoint ep = new FocusPostEndpoint(this);
+		return ep.postMessage(text);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opencode4workspace.IWWClient#getResultContent()
 	 */
 	public String getResultContent() {
 		return resultContent;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.opencode4workspace.IWWClient#setResultContent(java.lang.String)
 	 */
 	public void setResultContent(String resultContent) {

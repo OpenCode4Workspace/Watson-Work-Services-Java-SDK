@@ -1,11 +1,14 @@
 package org.opencode4workspace.authentication;
 
+import java.util.List;
+
 /**
  * @author Christian Guedemann
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Application Token Class, specific for application connections to Watson Workspace. Extended by {@link PeopleToken}
+ *        Application Token Class, specific for application connections to Watson Workspace. Extended by
+ *        {@link PeopleToken}
  */
 public class AppToken {
 
@@ -33,11 +36,17 @@ public class AppToken {
 	 * @author Christian Guedemann
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scope of token, currently only "read write"
+	 *        Enum for scopes of token. space_create, settings-read, settings_update are only relevant to PeopleTokens.
+	 *        space_change is only relevant to AppTokens. The rest are shared.
 	 *
 	 */
 	public enum TokenScope {
-		READ_WRITE("read write");
+		SPACE_CREATE("space_create"), SETTINGS_READ("settings_read"), SETTINGS_UPDATE(
+				"settings_update"), TRANSCRIPT_READ("transcript_read"), MESSAGE_CREATE("message_create"), SPACE_LIST(
+						"space_list"), FILE_UPLOAD("file_upload"), FILE_DOWNLOAD("file_download"), PROFILE_UPDATE(
+								"profile_update"), MESSAGE_READ("message_read"), SPACE_READ(
+										"space_read"), MEMBERSHIP_LIST("membership_list"), PROFILE_READ(
+												"profile_read"), SPACE_CHANGE("space_change");
 
 		private String value_;
 
@@ -53,7 +62,7 @@ public class AppToken {
 	private String access_token;
 	private TokenType token_type;
 	private int expires_in;
-	private TokenScope scope;
+	private TokenScope[] scope;
 	private String id;
 	private String jti;
 
@@ -98,7 +107,7 @@ public class AppToken {
 	 * 
 	 * @since 0.5.0
 	 */
-	public TokenScope getScope() {
+	public TokenScope[] getScope() {
 		return scope;
 	}
 
@@ -108,7 +117,17 @@ public class AppToken {
 	 * @since 0.5.0
 	 */
 	public String getScopeAsString() {
-		return scope.getValue();
+		StringBuilder builder = new StringBuilder();
+		boolean first = true;
+		for (TokenScope s : scope) {
+			if (first) {
+				first = !first;
+				builder.append(s.getValue());
+			} else {
+				builder.append(" " + s.getValue());
+			}
+		}
+		return builder.toString();
 	}
 
 	/**

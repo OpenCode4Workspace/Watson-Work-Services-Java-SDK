@@ -1,6 +1,7 @@
 package org.opencode4workspace.mocks;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.json.ResultParser;
+
+import org.opencode4workspace.mocks.MockGraphQLEndpoint;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -167,6 +170,13 @@ public class MockClient implements IWWClient {
 	public Object getExpiresIn() {
 		return null;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opencode4workspace.IWWClient#getExpireDate()
+	 */
+	public Date getExpireDate() {
+		return null;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -186,6 +196,11 @@ public class MockClient implements IWWClient {
 	@Override
 	public void setResultContent(String resultContent) {
 		this.resultContent = resultContent;
+	}
+
+	@Override
+	public String getUserRefreshToken() {
+		return null;
 	}
 
 }

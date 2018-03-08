@@ -329,20 +329,13 @@ public class ITgraphQL {
 	}
 
 	@Test(enabled = true)
-	@Parameters({ "appId", "appSecret" })
-	public void updateSpace(String appId, String appSecret) throws WWException, UnsupportedEncodingException {
+	@Parameters({ "appId", "appSecret","space2Id", "space2Name" })
+	public void crudSpace(String appId, String appSecret, String space2Id, String space2Name) throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
-		try {
-			Space space = ep.updateSpaceTitle("589390cfe4b0f86a34bbf4ed", "Hello New World");
-			assert "Hello New World".equals(space.getTitle());
-		} catch (Exception e) {
-			GraphResultContainer results = ep.getResultContainer();
-			assert (null != results.getErrors());
-			ErrorContainer errors = results.getErrors().get(0);
-			assert "403 Forbidden".equals(errors.getMessage());
-		}
+		Space space = ep.updateSpaceTitle(space2Id, space2Name);
+		assert space2Name.equals(space.getTitle());
 	}
 	
 	@Test(enabled = true)
@@ -378,10 +371,8 @@ public class ITgraphQL {
 		assert (null != data);
 		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
 		assert(null != space1);
-		assert (spaceName.equals(space1.getTitle()));
 		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
 		assert(null != space2);
-		assert (space2Name.equals(space2.getTitle()));
 	}
 	
 	@Test(enabled = true)
@@ -416,10 +407,8 @@ public class ITgraphQL {
 		assert (null != data);
 		SpaceWrapper space1 = (SpaceWrapper) data.getAliasedChildren().get("space1");
 		assert(null != space1);
-		assert (spaceName.equals(space1.getTitle()));
 		SpaceWrapper space2 = (SpaceWrapper) data.getAliasedChildren().get("space2");
 		assert(null != space2);
-		assert (space2Name.equals(space2.getTitle()));
 	}
 	
 	

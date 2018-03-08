@@ -6,6 +6,7 @@ import java.util.Date;
 import org.opencode4workspace.authentication.AppToken.TokenScope;
 import org.opencode4workspace.authentication.AppToken.TokenType;
 import org.opencode4workspace.bo.Annotation.AnnotationType;
+import org.opencode4workspace.bo.Focus.Lens;
 import org.opencode4workspace.bo.Person.PresenceStatus;
 
 import com.google.gson.Gson;
@@ -39,9 +40,10 @@ public class ResultParser<T> {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSZ");
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
-		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
+		builder.registerTypeAdapter(TokenScope[].class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
 		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
+		builder.registerTypeAdapter(Lens.class, new LensDeserializer());
 		this.gson = builder.create();
 	}
 
@@ -67,9 +69,10 @@ public class ResultParser<T> {
 			builder.setDateFormat(dateFormat);
 		}
 		builder.registerTypeAdapter(TokenType.class, new TokenTypeDeserializer());
-		builder.registerTypeAdapter(TokenScope.class, new TokenScopeDeserializer());
+		builder.registerTypeAdapter(TokenScope[].class, new TokenScopeDeserializer());
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
 		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
+		builder.registerTypeAdapter(Lens.class, new LensDeserializer());
 		this.gson = builder.create();
 	}
 

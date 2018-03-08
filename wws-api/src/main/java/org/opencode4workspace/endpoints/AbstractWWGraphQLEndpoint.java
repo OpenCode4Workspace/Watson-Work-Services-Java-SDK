@@ -69,7 +69,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 	 * 
 	 * @since 0.5.0
 	 */
-	private boolean isShouldBeValid() {
+	protected boolean isShouldBeValid() {
 		if (getClient().isValid()) {
 			return true;
 		} else {
@@ -131,8 +131,12 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
+			if (!isShouldBeValid()) {
+				getClient().authenticate();
+			}
 			StringEntity postPayload = new StringEntity(new RequestBuilder<GraphQLRequest>(GraphQLRequest.class).buildJson(request), "UTF-8");
 			post.setEntity(postPayload);
+			// TODO: Add a property on the WWClient to allow profiling, and set it here if required
 			if (getProfileDump()) {
 				System.out.println("[WWS Profiler] Query is " + postPayload);
 			}
@@ -142,10 +146,12 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 				long elapsed = System.nanoTime() - start;
 				System.out.println("[WWS Profiler] Query took " + elapsed / 1000000 + "ms");
 			}
+			String content = EntityUtils.toString(response.getEntity());
+			setResultContent(content);
+			if (getProfileDump()) {
+				System.out.println("[WWS Profiler] Response was " + content);
+			}
 			if (response.getStatusLine().getStatusCode() == 200) {
-				// TODO: Handle if we need to re-authenticate
-				String content = EntityUtils.toString(response.getEntity());
-				setResultContent(content);
 				setResultContainer(new ResultParser<GraphResultContainer>(GraphResultContainer.class).parse(content));
 				if (null != getRequest().getReturnObjectTypes()) {
 					Gson gson = new Gson();
@@ -170,7 +176,7 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 					}
 				}
 			} else {
-				throw new WWException("Failure during login" + response.getStatusLine().getReasonPhrase());
+				throw new WWException("Failure during request - " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}
 		} catch (Exception e) {
 			throw new WWException(e);
@@ -250,14 +256,14 @@ public abstract class AbstractWWGraphQLEndpoint implements IWWGraphQLEndpoint {
 		this.profileDump = profileDump;
 	}
 
-	public Map<String, Object> getAliasedChildren() {
+	public Map<String, Object> getAliasedChildren() throws WWException {
 		try {
 			DataContainer data = getResultContainer().getData();
 			if (null != data) {
 				return data.getAliasedChildren();
 			}
 		} catch (WWException e) {
-			// TODO CHRISTIAN, is it okay to just assume this is null and suppress the error?
+			throw new WWException("Error parsing result - " + getResultContent());
 		}
 		return null;
 	}

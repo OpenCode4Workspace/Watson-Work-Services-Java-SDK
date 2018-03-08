@@ -17,7 +17,7 @@ import com.google.gson.JsonParseException;
  * @since 0.5.0
  *
  */
-public class TokenScopeDeserializer implements JsonDeserializer<TokenScope> {
+public class TokenScopeDeserializer implements JsonDeserializer<TokenScope[]> {
 
 	/*
 	 * (non-Javadoc)
@@ -25,14 +25,18 @@ public class TokenScopeDeserializer implements JsonDeserializer<TokenScope> {
 	 * @see com.google.gson.JsonDeserializer#deserialize(com.google.gson.JsonElement, java.lang.reflect.Type, com.google.gson.JsonDeserializationContext)
 	 */
 	@Override
-	public TokenScope deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	public TokenScope[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+		String[] vals = json.getAsString().split(" ");
 		TokenScope[] tokenScopes = TokenScope.values();
-		for (TokenScope tokenScope : tokenScopes) {
-			if (tokenScope.getValue().equals(json.getAsString())) {
-				return tokenScope;
+		TokenScope[] retVal = new TokenScope[vals.length];
+		for (int i = 0; i < vals.length; i++) {
+			for (TokenScope tokenScope : tokenScopes) {
+				if (tokenScope.getValue().equals(vals[i])) {
+					retVal[i] = tokenScope;
+				}
 			}
 		}
-		return null;
+		return retVal;
 	}
 
 }

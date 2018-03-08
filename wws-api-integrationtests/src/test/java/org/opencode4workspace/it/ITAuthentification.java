@@ -19,6 +19,8 @@ public class ITAuthentification {
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();
+		System.out.println(client.getExpiresIn());
+		assert "".equals(client.getUserRefreshToken());
 	}
 
 	
@@ -26,7 +28,7 @@ public class ITAuthentification {
 	@Parameters({ "appId", "appSecret", "userToken" })
 	public void testLoginAsUser(String appId, String appSecret, String userToken) throws UnsupportedEncodingException, WWException {
 		System.out.println("UserToken: "+ userToken);
-		IWWClient client = WWClient.buildClientUserAccess(userToken,appId, appSecret, new WWAuthenticationEndpoint(), "https://webgate.biz");
+		IWWClient client = WWClient.buildClientUserAccess(userToken,appId, appSecret, new WWAuthenticationEndpoint(), "https://openntf.org");
 		assert !client.isAuthenticated();
 		client.authenticate();
 		assert client.isAuthenticated();

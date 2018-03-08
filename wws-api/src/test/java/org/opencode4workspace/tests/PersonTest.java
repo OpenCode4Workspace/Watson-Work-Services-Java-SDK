@@ -12,7 +12,7 @@ import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
 
 public class PersonTest {
-	private static final String PEOPLE_QUERY = "people (first: 10) {items {displayName email extId created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}";
+	private static final String PEOPLE_QUERY = "people (first: 10) {items {displayName email extId created updated ibmUniqueID createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}";
 
 	
 
@@ -25,6 +25,7 @@ public class PersonTest {
 				.addField(PersonFields.EXT_ID)
 				.addField(PersonFields.CREATED)
 				.addField(PersonFields.UPDATED)
+				.addField(PersonFields.IBM_UNIQUE_ID)
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY))
 				.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
 		assertEquals(PEOPLE_QUERY, personNames.build());

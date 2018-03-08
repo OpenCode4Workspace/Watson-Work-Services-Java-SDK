@@ -6,10 +6,12 @@ import java.util.List;
 import org.opencode4workspace.IWWClient;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation;
+import org.opencode4workspace.bo.Mentioned;
 import org.opencode4workspace.bo.Message;
 import org.opencode4workspace.bo.Person;
 import org.opencode4workspace.bo.Space;
 import org.opencode4workspace.builders.ConversationGraphQLQuery;
+import org.opencode4workspace.builders.MentionedGraphQLQuery;
 import org.opencode4workspace.builders.MessageGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PeopleGraphQLQuery.PeopleAttributes;
@@ -17,11 +19,18 @@ import org.opencode4workspace.builders.PersonGraphQLQuery;
 import org.opencode4workspace.builders.SpaceCreateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceDeleteGraphQLMutation;
 import org.opencode4workspace.builders.SpaceGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersAddDataSenderBuilder.SpaceMemberObject;
+import org.opencode4workspace.builders.SpaceMembersAddGraphQLMutation;
 import org.opencode4workspace.builders.SpaceMembersGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersRemoveGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation;
 import org.opencode4workspace.builders.SpaceUpdateGraphQLMutation.UpdateSpaceMemberOperation;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
+import org.opencode4workspace.graphql.ConversationWrapper;
 import org.opencode4workspace.graphql.DataContainer;
+import org.opencode4workspace.graphql.MembersContainer;
+import org.opencode4workspace.graphql.MentionedContainer;
+import org.opencode4workspace.graphql.SpacesContainer;
 import org.opencode4workspace.graphql.UpdateSpaceContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 
@@ -39,7 +48,9 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Simplified access method, to load GraphQL query for getting spaces, execute the request, and parse the results
+	 * Simplified access method, to load GraphQL query for getting spaces, execute the request, and parse the results.
+	 * Note: this doesn't have access to PageInfo class with startCursor / endCursor and whether or not there are
+	 * additional / previous pages.
 	 * 
 	 * @return List of Space details
 	 * @throws WWException
@@ -48,13 +59,13 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public List<? extends Space> getSpaces() throws WWException {
-
 		SpacesGraphQLQuery queryObject = SpacesGraphQLQuery.buildStandardGetSpacesQuery();
 		return getSpacesWithQuery(queryObject);
 	}
 
 	/**
-	 * getSpaces by using a SpacesGraphQLQuery
+	 * getSpaces by using a SpacesGraphQLQuery. Note: this doesn't have access to PageInfo class with startCursor /
+	 * endCursor and whether or not there are additional / previous pages.
 	 * 
 	 * @param query
 	 *            GraphQLQuery for the call
@@ -65,9 +76,23 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public List<? extends Space> getSpacesWithQuery(SpacesGraphQLQuery query) throws WWException {
+		return (List<? extends Space>) getSpacesContainerWithQuery(query).getItems();
+	}
+
+	/**
+	 * Get the SpacesContainer, including PageInfo object
+	 * 
+	 * @param query GraphQLQuery for the call
+	 * @return SpacesContainer containing List extending Space and PageInfo object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public SpacesContainer getSpacesContainerWithQuery(SpacesGraphQLQuery query) throws WWException {
 		setRequest(new GraphQLRequest(query));
 		executeRequest();
-		return (List<? extends Space>) getResultContainer().getData().getSpaces().getItems();
+		return getResultContainer().getData().getSpaces();
 	}
 
 	/**
@@ -88,7 +113,8 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		if (null == members) {
 			mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitle(title);
 		} else {
-			mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title, members);
+			mutationObject = SpaceCreateGraphQLMutation.buildCreateSpaceMutationWithSpaceTitleAndMembers(title,
+					members);
 		}
 		return createSpaceWithMutation(mutationObject);
 	}
@@ -142,7 +168,8 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.6.0
 	 */
 	public Space updateSpaceTitle(String id, String newTitle) throws WWException {
-		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitle(id, newTitle);
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitle(id,
+				newTitle);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getUpdateSpaceContainer_SpaceWrapper();
@@ -163,8 +190,10 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * 
 	 * @since 0.6.0
 	 */
-	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
-		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeMembers(id, members, addOrRemove);
+	public ArrayList<String> updateSpaceMembers(String id, List<String> members, UpdateSpaceMemberOperation addOrRemove)
+			throws WWException {
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeMembers(id,
+				members, addOrRemove);
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		ArrayList<String> membersReturned = new ArrayList<String>();
@@ -175,7 +204,8 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Update the members of a Space and its title, returning a UpdateSpaceContainer containing an Array of members updated and Space object with the new title
+	 * Update the members of a Space and its title, returning a UpdateSpaceContainer containing an Array of members
+	 * updated and Space object with the new title
 	 * 
 	 * @param id
 	 *            String id for the Space to update
@@ -191,13 +221,16 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * 
 	 * @since 0.6.0
 	 */
-	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members, UpdateSpaceMemberOperation addOrRemove) throws WWException {
-		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation.buildUpdateSpaceMutationChangeTitleAndMembers(id, title, members, addOrRemove);
+	public UpdateSpaceContainer updateSpaceMembersAndTitle(String id, String title, List<String> members,
+			UpdateSpaceMemberOperation addOrRemove) throws WWException {
+		SpaceUpdateGraphQLMutation mutationObject = SpaceUpdateGraphQLMutation
+				.buildUpdateSpaceMutationChangeTitleAndMembers(id, title, members, addOrRemove);
 		return updateSpaceWithMutation(mutationObject);
 	}
 
 	/**
-	 * Updates a Space with a query, returning a UpdateSpaceContainer containing an Array of members updated and Space object with the new title
+	 * Updates a Space with a query, returning a UpdateSpaceContainer containing an Array of members updated and Space
+	 * object with the new title
 	 * 
 	 * @param mutationObject
 	 *            SpaceUpdateGraphQLMutation containing the details to update
@@ -211,6 +244,56 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 		setRequest(new GraphQLRequest(mutationObject));
 		executeRequest();
 		return getResultContainer().getData().getUpdateSpaceContainer();
+	}
+
+	/**
+	 * Add members to a Space, returning List of members updated
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to add / remove as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> addSpaceMembers(String id, List<SpaceMemberObject> members) throws WWException {
+		SpaceMembersAddGraphQLMutation mutationObject = SpaceMembersAddGraphQLMutation
+				.buildAddSpaceMembersMutationChange(id, members);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		ArrayList<String> membersReturned = new ArrayList<String>();
+		for (String member : getResultContainer().getData().getUpdateSpaceContainer_MemberIdsChanged()) {
+			membersReturned.add(member);
+		}
+		return membersReturned;
+	}
+
+	/**
+	 * Remove members of a Space, returning List of members updated and the
+	 * 
+	 * @param id
+	 *            String id of the space to update
+	 * @param members
+	 *            List of member IDs to remove as members
+	 * @return ArrayList of member IDs updated
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ArrayList<String> removeSpaceMembers(String id, List<String> members) throws WWException {
+		SpaceMembersRemoveGraphQLMutation mutationObject = SpaceMembersRemoveGraphQLMutation
+				.buildRemoveSpaceMembersMutationChange(id, members);
+		setRequest(new GraphQLRequest(mutationObject));
+		executeRequest();
+		ArrayList<String> membersReturned = new ArrayList<String>();
+		for (String member : getResultContainer().getData().getRemoveSpaceMembersContainer_MemberIdsChanged()) {
+			membersReturned.add(member);
+		}
+		return membersReturned;
 	}
 
 	/**
@@ -324,7 +407,8 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public Conversation getConversation(String conversationId) throws WWException {
-		ConversationGraphQLQuery queryObject = ConversationGraphQLQuery.buildStandardConversationQueryById(conversationId);
+		ConversationGraphQLQuery queryObject = ConversationGraphQLQuery
+				.buildStandardConversationQueryById(conversationId);
 		return getConversationWithQuery(queryObject);
 	}
 
@@ -340,6 +424,21 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public Conversation getConversationWithQuery(ConversationGraphQLQuery query) throws WWException {
+		return (Conversation) getConversationWrapperWithQuery(query);
+	}
+
+	/**
+	 * Get ConversationWrapper object with query. This allows access to the PageInfo object
+	 * 
+	 * @param query
+	 *            ConversationGraphQLQuery with selection and return criteria
+	 * @return ConversationWrapper for relevant query
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public ConversationWrapper getConversationWrapperWithQuery(ConversationGraphQLQuery query) throws WWException {
 		setRequest(new GraphQLRequest(query));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
@@ -448,7 +547,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	}
 
 	/**
-	 * Get People with query
+	 * Get People with query. Note: this just returns the People, not the associated PageInfo object
 	 * 
 	 * @param query
 	 *            PeopleGraphQLQuery with selection and return criteria
@@ -459,9 +558,66 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public List<Person> getPeopleWithQuery(PeopleGraphQLQuery query) throws WWException {
+		return getPeopleContainerWithQuery(query).getItems();
+	}
+	
+	/**
+	 * @param query
+	 *            PeopleGraphQLQuery with selection and return criteria
+	 * @return MembersContainer for the relevant query including PageInfo object and People items
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public MembersContainer getPeopleContainerWithQuery(PeopleGraphQLQuery query) throws WWException {
 		setRequest(new GraphQLRequest(query));
 		executeRequest();
 		DataContainer container = getResultContainer().getData();
-		return (List<Person>) container.getPeople();
+		return container.getPeople();
+	}
+
+	/**
+	 * Get Mentioned query with first 10 mentions. Note: this does not give access to thePageInfo object
+	 * 
+	 * @return List of first 10 Mentioned objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned() throws WWException {
+		return getMentioned(MentionedGraphQLQuery.buildFullMentionedGraphQuery());
+	}
+
+	/**
+	 * Get Mentioned query with passed query. Note: this does not give access to thePageInfo object
+	 * 
+	 * @param query
+	 *            MentionedGraphQLQuery with relevant parameters
+	 * @return List of Mentioned objects
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<Mentioned> getMentioned(MentionedGraphQLQuery query) throws WWException {
+		return getMentionedContainerWithQuery(query).getItems();
+	}
+	
+	/**
+	 * @param query
+	 *            MentionedGraphQLQuery with relevant parameters
+	 * @return MentionedContainer container Mentioned objects and PageInfo object
+	 * @throws WWException
+	 *             containing an error message, if the request was unsuccessful
+	 * 
+	 * @since 0.8.0
+	 */
+	public MentionedContainer getMentionedContainerWithQuery(MentionedGraphQLQuery query) throws WWException {
+		setRequest(new GraphQLRequest(query));
+		executeRequest();
+		DataContainer container = getResultContainer().getData();
+		return container.getMentioned();
 	}
 }

@@ -48,6 +48,9 @@ public class PhotoPostEndpoint extends AbstractWWGraphQLEndpoint {
 		CloseableHttpClient client = HttpClients.createDefault();
 		CloseableHttpResponse response = null;
 		try {
+			if (!isShouldBeValid()) {
+				getClient().authenticate();
+			}
 			if (photo.length() > (300*1000)) {
 				throw new WWException("File must be less than 300Kb");
 			}

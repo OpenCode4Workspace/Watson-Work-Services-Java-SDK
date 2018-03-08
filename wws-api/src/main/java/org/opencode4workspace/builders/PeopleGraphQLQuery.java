@@ -21,7 +21,7 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 	 * @since 0.5.0
 	 * 
 	 *        <p>
-	 *        Enum for filtering a . See {@link WWFieldsAttributesInterface}.
+	 *        Enum for filtering a PeopleQuery. See {@link WWFieldsAttributesInterface}.
 	 *        </p>
 	 *        <ul>
 	 *        <li>ID expects a list of IDs for people</li>
@@ -127,10 +127,10 @@ public class PeopleGraphQLQuery extends BaseGraphQLQuery {
 		query.addField(PersonFields.EMAIL);
 		query.addField(PersonFields.PHOTO_URL);
 		query.addField(PersonFields.EXT_ID);
-		query.addField(PersonFields.EMAIL_ADDRESSES);
 		query.addField(PersonFields.CUSTOMER_ID);
 		query.addField(PersonFields.CREATED);
 		query.addField(PersonFields.UPDATED);
+		query.addField(PersonFields.IBM_UNIQUE_ID);
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.CREATED_BY));
 		query.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(PersonChildren.UPDATED_BY));
 		return new PeopleGraphQLQuery(query);

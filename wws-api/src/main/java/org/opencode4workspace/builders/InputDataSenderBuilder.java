@@ -2,6 +2,7 @@ package org.opencode4workspace.builders;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ public class InputDataSenderBuilder implements Serializable, IDataSenderBuilder 
 	private static final long serialVersionUID = 1L;
 	private String mutationName;
 	private Map<String, Object> fieldsMap = new HashMap<String, Object>();
+	private List<IDataSenderBuilder> children = new ArrayList<IDataSenderBuilder>();
 
 	/**
 	 * Raw constructor. Recommendation is to use overloaded methods
@@ -76,6 +78,21 @@ public class InputDataSenderBuilder implements Serializable, IDataSenderBuilder 
 			Object obj = getFieldsMap().get(key);
 			convertMapValue(s, obj);
 		}
+
+		// Add children, if exist
+		for (IDataSenderBuilder child : getChildren()) {
+			if (!isFirst) {
+				if (pretty) {
+					s.append("\n\r");
+				} else {
+					s.append(" ");
+				}
+			} else {
+				isFirst = false;
+			}
+			s.append(child.build(pretty));
+		}
+		
 		if (pretty) {
 			s.append("\n\r");
 		}
@@ -235,6 +252,55 @@ public class InputDataSenderBuilder implements Serializable, IDataSenderBuilder 
 	 */
 	public InputDataSenderBuilder removeField(WWFieldsAttributesInterface enumName) {
 		fieldsMap.remove(enumName.getLabel());
+		return this;
+	}
+	
+	/**
+	 * @return List of {@link IDataSenderBuilder} children to request from the object
+	 * 
+	 * @since 0.8.0
+	 */
+	public List<IDataSenderBuilder> getChildren() {
+		return children;
+	}
+
+	/**
+	 * @param children
+	 *            List of {@link IDataSenderBuilder} children to request from the object
+	 * @return InputDataSenderBuilder, current object
+	 * 
+	 * @since 0.8.0
+	 */
+	public InputDataSenderBuilder setChildren(List<IDataSenderBuilder> children) {
+		this.children = children;
+		return this;
+	}
+
+	/**
+	 * Add a request for a specific child from the object
+	 * 
+	 * @param child
+	 *            DataSenderBuilder, child to add
+	 * @return InputDataSenderBuilder, current object
+	 * 
+	 * @since 0.8.0
+	 */
+	public InputDataSenderBuilder addChild(IDataSenderBuilder child) {
+		children.add(child);
+		return this;
+	}
+
+	/**
+	 * Removes a request for a specific child from the object
+	 * 
+	 * @param child
+	 *            DataSenderBuilder, child to remove
+	 * @return ObjectDataSenderBuilder, current object
+	 * 
+	 * @since 0.8.0
+	 */
+	public InputDataSenderBuilder removeChild(IDataSenderBuilder child) {
+		children.remove(child);
 		return this;
 	}
 

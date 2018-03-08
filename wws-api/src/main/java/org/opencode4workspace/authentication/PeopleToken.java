@@ -1,5 +1,7 @@
 package org.opencode4workspace.authentication;
 
+import java.util.Date;
+
 /**
  * @author Christian Guedemann
  * @since 0.5.0
@@ -12,6 +14,7 @@ public class PeopleToken extends AppToken {
 	private String refresh_token;
 	private String displayName;
 	private String providerId;
+	private Date createdDate;
 
 	/**
 	 * @return String, the refresh token for the user, equivalent to JWT token for application
@@ -38,6 +41,20 @@ public class PeopleToken extends AppToken {
 	 */
 	public String getProviderId() {
 		return providerId;
+	}
+	
+	/**
+	 * @return Date the token was created, used with expiresIn to work out if it's expired
+	 */
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	
+	/**
+	 * @param date Date the token was created, used with expiresIn to work out if it's expired
+	 */
+	public void setCreatedDate(Date date) {
+		createdDate = date;
 	}
 
 }

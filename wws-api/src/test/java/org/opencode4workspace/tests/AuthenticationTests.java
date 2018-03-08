@@ -51,7 +51,7 @@ public class AuthenticationTests {
 	@Test
 	public void testGetJWTTokenFromEndpointApplication() throws InterruptedException, UnsupportedEncodingException, WWException {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		EasyMock.expect(authenticationEndpoint.authenticateApplication(BASIC_MM_CRED)).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", ""));
+		EasyMock.expect(authenticationEndpoint.authenticateApplication(BASIC_MM_CRED)).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", "", "", "", null));
 		EasyMock.replay(authenticationEndpoint);
 		IWWClient client = WWClient.buildClientApplicationAccess(MY_APP_ID, MY_APP_SECRET, authenticationEndpoint);
 
@@ -70,7 +70,7 @@ public class AuthenticationTests {
 	@Test
 	public void testGetJWTTokenFromEndpointUser() throws InterruptedException, UnsupportedEncodingException, WWException {
 		AuthenticationEndpoint authenticationEndpoint = EasyMock.createNiceMock(AuthenticationEndpoint.class);
-		EasyMock.expect(authenticationEndpoint.authorizeUser(BASIC_MM_CRED, USER_TOKEN, "http://localhost")).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", ""));
+		EasyMock.expect(authenticationEndpoint.authorizeUser(BASIC_MM_CRED, USER_TOKEN, "http://localhost")).andReturn(new AuthenticationResult(JWT_TOKEN, 2, "", "", "", "", "", null));
 		EasyMock.replay(authenticationEndpoint);
 		IWWClient client = WWClient.buildClientUserAccess(USER_TOKEN, MY_APP_ID, MY_APP_SECRET, authenticationEndpoint, "http://localhost");
 

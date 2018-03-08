@@ -3,6 +3,9 @@ package org.opencode4workspace.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.Test;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.Conversation.ConversationChildren;
@@ -16,7 +19,9 @@ import org.opencode4workspace.bo.Space.SpaceChildren;
 import org.opencode4workspace.bo.Space.SpaceFields;
 import org.opencode4workspace.builders.BaseGraphQLQuery;
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
+import org.opencode4workspace.builders.SpaceGraphQLQuery.SpaceAttributes;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
+import org.opencode4workspace.builders.SpacesGraphQLQuery.SpacesAttributes;
 import org.opencode4workspace.graphql.BasicPaginationEnum;
 import org.opencode4workspace.json.GraphQLRequest;
 
@@ -26,7 +31,9 @@ public class FieldDataSenderTest {
 	private static final String GET_SPACES_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
 	private static final String GET_SPACES_BIGGER_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated updatedBy {id displayName photoUrl email} createdBy {id displayName photoUrl email} members (first: 100) {items {id photoUrl email displayName}}}}}";
 	private static final String GET_SPACES_FULL_QUERY = "query getSpaces {spaces (first: 100) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated updatedBy {id displayName photoUrl email} createdBy {id displayName photoUrl email} members (first: 100) {items {id photoUrl email displayName}} conversation {id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email} messages (first: 20) {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {contentType content id created updated createdBy {id displayName photoUrl email} updatedBy {id displayName photoUrl email}}}}}}}";
-
+	private static final String GET_SPACES_SINCE_QUERY = "query getSpaces {spaces (updatedSince: \"2018-02-20T00:00:00.000+0000\") {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
+	private static final String GET_SPACES_SINCE_QUERY_US = "query getSpaces {spaces (updatedSince: \"2018-02-20T00:00:00.000-0500\") {pageInfo {startCursor endCursor hasNextPage hasPreviousPage} items {id title description created updated membersUpdated}}}";
+	
 	@Test
 	public void testGetPageInfoFields() {
 		ObjectDataSenderBuilder fb = new ObjectDataSenderBuilder(PageInfo.PAGE_QUERY_OBJECT_NAME, false);
@@ -55,6 +62,25 @@ public class FieldDataSenderTest {
 		SpacesGraphQLQuery query = new SpacesGraphQLQuery(spaces);
 		GraphQLRequest request = new GraphQLRequest(query);
 		assertEquals(GET_SPACES_QUERY, request.getQuery());
+	}
+
+	@Test
+	public void testSpacesUpdatedSinceObjectQuery() throws WWException {
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
+		Calendar cal = Calendar.getInstance();
+		cal.set(2018, 1, 20, 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		spaces.addAttribute(SpacesAttributes.UPDATED_SINCE, cal.getTime());
+		spaces.addPageInfo();
+		spaces.addField(Space.SpaceFields.ID);
+		spaces.addField(SpaceFields.TITLE);
+		spaces.addField(SpaceFields.DESCRIPTION);
+		spaces.addField(SpaceFields.CREATED);
+		spaces.addField(SpaceFields.UPDATED);
+		spaces.addField(SpaceFields.MEMBERS_UPDATED);
+		SpacesGraphQLQuery query = new SpacesGraphQLQuery(spaces);
+		GraphQLRequest request = new GraphQLRequest(query);
+		assertTrue(GET_SPACES_SINCE_QUERY.equals(request.getQuery()) || GET_SPACES_SINCE_QUERY_US.equals(request.getQuery()));
 	}
 
 	@Test
