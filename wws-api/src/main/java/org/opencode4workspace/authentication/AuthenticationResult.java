@@ -56,7 +56,7 @@ public class AuthenticationResult {
 			this.created = new Date();
 		}
 		this.scopeAsString = scopeAsString;
-		this.expireDate = buildExpireDate(created, this.expires);
+		this.expireDate = buildExpireDate(this.created, this.expires);
 	}
 
 	/**
