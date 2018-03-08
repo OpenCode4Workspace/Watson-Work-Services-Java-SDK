@@ -57,7 +57,7 @@ public class FocusPostEndpoint extends AbstractWWGraphQLEndpoint {
 			StringEntity postPayload = new StringEntity(jjo.toString(), "UTF-8");
 			post.setEntity(postPayload);
 			response = client.execute(post);
-			if (response.getStatusLine().getStatusCode() == 201) {
+			if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 201) {
 				String content = EntityUtils.toString(response.getEntity());
 				FocusResponseContainer container = new ResultParser<FocusResponseContainer>(FocusResponseContainer.class).parse(content);
 				return container.getFocuses();
