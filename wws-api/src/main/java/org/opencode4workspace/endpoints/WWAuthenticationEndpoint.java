@@ -35,20 +35,9 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 	 */
 	@Override
 	public AuthenticationResult authenticateApplication(String basicAuthApp) throws WWException {
-		AppToken appToken = authenticateApplicationGetToken(basicAuthApp);
-		return AuthenticationResult.buildFromToken(appToken);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.opencode4workspace.authentication.AuthenticatenEndpoint# authenticateApplication(java.lang.String)
-	 */
-	@Override
-	public AppToken authenticateApplicationGetToken(String basicAuth) throws WWException {
 		CloseableHttpClient client = HttpClients.createDefault();
 		List<NameValuePair> params = new ArrayList<NameValuePair>(1);
-		HttpPost post = preparePost(basicAuth);
+		HttpPost post = preparePost(basicAuthApp);
 		params.add(new BasicNameValuePair("grant_type", "client_credentials"));
 		CloseableHttpResponse response = null;
 		try {
@@ -58,7 +47,7 @@ public class WWAuthenticationEndpoint implements AuthenticationEndpoint {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				String content = EntityUtils.toString(response.getEntity());
 				AppToken appToken = new ResultParser<AppToken>(AppToken.class).parse(content);
-				return appToken;
+				return AuthenticationResult.buildFromToken(appToken);
 			} else {
 				throw new WWException("Failure during login - " + response.getStatusLine().getStatusCode() + " " + response.getStatusLine().getReasonPhrase() + ", response was " + EntityUtils.toString(response.getEntity()));
 			}

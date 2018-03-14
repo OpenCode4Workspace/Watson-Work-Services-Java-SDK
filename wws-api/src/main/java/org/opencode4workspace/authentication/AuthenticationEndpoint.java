@@ -25,19 +25,6 @@ public interface AuthenticationEndpoint {
 	AuthenticationResult authenticateApplication(String basicAuthApp) throws WWException;
 
 	/**
-	 * Creates POST request for authentication and returns token, if successful, or generates error, if not
-	 * 
-	 * @param basicAuthApp
-	 *            String, content for Authorization header constructed from {@link WWClient#getAppCredentials()}
-	 * @return {@link AppToken} response
-	 * @throws WWException
-	 *             error details
-	 * 
-	 * @since 0.0.5
-	 */
-	AppToken authenticateApplicationGetToken(String basicAuthApp) throws WWException;
-
-	/**
 	 * Creates POST request for authorizing user and returns result, if successful, or generates error, if not
 	 * 
 	 * @param basicAuthApp
