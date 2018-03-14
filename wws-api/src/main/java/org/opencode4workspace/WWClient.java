@@ -184,12 +184,17 @@ public class WWClient implements Serializable, IWWClient {
 	public void authenticate() throws UnsupportedEncodingException, WWException {
 		if (clientType == ClientType.APPLICATON) {
 			authenticationResult = endpoint.authenticateApplication(getAppCredentials());
+		} else {if (null == authenticationResult) {
+			authenticationResult = endpoint.authorizeUser(getAppCredentials(), userToken, redirectTo);
 		} else {
-			if (null != authenticationResult.getUserRefreshToken() && !"".equals(authenticationResult.getUserRefreshToken())) {
-				authenticationResult = endpoint.authorizeUserRefreshToken(getAppCredentials(), authenticationResult.getUserRefreshToken(), authenticationResult.getScopeAsString());
+			if (null != authenticationResult.getUserRefreshToken()
+					&& !"".equals(authenticationResult.getUserRefreshToken())) {
+				authenticationResult = endpoint.authorizeUserRefreshToken(getAppCredentials(),
+						authenticationResult.getUserRefreshToken(), authenticationResult.getScopeAsString());
 			} else {
 				authenticationResult = endpoint.authorizeUser(getAppCredentials(), userToken, redirectTo);
 			}
+		}
 		}
 	}
 
