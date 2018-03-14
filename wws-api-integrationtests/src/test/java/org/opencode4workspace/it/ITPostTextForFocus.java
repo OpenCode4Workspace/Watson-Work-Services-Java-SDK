@@ -16,7 +16,7 @@ public class ITPostTextForFocus {
 
 	@Test(enabled = true)
 	@Parameters({ "appId", "appSecret" })
-	public void postTestTextForFocus(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
+	public void postTestForFocus(String appId, String appSecret) throws UnsupportedEncodingException, WWException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		assert !client.isAuthenticated();
 		client.authenticate();

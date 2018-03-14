@@ -29,6 +29,7 @@ import org.opencode4workspace.builders.ConversationGraphQLQuery.ConversationMess
 import org.opencode4workspace.builders.ObjectDataSenderBuilder;
 import org.opencode4workspace.builders.PeopleGraphQLQuery;
 import org.opencode4workspace.builders.PersonGraphQLQuery;
+import org.opencode4workspace.builders.SpaceMembersAddDataSenderBuilder.SpaceMemberObject;
 import org.opencode4workspace.builders.SpacesGraphQLQuery;
 import org.opencode4workspace.endpoints.WWAuthenticationEndpoint;
 import org.opencode4workspace.endpoints.WWGraphQLEndpoint;
@@ -37,6 +38,7 @@ import org.opencode4workspace.graphql.DataContainer;
 import org.opencode4workspace.graphql.ErrorContainer;
 import org.opencode4workspace.graphql.GraphResultContainer;
 import org.opencode4workspace.graphql.SpaceWrapper;
+import org.opencode4workspace.graphql.SpacesContainer;
 import org.opencode4workspace.json.GraphQLRequest;
 import org.opencode4workspace.json.ResultParser;
 import org.testng.annotations.Parameters;
@@ -90,6 +92,38 @@ public class ITgraphQL {
 		spaces.addChild(members);
 		List<? extends Space> spacesResult = client.getSpacesWithQuery(new SpacesGraphQLQuery(spaces));
 		assert (spacesResult.size() > 0);
+	}
+	
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret" })
+	public void testGetSpacesContainerAsApp(String appId, String appSecret)
+			throws UnsupportedEncodingException, WWException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		assert !client.isAuthenticated();
+		client.authenticate();
+		assert client.isAuthenticated();
+
+		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
+		spaces.addAttribute(BasicPaginationEnum.FIRST, 10);
+		spaces.addPageInfo();
+		spaces.addField(SpaceFields.ID);
+		spaces.addField(SpaceFields.TITLE);
+		spaces.addField(SpaceFields.DESCRIPTION);
+		spaces.addField(SpaceFields.UPDATED);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.UPDATED_BY));
+		spaces.addField(SpaceFields.CREATED);
+		spaces.addChild(new BasicCreatedByUpdatedByDataSenderBuilder(SpaceChildren.CREATED_BY));
+		ObjectDataSenderBuilder members = new ObjectDataSenderBuilder(SpaceChildren.MEMBERS.getLabel(), true);
+		members.addAttribute(BasicPaginationEnum.FIRST, 100);
+		members.addField(PersonFields.ID);
+		members.addField(PersonFields.PHOTO_URL);
+		members.addField(PersonFields.EMAIL);
+		members.addField(PersonFields.DISPLAY_NAME);
+		members.addField(PersonFields.PRESENCE);
+		spaces.addChild(members);
+		SpacesContainer spacesResult = client.getSpacesContainerWithQuery(new SpacesGraphQLQuery(spaces));
+		assert spacesResult.getPageInfo().isHasNextPage();
+		assert (spacesResult.getItems().size() > 0);
 	}
 
 	@Test(enabled = false)
@@ -336,6 +370,28 @@ public class ITgraphQL {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(client);
 		Space space = ep.updateSpaceTitle(space2Id, space2Name);
 		assert space2Name.equals(space.getTitle());
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret","space2Id", "profileId" })
+	public void addMembersToSpace(String appId, String appSecret, String space2Id, String profileId) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		List<SpaceMemberObject> members = new ArrayList<SpaceMemberObject>();
+		SpaceMemberObject obj = new SpaceMemberObject(profileId, "");
+		List<String> ids = client.addSpaceMembers(space2Id, members);
+		assert ids.size() == 1;
+	}
+
+	@Test(enabled = true)
+	@Parameters({ "appId", "appSecret","space2Id", "profileId" })
+	public void removeMembersToSpace(String appId, String appSecret, String space2Id, String profileId) throws WWException, UnsupportedEncodingException {
+		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
+		client.authenticate();
+		List<String> members = new ArrayList<String>();
+		members.add(profileId);
+		List<String> ids = client.removeSpaceMembers(space2Id, members);
+		assert ids.size() == 1;
 	}
 	
 	@Test(enabled = true)
