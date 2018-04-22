@@ -29,7 +29,7 @@ public class AnnotationTypeDeserializer implements JsonDeserializer<AnnotationTy
 	public AnnotationType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		AnnotationType[] annotationTypes = AnnotationType.values();
 		for (AnnotationType annotationType : annotationTypes) {
-			if (annotationType.getLabel().equals(json.getAsString())) {
+			if (annotationType.getLabel().equalsIgnoreCase(json.getAsString())) {
 				return annotationType;
 			}
 		}
