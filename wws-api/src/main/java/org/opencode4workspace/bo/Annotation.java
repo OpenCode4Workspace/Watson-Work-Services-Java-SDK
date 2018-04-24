@@ -3,6 +3,8 @@ package org.opencode4workspace.bo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * 
  * @author Christian Guedemann
@@ -20,11 +22,26 @@ public class Annotation implements Serializable {
 	 *
 	 */
 	public enum AnnotationType implements WWFieldsAttributesInterface {
-		GENERIC("generic", String.class), MOMENT("conversation-moment", String.class), FOCUS("message-focus", String.class), NLP_ENTITY(
-				"mesage-nlp-entities", String.class), NLP_KEYWORD("message-nlp-keywords", String.class), NLP_DOCSENTIMENT(
-						"nlp-docSentiment", String.class), NLP_RELATION("message-nlp-relations", String.class), NLP_CONCEPT(
-								"message-nlp-concepts", String.class), NLP_TAXONOMY(
-										"message-nlp-taxonomy", String.class), NLP_DATE("message-nlp-dates", String.class);
+		@SerializedName("generic")
+		GENERIC("generic", String.class),
+		@SerializedName("conversation-moment")
+		MOMENT("conversation-moment", String.class),
+		@SerializedName("message-focus")
+		FOCUS("message-focus", String.class),
+		@SerializedName("message-nlp-entities")
+		NLP_ENTITY("mesage-nlp-entities", String.class),
+		@SerializedName("message-nlp-keywords")
+		NLP_KEYWORD("message-nlp-keywords", String.class),
+		@SerializedName("nlp-docSentiment")
+		NLP_DOCSENTIMENT("nlp-docSentiment", String.class),
+		@SerializedName("message-nlp-relations")
+		NLP_RELATION("message-nlp-relations", String.class),
+		@SerializedName("message-nlp-conceptsc")
+		NLP_CONCEPT("message-nlp-concepts", String.class),
+		@SerializedName("message-nlp-taxonomy")
+		NLP_TAXONOMY("message-nlp-taxonomy", String.class),
+		@SerializedName("message-nlp-dates")
+		NLP_DATE("message-nlp-dates", String.class);
 
 		private String label;
 		private Class<?> objectClassType;
