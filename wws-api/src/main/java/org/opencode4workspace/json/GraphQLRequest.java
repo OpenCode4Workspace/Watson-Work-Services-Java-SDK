@@ -27,6 +27,7 @@ public class GraphQLRequest {
 	private HashMap<String, String> variables;
 	private String operationName;
 	private Map<String, WWQueryResponseObjectInterface> returnObjectTypes;
+	private boolean beta;
 
 	/**
 	 * Initialises the GraphQLRequest object from all properties
@@ -285,6 +286,26 @@ public class GraphQLRequest {
 	 */
 	public void setReturnObjectTypes(Map<String, WWQueryResponseObjectInterface> returnObjectTypes) {
 		this.returnObjectTypes = returnObjectTypes;
+	}
+	
+	/**
+	 * Whether or not query will run in beta mode
+	 * 
+	 * @return sets HTTP header x-graphql-view: PUBLIC, BETA
+	 */
+	public boolean isBeta() {
+		return beta;
+	}
+
+	/**
+	 * Set query to run in beta mode
+	 * 
+	 * @param beta boolean whether or not query should pass HTTP Header x-graphql-view: PUBLIC, BETA 
+	 * 
+	 * 0.9.0
+	 */
+	public void setBeta(boolean beta) {
+		this.beta = beta;
 	}
 
 }
