@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.opencode4workspace.WWException;
 import org.opencode4workspace.bo.PageInfo;
 import org.opencode4workspace.bo.WWFieldsAttributesInterface;
