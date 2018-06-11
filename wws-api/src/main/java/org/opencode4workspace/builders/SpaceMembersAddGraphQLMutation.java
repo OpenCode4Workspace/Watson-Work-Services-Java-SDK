@@ -91,7 +91,7 @@ public class SpaceMembersAddGraphQLMutation extends BaseGraphQLMutation {
 			throw new WWException("Space id is mandatory");
 		}
 		if (null == members || members.isEmpty()) {
-			throw new WWException("members to update are mandatory");
+			throw new WWException("Members to update are mandatory");
 		}
 		InputDataSenderBuilder spaceInput = new InputDataSenderBuilder(Space.ADD_SPACE_MEMBERS_MUTATION_NAME);
 		spaceInput.addField(AddSpaceMembersField.SPACE_ID, spaceId);
