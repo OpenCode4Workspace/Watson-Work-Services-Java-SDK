@@ -373,7 +373,7 @@ public class WWGraphQLEndpoint extends AbstractWWGraphQLEndpoint {
 	 * @since 0.5.0
 	 */
 	public Person getPersonByEmail(String personEmail) throws WWException {
-		PersonGraphQLQuery queryObject = PersonGraphQLQuery.buildPersonQueryById(personEmail);
+		PersonGraphQLQuery queryObject = PersonGraphQLQuery.buildPersonQueryByEmail(personEmail);
 		return getPersonWithQuery(queryObject);
 	}
 

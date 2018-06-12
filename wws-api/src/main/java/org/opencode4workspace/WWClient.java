@@ -617,7 +617,7 @@ public class WWClient implements Serializable, IWWClient {
 	 */
 	public Person getPersonByEmail(String personEmail) throws WWException {
 		WWGraphQLEndpoint ep = new WWGraphQLEndpoint(this);
-		return ep.getPersonById(personEmail);
+		return ep.getPersonByEmail(personEmail);
 	}
 
 	/**
