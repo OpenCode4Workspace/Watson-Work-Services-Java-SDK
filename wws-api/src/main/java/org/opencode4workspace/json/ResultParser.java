@@ -73,6 +73,7 @@ public class ResultParser<T> {
 		builder.registerTypeAdapter(PresenceStatus.class, new PersonPresenceDeserializer());
 		builder.registerTypeAdapter(AnnotationType.class, new AnnotationTypeDeserializer());
 		builder.registerTypeAdapter(Lens.class, new LensDeserializer());
+		builder.registerTypeAdapter(int.class, new IntTypeAdapter());
 		this.gson = builder.create();
 	}
 

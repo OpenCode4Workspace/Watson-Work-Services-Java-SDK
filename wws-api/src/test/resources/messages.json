@@ -1,0 +1,16 @@
+{
+              "items": [
+                {
+                  "content": "blubb ib bluu",
+                  "annotations": [
+                    "{\"keywords\":[{\"relevance\":0.943632,\"text\":\"blubb ib bluu\"}],\"annotationId\":\"5ad75adee4b041393c89dd1f\",\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"updatedBy\":\"toscana-aip-nlc-consumer-client-id\",\"tokenClientId\":\"toscana-aip-nlc-consumer-client-id\",\"version\":\"null\",\"created\":1524062942092,\"updated\":1524062942092,\"type\":\"message-nlp-keywords\"}",
+                    "{\"docSentiment\":{\"score\":0.0,\"type\":\"neutral\"},\"annotationId\":\"5ad75adee4b041393c89dd20\",\"createdBy\":\"toscana-aip-nlc-consumer-client-id\",\"updatedBy\":\"toscana-aip-nlc-consumer-client-id\",\"tokenClientId\":\"toscana-aip-nlc-consumer-client-id\",\"version\":\"null\",\"created\":1524062942092,\"updated\":1524062942092,\"type\":\"message-nlp-docSentiment\"}"
+                  ]
+                },
+                {
+                  "content": null,
+                  "annotations": [
+                    "{\"actor\":{\"name\":\"CGU\",\"avatar\":\"http://gravatar.com/cgu\",\"url\":\"http://openntf.org\"},\"color\":\"#FF0000\",\"text\":\"Message from *build process* - Integration Testing\",\"title\":\"IT-Testing\",\"annotationId\":\"5ad75371e4b0bf3b5882037e\",\"createdBy\":\"e9c66bc5-0d1f-41e3-8f63-9db840376d00\",\"updatedBy\":\"e9c66bc5-0d1f-41e3-8f63-9db840376d00\",\"tokenClientId\":\"e9c66bc5-0d1f-41e3-8f63-9db840376d00\",\"version\":\"null\",\"created\":1524061041433,\"updated\":1524061041433,\"type\":\"GENERIC\"}"
+                  ]
+                }]
+			}
