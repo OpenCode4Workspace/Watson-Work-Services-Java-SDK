@@ -104,7 +104,7 @@ public class ITgraphQL {
 		assert client.isAuthenticated();
 
 		ObjectDataSenderBuilder spaces = new ObjectDataSenderBuilder(Space.SPACES_QUERY_OBJECT_NAME, true);
-		spaces.addAttribute(BasicPaginationEnum.FIRST, 10);
+		spaces.addAttribute(BasicPaginationEnum.FIRST, 1);
 		spaces.addPageInfo();
 		spaces.addField(SpaceFields.ID);
 		spaces.addField(SpaceFields.TITLE);
@@ -373,23 +373,24 @@ public class ITgraphQL {
 	}
 
 	@Test(enabled = true)
-	@Parameters({ "appId", "appSecret","space2Id", "profileId" })
-	public void addMembersToSpace(String appId, String appSecret, String space2Id, String profileId) throws WWException, UnsupportedEncodingException {
+	@Parameters({ "appId", "appSecret","space2Id", "newProfileId" })
+	public void addMembersToSpace(String appId, String appSecret, String space2Id, String newProfileId) throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		List<SpaceMemberObject> members = new ArrayList<SpaceMemberObject>();
-		SpaceMemberObject obj = new SpaceMemberObject(profileId, "");
+		SpaceMemberObject obj = new SpaceMemberObject(newProfileId, "");
+		members.add(obj);
 		List<String> ids = client.addSpaceMembers(space2Id, members);
 		assert ids.size() == 1;
 	}
 
 	@Test(enabled = true)
-	@Parameters({ "appId", "appSecret","space2Id", "profileId" })
-	public void removeMembersToSpace(String appId, String appSecret, String space2Id, String profileId) throws WWException, UnsupportedEncodingException {
+	@Parameters({ "appId", "appSecret","space2Id", "newProfileId" })
+	public void removeMembersToSpace(String appId, String appSecret, String space2Id, String newProfileId) throws WWException, UnsupportedEncodingException {
 		WWClient client = WWClient.buildClientApplicationAccess(appId, appSecret, new WWAuthenticationEndpoint());
 		client.authenticate();
 		List<String> members = new ArrayList<String>();
-		members.add(profileId);
+		members.add(newProfileId);
 		List<String> ids = client.removeSpaceMembers(space2Id, members);
 		assert ids.size() == 1;
 	}
