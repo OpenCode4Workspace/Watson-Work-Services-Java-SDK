@@ -109,7 +109,7 @@ public class PersonGraphQLQuery extends BaseGraphQLQuery {
 		}
 		ObjectDataSenderBuilder query = new ObjectDataSenderBuilder();
 		query.setObjectName(Person.ONE_PERSON_QUERY_OBJECT_NAME);
-		query.addAttribute(PersonAttributes.ID, email);
+		query.addAttribute(PersonAttributes.EMAIL, email);
 		addPersonFieldsAndChildren(query);
 		return new PersonGraphQLQuery(METHOD_GET_PROFILE, query);
 	}
