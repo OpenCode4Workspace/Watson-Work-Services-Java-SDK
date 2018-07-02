@@ -1,7 +1,10 @@
 package org.opencode4workspace.json;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.opencode4workspace.authentication.AppToken;
 import org.opencode4workspace.authentication.AppToken.TokenScope;
 
 import com.google.gson.JsonDeserializationContext;
@@ -27,16 +30,16 @@ public class TokenScopeDeserializer implements JsonDeserializer<TokenScope[]> {
 	@Override
 	public TokenScope[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		String[] vals = json.getAsString().split(" ");
-		TokenScope[] tokenScopes = TokenScope.values();
-		TokenScope[] retVal = new TokenScope[vals.length];
-		for (int i = 0; i < vals.length; i++) {
-			for (TokenScope tokenScope : tokenScopes) {
-				if (tokenScope.getValue().equals(vals[i])) {
-					retVal[i] = tokenScope;
-				}
+		List<TokenScope> retValues = new ArrayList<TokenScope>();
+		for (String val: vals) {
+			TokenScope ts = TokenScope.findScope(val);
+			if (ts != null){
+				retValues.add(ts);
+			} else {
+				System.out.println("Hint: TokenScope for "+ val +" not defined!");
 			}
 		}
-		return retVal;
+		return retValues.toArray(new TokenScope[retValues.size()]);
 	}
 
 }

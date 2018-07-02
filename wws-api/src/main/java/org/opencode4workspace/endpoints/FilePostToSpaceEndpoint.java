@@ -1,6 +1,8 @@
 package org.opencode4workspace.endpoints;
 
 import java.io.File;
+import java.nio.charset.Charset;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -64,7 +66,7 @@ public class FilePostToSpaceEndpoint extends AbstractWWGraphQLEndpoint {
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 			builder.setContentType(ContentType.MULTIPART_FORM_DATA);
-
+			builder.setCharset(Charset.forName("utf-8"));
 			if (null == imageSize || "".equals(imageSize)) {
 				builder.addBinaryBody("file", file);
 			} else {

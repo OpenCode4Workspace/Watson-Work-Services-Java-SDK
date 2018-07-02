@@ -7,8 +7,8 @@ import java.util.List;
  * @author Paul Withers
  * @since 0.5.0
  * 
- *        Application Token Class, specific for application connections to Watson Workspace. Extended by
- *        {@link PeopleToken}
+ *        Application Token Class, specific for application connections to
+ *        Watson Workspace. Extended by {@link PeopleToken}
  */
 public class AppToken {
 
@@ -16,7 +16,8 @@ public class AppToken {
 	 * @author Christian Guedemann
 	 * @since 0.5.0
 	 * 
-	 *        Enum for Token types, currently only "bearer". This gets added to the POST / GET request
+	 *        Enum for Token types, currently only "bearer". This gets added to
+	 *        the POST / GET request
 	 */
 	public enum TokenType {
 		BEARER("bearer");
@@ -36,18 +37,16 @@ public class AppToken {
 	 * @author Christian Guedemann
 	 * @since 0.5.0
 	 * 
-	 *        Enum for scopes of token. space_create, settings-read, settings_update are only relevant to PeopleTokens.
-	 *        space_change is only relevant to AppTokens. The rest are shared.
+	 *        Enum for scopes of token. space_create, settings-read,
+	 *        settings_update are only relevant to PeopleTokens. space_change is
+	 *        only relevant to AppTokens. The rest are shared.
 	 *
 	 */
 	public enum TokenScope {
-		SPACE_CREATE("space_create"), SETTINGS_READ("settings_read"), SETTINGS_UPDATE(
-				"settings_update"), TRANSCRIPT_READ("transcript_read"), MESSAGE_CREATE("message_create"), SPACE_LIST(
-						"space_list"), FILE_UPLOAD("file_upload"), FILE_DOWNLOAD("file_download"), PROFILE_UPDATE(
-								"profile_update"), MESSAGE_READ("message_read"), SPACE_READ(
-										"space_read"), MEMBERSHIP_LIST("membership_list"), PROFILE_READ(
-												"profile_read"), SPACE_CHANGE("space_change");
-
+		SPACE_CREATE("space_create"), SETTINGS_READ("settings_read"), SETTINGS_UPDATE("settings_update"), TRANSCRIPT_READ("transcript_read"), MESSAGE_CREATE("message_create"), SPACE_LIST(
+				"space_list"), FILE_UPLOAD("file_upload"), FILE_DOWNLOAD("file_download"), PROFILE_UPDATE(
+						"profile_update"), MESSAGE_READ("message_read"), SPACE_READ("space_read"), MEMBERSHIP_LIST("membership_list"), PROFILE_READ("profile_read"), SPACE_CHANGE("space_change"),
+		MEMBER_MODIFY("member_modify"), SPACE_MODIFY("space_modify");
 		private String value_;
 
 		private TokenScope(String scope) {
@@ -56,6 +55,14 @@ public class AppToken {
 
 		public String getValue() {
 			return value_;
+		}
+		public static TokenScope findScope(String value) {
+			for (TokenScope ts: values()) {
+				if (ts.getValue().equalsIgnoreCase(value)) {
+					return ts;
+				}
+			}
+			return null;
 		}
 	}
 
@@ -76,7 +83,8 @@ public class AppToken {
 	}
 
 	/**
-	 * @return TokenType, get token type for the authenticated application / user. Currently the value is "bearer"
+	 * @return TokenType, get token type for the authenticated application /
+	 *         user. Currently the value is "bearer"
 	 * 
 	 * @since 0.5.0
 	 */
@@ -120,11 +128,13 @@ public class AppToken {
 		StringBuilder builder = new StringBuilder();
 		boolean first = true;
 		for (TokenScope s : scope) {
-			if (first) {
-				first = !first;
-				builder.append(s.getValue());
-			} else {
-				builder.append(" " + s.getValue());
+			if (s != null) {
+				if (first) {
+					first = !first;
+					builder.append(s.getValue());
+				} else {
+					builder.append(" " + s.getValue());
+				}
 			}
 		}
 		return builder.toString();
